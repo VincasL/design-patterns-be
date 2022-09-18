@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BattleshipService.Data.Models
 {
-    public class Ship
+    public class Mine
     {
         public int Id { get; set; }
 

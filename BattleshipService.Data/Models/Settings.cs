@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace BattleshipService.Data.Models
 {
-    public class PowerUp
+    public  class Settings
     {
+        public int Id { get; set; }
+
+        public bool IsDarkModeEnabled { get; set; }
     }
 }
