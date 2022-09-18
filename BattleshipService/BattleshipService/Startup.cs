@@ -1,7 +1,7 @@
-﻿using Battleship.Data;
-using Battleship_API.Handlers;
+﻿using BattleshipService.Handlers;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using BattleshipService.Data;
 
 namespace BattleshipService
 {

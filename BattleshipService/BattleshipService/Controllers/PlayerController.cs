@@ -1,9 +1,9 @@
-﻿using Battleship.Data.Models;
-using Battleship_API.Handlers;
+﻿using BattleshipService.Data.Models;
+using BattleshipService.Handlers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Battleship_API.Controllers
+namespace BattleshipService.Controllers
 {
     [Route("[controller]")]
     [ApiController]

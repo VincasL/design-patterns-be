@@ -1,8 +1,8 @@
-﻿using Battleship.Data;
-using Battleship.Data.Models;
+﻿using BattleshipService.Data.Models;
+using BattleshipService.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Battleship_API.Handlers
+namespace BattleshipService.Handlers
 {
     public class PlayersHandler
     {
