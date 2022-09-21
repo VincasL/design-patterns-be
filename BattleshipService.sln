@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleshipService", "BattleshipService\BattleshipService.csproj", "{569019A0-6889-4ED4-A5E3-70B5A2C9A784}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleshipService.Data", "..\BattleshipService.Data\BattleshipService.Data.csproj", "{E4495DD5-4AAE-409C-A854-B979ED045374}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleshipService.Data", "BattleshipService.Data\BattleshipService.Data.csproj", "{E4495DD5-4AAE-409C-A854-B979ED045374}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

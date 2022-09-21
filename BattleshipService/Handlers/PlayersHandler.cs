@@ -1,5 +1,5 @@
-﻿using BattleshipService.Data.Models;
-using BattleshipService.Data;
+﻿using BattleshipService.Data;
+using BattleshipService.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BattleshipService.Handlers
