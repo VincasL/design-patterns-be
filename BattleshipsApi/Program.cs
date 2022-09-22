@@ -1,6 +1,6 @@
-using BattleshipService.Data;
-using BattleshipService.Handlers;
-using BattleshipService.Hubs;
+using BattleshipsApi;
+using BattleshipsApi.Handlers;
+using BattleshipsApi.Hubs;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddCors();
 
-builder.Services.AddDbContext<BattleshipsDbContext>(
+builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer("DefaultConnection"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

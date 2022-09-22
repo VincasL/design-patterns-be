@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace BattleshipService.Hubs;
+namespace BattleshipsApi.Hubs;
 
 public class BattleshipHub : Hub
 {

@@ -1,11 +1,10 @@
-﻿using BattleshipService.Data.Models;
-using BattleshipService.Handlers;
-using Microsoft.AspNetCore.Http;
+using BattleshipsApi.Handlers;
+using BattleshipsApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BattleshipService.Controllers
-{
-    [Route("[controller]")]
+namespace BattleshipsApi.Controllers;
+
+ [Route("[controller]")]
     [ApiController]
     public class PlayerController : ControllerBase
     {
@@ -104,4 +103,3 @@ namespace BattleshipService.Controllers
         //    }
         //}
     }
-}

@@ -1,4 +1,4 @@
-﻿namespace BattleshipService.Data.Models
+﻿namespace BattleshipsApi.Models
 {
     public class Tile
     {

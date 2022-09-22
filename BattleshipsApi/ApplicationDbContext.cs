@@ -1,9 +1,9 @@
-﻿using BattleshipService.Data.Models;
+﻿using BattleshipsApi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BattleshipService.Data;
+namespace BattleshipsApi;
 
-public class BattleshipsDbContext : DbContext
+public class ApplicationDbContext : DbContext
 {
     public virtual DbSet<Game> Games { get; set; }
         
@@ -23,7 +23,7 @@ public class BattleshipsDbContext : DbContext
         
     public virtual DbSet<Tile> Tiles { get; set; }
         
-    public BattleshipsDbContext(DbContextOptions<BattleshipsDbContext> options) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
 
     }
