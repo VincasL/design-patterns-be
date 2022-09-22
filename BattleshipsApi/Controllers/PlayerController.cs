@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BattleshipsApi.Controllers;
 
- [Route("[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class PlayerController : ControllerBase
     {
