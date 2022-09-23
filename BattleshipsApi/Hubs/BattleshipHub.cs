@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using SignalRSwaggerGen.Attributes;
 
 namespace BattleshipsApi.Hubs;
 
+[SignalRHub]
 public class BattleshipHub : Hub
 {
-    public async Task SendMessage(string user, string message)
-    {
-        await Clients.All.SendAsync("boi", user, message);
-    }
+
 }
