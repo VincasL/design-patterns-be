@@ -23,12 +23,18 @@ public class BattleshipHub : Hub
         if (!moreThanTwoPlayersInTheQueue) return;
         var players = _queueHandler.ReturnLastTwoPlayers();
         StartGame(players.Item1, players.Item2);
+        SendGameData(players.Item1, players.Item2);
     }
 
     public async void StartGame(GamePlayer player1, GamePlayer player2)
     {
-        await Clients.Clients(player1.ConnectionId, player2.ConnectionId).SendAsync("startGame", player1, player2);
+        await Clients.Clients(player1.ConnectionId, player2.ConnectionId).SendAsync("startGame");
     }
-
+    
+    public async void SendGameData(GamePlayer player1, GamePlayer player2)
+    {
+        var session = new GameSession(player1, player2);
+        await Clients.Clients(player1.ConnectionId, player2.ConnectionId).SendAsync("gameData", session);
+    }
 }
 
