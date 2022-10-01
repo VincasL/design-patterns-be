@@ -1,7 +1,7 @@
 using BattleshipsApi;
-using BattleshipsApi.Handlers;
 using BattleshipsApi.Hubs;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +31,14 @@ builder.Services.AddCors(options =>
 
 
 
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -49,6 +57,8 @@ builder.Services.AddSignalR(c =>
     c.ClientTimeoutInterval = TimeSpan.FromSeconds(5);
     c.KeepAliveInterval = TimeSpan.FromSeconds(2);
 });
+
+
 
 
 var app = builder.Build();
