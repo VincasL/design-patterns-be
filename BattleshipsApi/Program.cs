@@ -47,7 +47,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSignalRSwaggerGen();
 });
-builder.Services.AddSingleton<TimerManager>();
+builder.Services.AddSingleton<QueueHandler>();
 
 builder.Services.AddSignalR(c =>
 {

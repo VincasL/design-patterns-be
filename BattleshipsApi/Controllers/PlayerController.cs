@@ -43,7 +43,6 @@ public class PlayerController : ControllerBase
     public async Task<ActionResult<AddPlayerDto>> AddPlayer(AddPlayerDto player)
     {
         var playerToAdd = _mapper.Map<AddPlayerDto, Player>(player);
-
         await _context.Players.AddAsync(playerToAdd);
         await _context.SaveChangesAsync();
 

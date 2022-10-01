@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using BattleshipsApi.Entities;
+using BattleshipsApi.Handlers;
+using Microsoft.AspNetCore.SignalR;
 using SignalRSwaggerGen.Attributes;
 
 namespace BattleshipsApi.Hubs;
@@ -6,20 +8,27 @@ namespace BattleshipsApi.Hubs;
 [SignalRHub]
 public class BattleshipHub : Hub
 {
-    public async Task askServer(string someTextFromClient)
+    private QueueHandler _queueHandler;
+
+    public BattleshipHub(QueueHandler queueHandler)
     {
-        string tempString;
+        _queueHandler = queueHandler;
+    }
+    
+    public async Task JoinQueue(string name)
+    {
+        var player = new GamePlayer(Context.ConnectionId, name);
+        var moreThanTwoPlayersInTheQueue = _queueHandler.AddPlayerToQueue(player);
+        
+        if (!moreThanTwoPlayersInTheQueue) return;
+        var players = _queueHandler.ReturnLastTwoPlayers();
+        StartGame(players.Item1, players.Item2);
+    }
 
-        if(someTextFromClient == "hey")
-        {
-            tempString = "message was 'hey'";
-        }
-        else
-        {
-            tempString = "message was something else";
-        }
-
-        await Clients.Clients(this.Context.ConnectionId).SendAsync("askServerResponse", tempString);
+    public async void StartGame(GamePlayer player1, GamePlayer player2)
+    {
+        await Clients.Clients(player1.ConnectionId, player2.ConnectionId).SendAsync("startGame", player1, player2);
     }
 
 }
+
