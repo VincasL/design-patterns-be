@@ -18,14 +18,14 @@ public class TestController : ControllerBase
         _timer = timer;
     }
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult StartSendingMessages()
     {
         if (!_timer.IsTimerStarted)
         {
             _timer.PrepareTimer(() =>
             {
                 Console.WriteLine("Message sent");
-                _hub.Clients.All.SendAsync("SendMessage");
+                _hub.Clients.All.SendAsync("sendMessage", "ayo");
                 
             });
         }

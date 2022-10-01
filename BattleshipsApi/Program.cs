@@ -2,6 +2,7 @@ using BattleshipsApi;
 using BattleshipsApi.Hubs;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using BattleshipsApi.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,8 +30,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-
-
 var mapperConfig = new MapperConfiguration(mc =>
 {
     mc.AddProfile(new MappingProfile());
@@ -48,18 +47,14 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSignalRSwaggerGen();
 });
-builder.Services.AddTransient<PlayersHandler>();
 builder.Services.AddSingleton<TimerManager>();
 
 builder.Services.AddSignalR(c =>
 {
     c.EnableDetailedErrors = true;
-    c.ClientTimeoutInterval = TimeSpan.FromSeconds(5);
-    c.KeepAliveInterval = TimeSpan.FromSeconds(2);
+    c.ClientTimeoutInterval = TimeSpan.FromSeconds(180);
+    c.KeepAliveInterval = TimeSpan.FromSeconds(15);
 });
-
-
-
 
 var app = builder.Build();
 
