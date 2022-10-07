@@ -47,16 +47,18 @@ public class BattleshipHub : Hub
         }
         //TODO: might want to handle ships overlapping
         
+        
+        
         var session = _sessionsHandler.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         if (player.PlacedShips || session.AreShipsPlaced)
         {
             return;
         }
-
-        var board = player.Board;
         
         //TODO: move to different file
+        var board = player.Board;
+
         foreach (var ship in ships)
         {
             if (ship.IsHorizontal)
@@ -74,6 +76,7 @@ public class BattleshipHub : Hub
                 }
             }
         }
+        //
         
         session.GetPlayerByConnectionId(Context.ConnectionId).PlacedShips = true;
         
@@ -88,7 +91,7 @@ public class BattleshipHub : Hub
 
     public async Task MakeMove(Move move)
     {
-        //TODO:  Move validation
+        //TODO: validation
         var session = _sessionsHandler.GetSessionByConnectionId(Context.ConnectionId);
 
         if (session.NextPlayerTurnConnectionId != Context.ConnectionId)
@@ -98,6 +101,7 @@ public class BattleshipHub : Hub
         }
 
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
+        //TODO: move to different file
         var hitCell = board.Cells[move.X][ move.Y];
 
         if (hitCell.Type != CellType.NotShot)
@@ -118,6 +122,7 @@ public class BattleshipHub : Hub
             hitCell.Type = CellType.Empty;
             session.SetMoveToNextPlayer();
         }
+        //
         
         SendGameData(session);
     }
