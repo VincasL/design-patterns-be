@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BattleshipsApi.DTO;
-using BattleshipsApi.Models;
+using BattleshipsApi.Entities;
 
 namespace BattleshipsApi
 {
@@ -8,8 +8,10 @@ namespace BattleshipsApi
     {
         public MappingProfile()
         {
-            CreateMap<Player, AddPlayerDto>();
-            CreateMap<AddPlayerDto, Player>();
+            CreateMap<Session, GameData>();
+            CreateMap<Player, PlayerDto>();
+            CreateMap<Board, BoardDto>();
+            CreateMap<Cell, CellDto>();
         }
     }
 }

@@ -7,13 +7,13 @@ namespace BattleshipsApi.Handlers;
 
 public class QueueHandler
 {
-    private LinkedList<GamePlayer> _playersQueue = new();
+    private LinkedList<Player> _playersQueue = new();
     
     public QueueHandler()
     {
     }
     
-    public bool AddPlayerToQueue(GamePlayer player)
+    public bool AddPlayerToQueue(Player player)
     {
         if (_playersQueue.Any(x => x.ConnectionId == player.ConnectionId))
         {
@@ -25,7 +25,7 @@ public class QueueHandler
         return _playersQueue.Count >= 2;
     }
 
-    public Tuple<GamePlayer, GamePlayer> ReturnLastTwoPlayers()
+    public Tuple<Player, Player> ReturnLastTwoPlayers()
     {
         if (_playersQueue.Count < 2) throw new Exception();
 
@@ -35,6 +35,6 @@ public class QueueHandler
         _playersQueue.RemoveFirst();
         _playersQueue.RemoveFirst();
         
-        return new Tuple<GamePlayer, GamePlayer>(firstPlayer,secondPlayer);
+        return new Tuple<Player, Player>(firstPlayer,secondPlayer);
     }
 }

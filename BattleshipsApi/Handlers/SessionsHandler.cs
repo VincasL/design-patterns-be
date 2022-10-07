@@ -1,24 +1,23 @@
 ﻿using BattleshipsApi.Entities;
-using BattleshipsApi.Models;
 
 namespace BattleshipsApi.Handlers;
 
 public class SessionsHandler
 {
-    private List<GameSession> _sessions = new();
+    private List<Session> _sessions = new();
     
     public SessionsHandler()
     {
     }
 
-    public GameSession CreateSession(GamePlayer playerOne, GamePlayer playerTwo)
+    public Session CreateSession(Player playerOne, Player playerTwo)
     {
-        var session = new GameSession(playerOne, playerTwo);
+        var session = new Session(playerOne, playerTwo);
         _sessions.Add(session);
         return session;
     }
     
-    public GameSession GetSessionByConnectionId(string connectionId)
+    public Session GetSessionByConnectionId(string connectionId)
     {
         return _sessions.First(
             x => x.PlayerOne.ConnectionId == connectionId || x.PlayerTwo.ConnectionId == connectionId);

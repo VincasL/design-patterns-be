@@ -1,11 +1,10 @@
 ﻿using BattleshipsApi.Enums;
-using BattleshipsApi.Models;
 
 namespace BattleshipsApi.Entities;
 
-public class GameShip
+public class Ship
 {
     public ShipType Type { get; set; }
-    public Tile Tile { get; set; }
+    public Cell Cell { get; set; }
     public bool IsHorizontal { get; set; }
 }

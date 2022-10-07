@@ -1,8 +1,8 @@
 ﻿namespace BattleshipsApi.Entities;
 
-public class GameSettings
+public class Settings
 {
-    public GameSettings(int boardSize)
+    public Settings(int boardSize)
     {
         BoardSize = boardSize;
     }
