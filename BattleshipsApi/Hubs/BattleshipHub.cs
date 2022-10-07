@@ -48,26 +48,29 @@ public class BattleshipHub : Hub
         //TODO: might want to handle ships overlapping
         
         var session = _sessionsHandler.GetSessionByConnectionId(Context.ConnectionId);
-        var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
-        
+        var player = session.GetPlayerByConnectionId(Context.ConnectionId);
+        if (player.PlacedShips || session.AreShipsPlaced)
+        {
+            return;
+        }
+
+        var board = player.Board;
         
         //TODO: move to different file
         foreach (var ship in ships)
         {
-            board.Cells[ship.Cell.X][ship.Cell.Y].Ship = ship;
-
             if (ship.IsHorizontal)
             {
-                for (var x = ship.Cell.X; x < ship.Type.GetShipLength(); x++)
+                for (var y = ship.Cell.Y; y < ship.Cell.Y + ship.Type.GetShipLength(); y++)
                 {
-                    board.Cells[x][ship.Cell.Y].Ship = ship;
+                    board.Cells[ship.Cell.X][y].Ship = ship;
                 }
             }
             else
             {
-                for (var y = ship.Cell.Y; y < ship.Type.GetShipLength(); y++)
+                for (var x = ship.Cell.X; x < ship.Cell.X + ship.Type.GetShipLength(); x++)
                 {
-                    board.Cells[ship.Cell.X][y].Ship = ship;
+                    board.Cells[x][ship.Cell.Y].Ship = ship;
                 }
             }
         }
