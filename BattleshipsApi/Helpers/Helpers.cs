@@ -1,5 +1,4 @@
-﻿using BattleshipsApi.DTO;
-using BattleshipsApi.Enums;
+﻿using BattleshipsApi.Enums;
 
 namespace BattleshipsApi.Helpers;
 

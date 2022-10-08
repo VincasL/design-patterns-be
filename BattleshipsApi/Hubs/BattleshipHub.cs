@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using BattleshipsApi.DTO;
 using BattleshipsApi.Entities;
-using BattleshipsApi.Enums;
 using BattleshipsApi.Handlers;
-using BattleshipsApi.Helpers;
 using Microsoft.AspNetCore.SignalR;
 using SignalRSwaggerGen.Attributes;
 
@@ -12,16 +9,14 @@ namespace BattleshipsApi.Hubs;
 [SignalRHub]
 public class BattleshipHub : Hub
 {
-    private QueueHandler _queueHandler;
-    private SessionsHandler _sessionsHandler;
-    private IMapper _mapper;
-    private GameLogicHandler _gameLogicHandler;
+    private readonly QueueHandler _queueHandler;
+    private readonly SessionsHandler _sessionsHandler;
+    private readonly GameLogicHandler _gameLogicHandler;
 
     public BattleshipHub(QueueHandler queueHandler, SessionsHandler sessionsHandler, IMapper mapper, GameLogicHandler gameLogicHandler)
     {
         _queueHandler = queueHandler;
         _sessionsHandler = sessionsHandler;
-        _mapper = mapper;
         _gameLogicHandler = gameLogicHandler;
     }
     
@@ -30,54 +25,48 @@ public class BattleshipHub : Hub
         var player = new Player(Context.ConnectionId, name);
         var moreThanTwoPlayersInTheQueue = _queueHandler.AddPlayerToQueue(player);
 
-        if (!moreThanTwoPlayersInTheQueue)
+        if (moreThanTwoPlayersInTheQueue)
         {
-            return;
+            var players = _queueHandler.ReturnLastTwoPlayers();
+            StartGame(players.Item1, players.Item2);
         }
-        
-        var players = _queueHandler.ReturnLastTwoPlayers();
-        StartGame(players.Item1, players.Item2);
     }
 
     public async Task PlaceShips(List<Ship> ships)
     {
         if (ships.Count != 5 || ships.Select(x => x.Type).Distinct().Count() != ships.Count)
         {
-            throw new Exception("Invalid battleship configuration");
-        }
-        //TODO: might want to handle ships overlapping
-        
-        
-        
-        var session = _sessionsHandler.GetSessionByConnectionId(Context.ConnectionId);
-        var player = session.GetPlayerByConnectionId(Context.ConnectionId);
-        if (player.PlacedShips || session.AreShipsPlaced)
-        {
+            Console.WriteLine("Invalid battleship configuration");
             return;
         }
         
-        //TODO: move to different file
-        var board = player.Board;
+        var session = _sessionsHandler.GetSessionByConnectionId(Context.ConnectionId);
 
-        foreach (var ship in ships)
+        if (session.IsGameOver)
         {
-            if (ship.IsHorizontal)
-            {
-                for (var y = ship.Cell.Y; y < ship.Cell.Y + ship.Type.GetShipLength(); y++)
-                {
-                    board.Cells[ship.Cell.X][y].Ship = ship;
-                }
-            }
-            else
-            {
-                for (var x = ship.Cell.X; x < ship.Cell.X + ship.Type.GetShipLength(); x++)
-                {
-                    board.Cells[x][ship.Cell.Y].Ship = ship;
-                }
-            }
+            Console.WriteLine("Game is over bro");
+            return;
         }
-        //
         
+        var player = session.GetPlayerByConnectionId(Context.ConnectionId);
+        if (player.PlacedShips || session.AreShipsPlaced)
+        {
+            Console.WriteLine("Ships already placed");
+            return;
+        }
+        
+        var board = player.Board;
+        
+        try
+        {
+            _gameLogicHandler.PlaceShipsToBoard(ships, board);
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return;
+        }
+
         session.GetPlayerByConnectionId(Context.ConnectionId).PlacedShips = true;
         
         if (session.AllPlayersPlacedShips)
@@ -93,6 +82,12 @@ public class BattleshipHub : Hub
     {
         //TODO: validation
         var session = _sessionsHandler.GetSessionByConnectionId(Context.ConnectionId);
+        
+        if (session.IsGameOver)
+        {
+            Console.WriteLine("Game is over bro");
+            return;
+        }
 
         if (session.NextPlayerTurnConnectionId != Context.ConnectionId)
         {
@@ -100,29 +95,36 @@ public class BattleshipHub : Hub
             return;
         }
 
-        var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
-        //TODO: move to different file
-        var hitCell = board.Cells[move.X][ move.Y];
+        var player = session.GetEnemyPlayerByConnectionId(Context.ConnectionId);
+        var board = player.Board;
 
-        if (hitCell.Type != CellType.NotShot)
+        bool hasShipBeenHit;
+        bool hasShipBeenDestroyed;
+
+        try
         {
-            //This should not happen, the cell has been already hit previously, so do nothing
+            (hasShipBeenHit, hasShipBeenDestroyed) = _gameLogicHandler.MakeMoveToEnemyBoard(move, board);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
             return;
         }
-
-        //TODO: cell hit logic
-        var shipExistsInCell = true;
-
-        if (shipExistsInCell)
+        
+        if (!hasShipBeenHit)
         {
-            //TODO: cell type = DamagedShip or DestroyedShip
-        }
-        else
-        {
-            hitCell.Type = CellType.Empty;
             session.SetMoveToNextPlayer();
         }
-        //
+
+        if (hasShipBeenDestroyed)
+        {
+            player.DestroyedShipCount++;
+            if (session.Settings.ShipCount >= player.DestroyedShipCount)
+            {
+                session.IsGameOver = true;
+                session.WinnerConnectionId = Context.ConnectionId;
+            }
+        }
         
         SendGameData(session);
     }
@@ -144,7 +146,7 @@ public class BattleshipHub : Hub
     {
         var gameDataPlayerOne = _gameLogicHandler.MapSessionToGameDataDtoPlayerOne(session);
         var gameDataPlayerTwo = _gameLogicHandler.MapSessionToGameDataDtoPlayerTwo(session);
-        
+
         await Clients.Client(session.PlayerOne.ConnectionId).SendAsync("gameData", gameDataPlayerOne);
         await Clients.Client(session.PlayerTwo.ConnectionId).SendAsync("gameData", gameDataPlayerTwo);
     }

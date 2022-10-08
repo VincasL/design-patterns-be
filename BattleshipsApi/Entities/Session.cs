@@ -1,6 +1,4 @@
-﻿using BattleshipsApi.Enums;
-
-namespace BattleshipsApi.Entities;
+﻿namespace BattleshipsApi.Entities;
 
 public class Session
 {
@@ -10,7 +8,10 @@ public class Session
     public Player PlayerTwo { get; set; }
     public bool AreShipsPlaced { get; set; }
     public string NextPlayerTurnConnectionId { get; set; }
+    public bool IsGameOver { get; set; } = false;
+    public string? WinnerConnectionId { get; set; } = null;
     public Settings Settings { get; set; }
+    
 
     public Session(Player playerOne, Player playerTwo, Settings? gameSettings = null)
     {
@@ -26,6 +27,11 @@ public class Session
     public Player GetPlayerByConnectionId(string connectionId)
     {
         return PlayerOne.ConnectionId == connectionId ? PlayerOne : PlayerTwo;
+    }
+    
+    public Player GetEnemyPlayerByConnectionId(string connectionId)
+    {
+        return PlayerOne.ConnectionId != connectionId ? PlayerOne : PlayerTwo;
     }
 
     public bool AllPlayersPlacedShips =>

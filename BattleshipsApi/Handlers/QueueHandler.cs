@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using BattleshipsApi.Entities;
-using BattleshipsApi.Hubs;
-using Microsoft.AspNetCore.SignalR;
+﻿using BattleshipsApi.Entities;
 
 namespace BattleshipsApi.Handlers;
 

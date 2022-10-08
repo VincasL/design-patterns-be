@@ -1,6 +1,4 @@
-﻿using BattleshipsApi.Entities;
-
-namespace BattleshipsApi.DTO;
+﻿namespace BattleshipsApi.DTO;
 
 public class GameData
 {
@@ -8,4 +6,6 @@ public class GameData
     public PlayerDto PlayerTwo { get; set; }
     public bool AreShipsPlaced { get; set; }
     public bool IsYourMove { get; set; }
+    public bool IsGameOver { get; set; }
+    public bool? Winner { get; set; }
 }

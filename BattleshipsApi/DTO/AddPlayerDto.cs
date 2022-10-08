@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace BattleshipsApi.DTO
+﻿namespace BattleshipsApi.DTO
 {
     public class AddPlayerDto
     {

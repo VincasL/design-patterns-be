@@ -1,6 +1,5 @@
 using BattleshipsApi;
 using BattleshipsApi.Hubs;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using BattleshipsApi.Handlers;
 

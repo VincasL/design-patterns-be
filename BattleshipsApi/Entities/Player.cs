@@ -6,6 +6,7 @@ public class Player
     public string Name { get; set; }
     public Board Board { get; set; }
     public bool PlacedShips { get; set; }
+    public int DestroyedShipCount { get; set; }
 
     public Player(string connectionId, string name)
     {
