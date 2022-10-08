@@ -17,6 +17,7 @@ public class GameLogicHandler
     public GameData MapSessionToGameDataDtoPlayerOne(Session session)
     {
         var gameData = _mapper.Map<GameData>(session);
+        gameData.IsYourMove = session.NextPlayerTurnConnectionId == session.PlayerOne.ConnectionId;
         for (var i = 0; i < session.PlayerOne.Board.Cells.Length; i++)
         {
             var row = session.PlayerOne.Board.Cells[i];
@@ -36,6 +37,7 @@ public class GameLogicHandler
     public GameData MapSessionToGameDataDtoPlayerTwo(Session session)
     {
         var gameData = _mapper.Map<GameData>(session);
+        gameData.IsYourMove = session.NextPlayerTurnConnectionId == session.PlayerTwo.ConnectionId;
         for (var i = 0; i < session.PlayerTwo.Board.Cells.Length; i++)
         {
             var row = session.PlayerTwo.Board.Cells[i];

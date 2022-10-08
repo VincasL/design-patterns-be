@@ -132,8 +132,7 @@ public class BattleshipHub : Hub
         var session = _sessionsHandler.GetSessionByConnectionId(Context.ConnectionId);
         SendGameData(session);
     }
-
-
+    
     public async void StartGame(Player player1, Player player2)
     {
         var session = _sessionsHandler.CreateSession(player1, player2);
