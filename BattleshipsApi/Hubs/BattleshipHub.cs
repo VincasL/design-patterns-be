@@ -73,7 +73,10 @@ public class BattleshipHub : Hub
             session.AreShipsPlaced = true;
             session.NextPlayerTurnConnectionId = session.PlayerOne.ConnectionId;
             SendGameData(session);
+            return;
         }
+        
+        SendGameData(session, true);
     }
 
     public async Task MakeMove(Move move)
@@ -117,7 +120,7 @@ public class BattleshipHub : Hub
         if (hasShipBeenDestroyed)
         {
             player.DestroyedShipCount++;
-            if (session.Settings.ShipCount >= player.DestroyedShipCount)
+            if (session.Settings.ShipCount <= player.DestroyedShipCount)
             {
                 session.IsGameOver = true;
                 session.WinnerConnectionId = Context.ConnectionId;
@@ -140,10 +143,18 @@ public class BattleshipHub : Hub
         SendGameData(session);
     }
     
-    public async void SendGameData(GameSession gameSession)
+    public async void SendGameData(GameSession gameSession, bool onlySendToPlayerThatSentTheMessage = false)
     {
+        
         var gameDataPlayerOne = _gameLogicHandler.MapSessionToGameDataDtoPlayerOne(gameSession);
         var gameDataPlayerTwo = _gameLogicHandler.MapSessionToGameDataDtoPlayerTwo(gameSession);
+        
+        if (onlySendToPlayerThatSentTheMessage)
+        {
+            await Clients.Client(Context.ConnectionId)
+                .SendAsync("gameData", Context.ConnectionId == gameSession.PlayerOne.ConnectionId ? gameDataPlayerOne : gameDataPlayerTwo);
+            return;
+        }
 
         await Clients.Client(gameSession.PlayerOne.ConnectionId).SendAsync("gameData", gameDataPlayerOne);
         await Clients.Client(gameSession.PlayerTwo.ConnectionId).SendAsync("gameData", gameDataPlayerTwo);
