@@ -2,9 +2,12 @@
 
 namespace BattleshipsApi.Entities;
 
-public class Ship
+public class Ship:Unit
 {
     public ShipType Type { get; set; }
-    public Cell Cell { get; set; }
     public bool IsHorizontal { get; set; }
+    public int ShieldStrenth { get; set; }
+    public int ArmourStrenth { get; set; }
+    public int Fuel { get; set; }
+
 }
