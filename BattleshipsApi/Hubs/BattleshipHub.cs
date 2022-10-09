@@ -72,9 +72,8 @@ public class BattleshipHub : Hub
         {
             session.AreShipsPlaced = true;
             session.NextPlayerTurnConnectionId = session.PlayerOne.ConnectionId;
+            SendGameData(session);
         }
-        
-        SendGameData(session);
     }
 
     public async Task MakeMove(Move move)
