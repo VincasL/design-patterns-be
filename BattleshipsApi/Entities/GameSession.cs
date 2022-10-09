@@ -38,5 +38,5 @@ public class GameSession
         PlayerOne.PlacedShips && PlayerTwo.PlacedShips;
 
     public void SetMoveToNextPlayer() => 
-        NextPlayerTurnConnectionId = NextPlayerTurnConnectionId == PlayerOne.ConnectionId ? PlayerOne.ConnectionId : PlayerTwo.ConnectionId;
+        NextPlayerTurnConnectionId = NextPlayerTurnConnectionId == PlayerOne.ConnectionId ? PlayerTwo.ConnectionId : PlayerOne.ConnectionId;
 }

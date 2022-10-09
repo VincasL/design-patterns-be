@@ -52,8 +52,8 @@ builder.Services.AddTransient<GameLogicHandler>();
 builder.Services.AddSignalR(c =>
 {
     c.EnableDetailedErrors = true;
-    c.ClientTimeoutInterval = TimeSpan.FromSeconds(180);
-    c.KeepAliveInterval = TimeSpan.FromSeconds(15);
+    c.ClientTimeoutInterval = TimeSpan.FromSeconds(300);
+    c.KeepAliveInterval = TimeSpan.FromSeconds(300);
 });
 
 var app = builder.Build();

@@ -11,7 +11,7 @@ public class Cell
 
     public Cell(int x, int y)
     {
-        Type = CellType.Empty;
+        Type = CellType.NotShot;
         X = x;
         Y = y;
     }
