@@ -62,6 +62,9 @@ public class GameLogicHandler
         {
             gameData.Winner = session.WinnerConnectionId == session.PlayerTwo.ConnectionId;
         }
+        
+        // Switch players: so enemy always displays on the right
+        (gameData.PlayerOne, gameData.PlayerTwo) = (gameData.PlayerTwo, gameData.PlayerOne);
 
         return gameData;
     }
