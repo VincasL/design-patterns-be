@@ -8,7 +8,7 @@ namespace BattleshipsApi
     {
         public MappingProfile()
         {
-            CreateMap<Session, GameData>();
+            CreateMap<GameSession, GameData>();
             CreateMap<Player, PlayerDto>();
             CreateMap<Board, BoardDto>();
             CreateMap<Cell, CellDto>();

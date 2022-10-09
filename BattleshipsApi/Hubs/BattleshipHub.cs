@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BattleshipsApi.Entities;
 using BattleshipsApi.Handlers;
+using BattleshipsApi.Helpers;
 using Microsoft.AspNetCore.SignalR;
 using SignalRSwaggerGen.Attributes;
 
@@ -10,13 +11,11 @@ namespace BattleshipsApi.Hubs;
 public class BattleshipHub : Hub
 {
     private readonly QueueHandler _queueHandler;
-    private readonly SessionsHandler _sessionsHandler;
     private readonly GameLogicHandler _gameLogicHandler;
 
-    public BattleshipHub(QueueHandler queueHandler, SessionsHandler sessionsHandler, IMapper mapper, GameLogicHandler gameLogicHandler)
+    public BattleshipHub(QueueHandler queueHandler, IMapper mapper, GameLogicHandler gameLogicHandler)
     {
         _queueHandler = queueHandler;
-        _sessionsHandler = sessionsHandler;
         _gameLogicHandler = gameLogicHandler;
     }
     
@@ -40,7 +39,7 @@ public class BattleshipHub : Hub
             return;
         }
         
-        var session = _sessionsHandler.GetSessionByConnectionId(Context.ConnectionId);
+        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
 
         if (session.IsGameOver)
         {
@@ -81,7 +80,7 @@ public class BattleshipHub : Hub
     public async Task MakeMove(Move move)
     {
         //TODO: validation
-        var session = _sessionsHandler.GetSessionByConnectionId(Context.ConnectionId);
+        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
         
         if (session.IsGameOver)
         {
@@ -131,24 +130,24 @@ public class BattleshipHub : Hub
 
     public async Task RequestData()
     {
-        var session = _sessionsHandler.GetSessionByConnectionId(Context.ConnectionId);
+        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
         SendGameData(session);
     }
     
     public async void StartGame(Player player1, Player player2)
     {
-        var session = _sessionsHandler.CreateSession(player1, player2);
+        var session = SessionHelpers.CreateSession(player1, player2);
         await Clients.Clients(player1.ConnectionId, player2.ConnectionId).SendAsync("startGame");
         SendGameData(session);
     }
     
-    public async void SendGameData(Session session)
+    public async void SendGameData(GameSession gameSession)
     {
-        var gameDataPlayerOne = _gameLogicHandler.MapSessionToGameDataDtoPlayerOne(session);
-        var gameDataPlayerTwo = _gameLogicHandler.MapSessionToGameDataDtoPlayerTwo(session);
+        var gameDataPlayerOne = _gameLogicHandler.MapSessionToGameDataDtoPlayerOne(gameSession);
+        var gameDataPlayerTwo = _gameLogicHandler.MapSessionToGameDataDtoPlayerTwo(gameSession);
 
-        await Clients.Client(session.PlayerOne.ConnectionId).SendAsync("gameData", gameDataPlayerOne);
-        await Clients.Client(session.PlayerTwo.ConnectionId).SendAsync("gameData", gameDataPlayerTwo);
+        await Clients.Client(gameSession.PlayerOne.ConnectionId).SendAsync("gameData", gameDataPlayerOne);
+        await Clients.Client(gameSession.PlayerTwo.ConnectionId).SendAsync("gameData", gameDataPlayerTwo);
     }
 }
 

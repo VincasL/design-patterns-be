@@ -1,6 +1,6 @@
 ﻿namespace BattleshipsApi.Entities;
 
-public class Session
+public class GameSession
 {
     private Settings _defaultSettings = new Settings(10);
     
@@ -13,7 +13,7 @@ public class Session
     public Settings Settings { get; set; }
     
 
-    public Session(Player playerOne, Player playerTwo, Settings? gameSettings = null)
+    public GameSession(Player playerOne, Player playerTwo, Settings? gameSettings = null)
     {
         Settings = gameSettings ?? _defaultSettings;
         PlayerOne = playerOne;

@@ -15,13 +15,13 @@ public class GameLogicHandler
         _mapper = mapper;
     }
     
-    public GameData MapSessionToGameDataDtoPlayerOne(Session session)
+    public GameData MapSessionToGameDataDtoPlayerOne(GameSession gameSession)
     {
-        var gameData = _mapper.Map<GameData>(session);
+        var gameData = _mapper.Map<GameData>(gameSession);
         
-        for (var i = 0; i < session.PlayerOne.Board.Cells.Length; i++)
+        for (var i = 0; i < gameSession.PlayerOne.Board.Cells.Length; i++)
         {
-            var row = session.PlayerOne.Board.Cells[i];
+            var row = gameSession.PlayerOne.Board.Cells[i];
             for (var j = 0; j < row.Length; j++)
             {
                 var cell = row[j];
@@ -32,21 +32,21 @@ public class GameLogicHandler
             }
         }
         
-        gameData.IsYourMove = session.NextPlayerTurnConnectionId == session.PlayerOne.ConnectionId;
-        if (session.IsGameOver)
+        gameData.IsYourMove = gameSession.NextPlayerTurnConnectionId == gameSession.PlayerOne.ConnectionId;
+        if (gameSession.IsGameOver)
         {
-            gameData.Winner = session.WinnerConnectionId == session.PlayerOne.ConnectionId;
+            gameData.Winner = gameSession.WinnerConnectionId == gameSession.PlayerOne.ConnectionId;
         }
 
         return gameData;
     }
     
-    public GameData MapSessionToGameDataDtoPlayerTwo(Session session)
+    public GameData MapSessionToGameDataDtoPlayerTwo(GameSession gameSession)
     {
-        var gameData = _mapper.Map<GameData>(session);
-        for (var i = 0; i < session.PlayerTwo.Board.Cells.Length; i++)
+        var gameData = _mapper.Map<GameData>(gameSession);
+        for (var i = 0; i < gameSession.PlayerTwo.Board.Cells.Length; i++)
         {
-            var row = session.PlayerTwo.Board.Cells[i];
+            var row = gameSession.PlayerTwo.Board.Cells[i];
             for (var j = 0; j < row.Length; j++)
             {
                 var cell = row[j];
@@ -57,10 +57,10 @@ public class GameLogicHandler
             }
         }
         
-        gameData.IsYourMove = session.NextPlayerTurnConnectionId == session.PlayerTwo.ConnectionId;
-        if (session.IsGameOver)
+        gameData.IsYourMove = gameSession.NextPlayerTurnConnectionId == gameSession.PlayerTwo.ConnectionId;
+        if (gameSession.IsGameOver)
         {
-            gameData.Winner = session.WinnerConnectionId == session.PlayerTwo.ConnectionId;
+            gameData.Winner = gameSession.WinnerConnectionId == gameSession.PlayerTwo.ConnectionId;
         }
         
         // Switch players: so enemy always displays on the right
