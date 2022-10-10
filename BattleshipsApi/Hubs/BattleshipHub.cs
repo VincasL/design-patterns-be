@@ -33,7 +33,8 @@ public class BattleshipHub : Hub
 
     public async Task PlaceShips(List<Ship> ships)
     {
-        if (ships.Count != 5 || ships.Select(x => x.Type).Distinct().Count() != ships.Count)
+        if (ships.Count != 5)
+            // if (ships.Count != 5 || ships.Select(x => x.Type).Distinct().Count() != ships.Count)
         {
             Console.WriteLine("Invalid battleship configuration");
             return;
