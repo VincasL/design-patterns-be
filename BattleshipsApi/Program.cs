@@ -37,6 +37,7 @@ var mapperConfig = new MapperConfiguration(mc =>
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
+
 // builder.Services.AddDbContext<ApplicationDbContext>(
 //     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

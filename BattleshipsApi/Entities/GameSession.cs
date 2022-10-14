@@ -3,15 +3,14 @@
 public class GameSession
 {
     private Settings _defaultSettings = new Settings(10);
-    
+
     public Player PlayerOne { get; set; }
     public Player PlayerTwo { get; set; }
-    public bool AreShipsPlaced { get; set; }
     public string NextPlayerTurnConnectionId { get; set; }
     public bool IsGameOver { get; set; } = false;
-    public string? WinnerConnectionId { get; set; } = null;
     public Settings Settings { get; set; }
-    
+    public bool AllPlayersPlacedShips =>
+        PlayerOne.AreAllShipsPlaced && PlayerTwo.AreAllShipsPlaced;
 
     public GameSession(Player playerOne, Player playerTwo, Settings? gameSettings = null)
     {
@@ -34,8 +33,7 @@ public class GameSession
         return PlayerOne.ConnectionId != connectionId ? PlayerOne : PlayerTwo;
     }
 
-    public bool AllPlayersPlacedShips =>
-        PlayerOne.PlacedShips && PlayerTwo.PlacedShips;
+
 
     public void SetMoveToNextPlayer() => 
         NextPlayerTurnConnectionId = NextPlayerTurnConnectionId == PlayerOne.ConnectionId ? PlayerTwo.ConnectionId : PlayerOne.ConnectionId;

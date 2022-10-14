@@ -35,7 +35,7 @@ public class GameLogicHandler
         gameData.IsYourMove = gameSession.NextPlayerTurnConnectionId == gameSession.PlayerOne.ConnectionId;
         if (gameSession.IsGameOver)
         {
-            gameData.Winner = gameSession.WinnerConnectionId == gameSession.PlayerOne.ConnectionId;
+            gameData.Winner = gameSession.PlayerOne.Winner;
         }
 
         return gameData;
@@ -60,7 +60,7 @@ public class GameLogicHandler
         gameData.IsYourMove = gameSession.NextPlayerTurnConnectionId == gameSession.PlayerTwo.ConnectionId;
         if (gameSession.IsGameOver)
         {
-            gameData.Winner = gameSession.WinnerConnectionId == gameSession.PlayerTwo.ConnectionId;
+            gameData.Winner = gameSession.PlayerTwo.Winner;
         }
         
         // Switch players: so enemy always displays on the right
@@ -115,36 +115,73 @@ public class GameLogicHandler
         return (shipHasBeenHit, shipHasBeenDestroyed);
     }
 
-    public void PlaceShipsToBoard(List<Ship> ships, Board board)
+    public void PlaceShipToBoard(Ship ship, Board board)
     {
-        foreach (var ship in ships)
+        if (ship.IsHorizontal)
         {
-            if (ship.IsHorizontal)
+            for (var y = ship.Cell.Y; y < ship.Cell.Y + ship.Type.GetShipLength(); y++)
             {
-                for (var y = ship.Cell.Y; y < ship.Cell.Y + ship.Type.GetShipLength(); y++)
+                var cell = board.Cells[ship.Cell.X][y];
+                if (cell.Ship != null)
                 {
-                    var cell = board.Cells[ship.Cell.X][y];
-                    if (cell.Ship != null)
-                    {
-                        // consider rollback 
-                        throw new Exception("Ships overlap");
-                    }
-                    cell.Ship = ship;
+                    // consider rollback 
+                    throw new Exception("Ships overlap");
                 }
-            }
-            else
-            {
-                for (var x = ship.Cell.X; x < ship.Cell.X + ship.Type.GetShipLength(); x++)
-                {
-                    var cell = board.Cells[x][ship.Cell.Y];
-                    if (cell.Ship != null)
-                    {
-                        // consider rollback 
-                        throw new Exception("Ships overlap");
-                    }
-                    cell.Ship = ship;
-                }
+
+                cell.Ship = ship;
             }
         }
+        else
+        {
+            for (var x = ship.Cell.X; x < ship.Cell.X + ship.Type.GetShipLength(); x++)
+            {
+                var cell = board.Cells[x][ship.Cell.Y];
+                if (cell.Ship != null)
+                {
+                    // consider rollback 
+                    throw new Exception("Ships overlap");
+                }
+
+                cell.Ship = ship;
+            }
+        }
+    }
+
+    public void UndoPlaceShipToBoardByCell(Ship ship, Board board)
+    {
+        if (ship.IsHorizontal)
+        {
+            for (var y = ship.Cell.Y; y < ship.Cell.Y + ship.Type.GetShipLength(); y++)
+            {
+                var cell = board.Cells[ship.Cell.X][y];
+                if (cell.Ship == null)
+                {
+                    // consider rollback 
+                    throw new Exception("No ship here");
+                }
+
+                cell.Ship = null;
+            }
+        }
+        else
+        {
+            for (var x = ship.Cell.X; x < ship.Cell.X + ship.Type.GetShipLength(); x++)
+            {
+                var cell = board.Cells[x][ship.Cell.Y];
+                if (cell.Ship == null)
+                {
+                    // consider rollback 
+                    throw new Exception("No ship here");
+                }
+
+                cell.Ship = null;
+            }
+        }
+    }
+
+    public Ship? GetShipByCellCoordinates(Move move, Board board)
+    {
+        var ship = board.Cells[move.X][move.Y].Ship;
+        return ship;
     }
 }

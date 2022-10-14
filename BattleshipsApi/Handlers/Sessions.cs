@@ -22,6 +22,7 @@ public class Sessions
             }
         }
 
+        Console.WriteLine("Sessions returned");
         return _sessions;
     }
 }

@@ -17,8 +17,19 @@ public static class SessionHelpers
     public static GameSession GetSessionByConnectionId(string connectionId)
     {
         var sessions = Sessions.GetSessions();
-        return sessions.First(
+        var session = sessions.FirstOrDefault(
             x => x.PlayerOne.ConnectionId == connectionId || x.PlayerTwo.ConnectionId == connectionId);
+
+        return session ?? sessions.Last();
+    }
+
+    public static void BindNewConnectionIdToPlayer(string oldConnectionId, string newConnectionId, GameSession session)
+    {
+        session.GetPlayerByConnectionId(oldConnectionId).ConnectionId = newConnectionId;
+        if (session.NextPlayerTurnConnectionId == oldConnectionId)
+        {
+            session.NextPlayerTurnConnectionId = newConnectionId;
+        }
     }
     
 }
