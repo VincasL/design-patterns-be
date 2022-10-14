@@ -53,7 +53,7 @@ builder.Services.AddSignalR(c =>
 {
     c.EnableDetailedErrors = true;
     c.ClientTimeoutInterval = TimeSpan.FromSeconds(300);
-    c.KeepAliveInterval = TimeSpan.FromSeconds(300);
+    c.KeepAliveInterval = TimeSpan.FromSeconds(10);
 });
 
 var app = builder.Build();
