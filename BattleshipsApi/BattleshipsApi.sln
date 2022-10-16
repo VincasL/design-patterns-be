@@ -17,11 +17,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Builders", "Builders", "{E2
 		ShipBuilder.cs = ShipBuilder.cs
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algorythm", "Algorythm", "{026A8468-070E-4CA8-AE33-9ECB9D5F0367}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Strategy", "Strategy", "{C57993D0-5680-4AEA-8B49-616FDBE3750B}"
 	ProjectSection(SolutionItems) = preProject
-		FastMoveLeft.cs = FastMoveLeft.cs
-		FastMoveRight.cs = FastMoveRight.cs
-		MoveAlgorithm.cs = MoveAlgorithm.cs
+		DontMove.cs = DontMove.cs
+		MoveByPlayer.cs = MoveByPlayer.cs
+		MoveDown.cs = MoveDown.cs
+		MoveLeft.cs = MoveLeft.cs
+		MoveRight.cs = MoveRight.cs
+		MoveStrategy.cs = MoveStrategy.cs
+		MoveUp.cs = MoveUp.cs
 	EndProjectSection
 EndProject
 Global

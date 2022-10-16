@@ -1,8 +1,8 @@
 ﻿using System;
 
-public class FastMoveRight : MoveAlgorithm
+public class MoveRight : MoveStrategy
 {
-	public FastMoveRight()
+	public MoveRight()
 	{
 	}
 

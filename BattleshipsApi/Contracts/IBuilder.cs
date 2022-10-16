@@ -15,7 +15,7 @@ namespace BattleshipsApi.Contracts
         {
             return null;
         }
-        public IBuilder AddAlgorithm(MoveAlgorithm algo)
+        public IBuilder AddAlgorithm(MoveStrategy algo)
         {
             return null;
         }

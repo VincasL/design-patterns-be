@@ -1,6 +1,6 @@
 ﻿using System;
 
-public abstract class MoveAlgorithm
+public abstract class MoveStrategy
 {
 	public abstract void MoveDifferently();
 }
