@@ -20,5 +20,7 @@ public enum CellType{
     Empty,
     Ship,
     DamagedShip,
-    DestroyedShip
+    DestroyedShip,
+    projectile,
+    mine
 }
