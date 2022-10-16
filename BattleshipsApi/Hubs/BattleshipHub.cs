@@ -53,7 +53,7 @@ public class BattleshipHub : Hub
 
         player.AreAllShipsPlaced = true;
         
-        SendGameData(session, !session.AllPlayersPlacedShips);
+        SendGameData(session);
     }
 
     public async Task PlaceShip(Ship ship)
@@ -80,7 +80,7 @@ public class BattleshipHub : Hub
         _gameLogicHandler.PlaceShipToBoard( ship , board);
         player.PlacedShips.Add(ship);
 
-        SendGameData(session, true);
+        SendGameData(session);
     }
     
     public async Task UndoPlaceShip(Move move)
@@ -107,7 +107,7 @@ public class BattleshipHub : Hub
             throw new Exception("Ship not removed");
         }
         
-        SendGameData(session, true);
+        SendGameData(session);
     }
 
     public async Task RotateShip(Move move)
@@ -138,7 +138,7 @@ public class BattleshipHub : Hub
             throw;
         }
             
-        SendGameData(session, true);
+        SendGameData(session);
     }
     
     public async Task MakeMove(Move move)
@@ -207,19 +207,11 @@ public class BattleshipHub : Hub
         SendGameData(session);
     }
 
-    public async void SendGameData(GameSession gameSession, bool onlySendToPlayerThatSentTheMessage = false)
+    public async void SendGameData(GameSession gameSession)
     {
 
         var gameDataPlayerOne = _gameLogicHandler.MapSessionToGameDataDtoPlayerOne(gameSession);
         var gameDataPlayerTwo = _gameLogicHandler.MapSessionToGameDataDtoPlayerTwo(gameSession);
-
-        if (onlySendToPlayerThatSentTheMessage)
-        {
-            await Clients.Client(Context.ConnectionId)
-                .SendAsync("gameData",
-                    Context.ConnectionId == gameSession.PlayerOne.ConnectionId ? gameDataPlayerOne : gameDataPlayerTwo);
-            return;
-        }
 
         await Clients.Client(gameSession.PlayerOne.ConnectionId).SendAsync("gameData", gameDataPlayerOne);
         await Clients.Client(gameSession.PlayerTwo.ConnectionId).SendAsync("gameData", gameDataPlayerTwo);
@@ -229,7 +221,7 @@ public class BattleshipHub : Hub
     {
         var session = SessionHelpers.GetSessionByConnectionId(connectionId);
         SessionHelpers.BindNewConnectionIdToPlayer(connectionId, Context.ConnectionId, session);
-        SendGameData(session, true);
+        SendGameData(session);
     }
 }
 
