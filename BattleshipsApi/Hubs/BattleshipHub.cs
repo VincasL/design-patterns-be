@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BattleshipsApi.Entities;
+﻿using BattleshipsApi.Entities;
 using BattleshipsApi.Handlers;
 using BattleshipsApi.Helpers;
 using Microsoft.AspNetCore.SignalR;
@@ -13,7 +12,7 @@ public class BattleshipHub : Hub
     private readonly QueueHandler _queueHandler;
     private readonly GameLogicHandler _gameLogicHandler;
 
-    public BattleshipHub(QueueHandler queueHandler, IMapper mapper, GameLogicHandler gameLogicHandler)
+    public BattleshipHub(QueueHandler queueHandler, GameLogicHandler gameLogicHandler)
     {
         _queueHandler = queueHandler;
         _gameLogicHandler = gameLogicHandler;
@@ -39,20 +38,17 @@ public class BattleshipHub : Hub
 
         if (session.AllPlayersPlacedShips || player.AreAllShipsPlaced)
         {
-            Console.WriteLine("Ships already placed");
-            return;
+            throw new Exception("Ships already placed");
         }
         
         if (session.IsGameOver)
         {
-            Console.WriteLine("Game is over bro");
-            return;
+            throw new Exception("Game is over bro");
         }
 
         if (player.PlacedShips.Count != 5)
         {
-            Console.WriteLine("Not all ships placed");
-            return;
+            throw new Exception("Not all ships placed");
         }
 
         player.AreAllShipsPlaced = true;
@@ -68,34 +64,22 @@ public class BattleshipHub : Hub
         
         if (player.AreAllShipsPlaced || session.AllPlayersPlacedShips)
         {
-            Console.WriteLine("all ships are placed");
-            return;
+            throw new Exception("all ships are placed");
         }
 
         if (player.PlacedShips.Count > 5)
         {
-            Console.WriteLine("enough ships are placed");
-            return;
+            throw new Exception("enough ships are placed");
         }
         
         if(player.PlacedShips.Any(placedShip => placedShip.Type == ship.Type))
         {
-            Console.WriteLine("Such ship has already been placed");
-            return;
+            throw new Exception("Such ship has already been placed");
         }
         
-        try
-        {
-            _gameLogicHandler.PlaceShipToBoard( ship , board);
-            player.PlacedShips.Add(ship);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            throw e;
-            return;
-        }
-        
+        _gameLogicHandler.PlaceShipToBoard( ship , board);
+        player.PlacedShips.Add(ship);
+
         SendGameData(session, true);
     }
     
@@ -107,30 +91,20 @@ public class BattleshipHub : Hub
         
         if (player.AreAllShipsPlaced || session.AllPlayersPlacedShips)
         {
-            Console.WriteLine("all ships are placed");
-            return;
+            throw new Exception("all ships are placed");
         }
 
         var ship = _gameLogicHandler.GetShipByCellCoordinates(move, board);
         if (ship == null)
         {
-            Console.WriteLine("no ship here");
-            return;
+            throw new Exception("no ship here");
         }
         
-        try
+        _gameLogicHandler.UndoPlaceShipToBoardByCell(ship, board);
+        var removed = player.PlacedShips.Remove(ship);
+        if (!removed)
         {
-            _gameLogicHandler.UndoPlaceShipToBoardByCell(ship, board);
-            var removed = player.PlacedShips.Remove(ship);
-            if (!removed)
-            {
-                throw new Exception("Ship not removed");
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            return;
+            throw new Exception("Ship not removed");
         }
         
         SendGameData(session, true);
@@ -138,7 +112,33 @@ public class BattleshipHub : Hub
 
     public async Task RotateShip(Move move)
     {
-        //TODO: implement
+        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
+        
+        var ship = _gameLogicHandler.GetShipByCellCoordinates(move, board);
+        
+        if (ship == null)
+        {
+            throw new Exception("No ship to rotate in this cell");
+        }
+        
+        _gameLogicHandler.UndoPlaceShipToBoardByCell(ship, board);
+
+        try
+        {
+            ship.IsHorizontal = !ship.IsHorizontal;
+            _gameLogicHandler.PlaceShipToBoard(ship, board);
+
+        }
+        catch
+        {
+            // rollback
+            ship.IsHorizontal = !ship.IsHorizontal;
+            _gameLogicHandler.PlaceShipToBoard(ship, board);
+            throw;
+        }
+            
+        SendGameData(session, true);
     }
     
     public async Task MakeMove(Move move)
@@ -148,20 +148,17 @@ public class BattleshipHub : Hub
 
         if (!session.AllPlayersPlacedShips)
         {
-            Console.WriteLine("Not all ships placed");
-            return;
+            throw new Exception("Not all ships placed");
         }
 
         if (session.IsGameOver)
         {
-            Console.WriteLine("Game is over bro");
-            return;
+            throw new Exception("Game is over bro");
         }
 
         if (session.NextPlayerTurnConnectionId != Context.ConnectionId)
         {
-            Console.WriteLine("it's not your move bro");
-            return;
+            throw new Exception("it's not your move bro");
         }
 
         var player = session.GetEnemyPlayerByConnectionId(Context.ConnectionId);
@@ -176,8 +173,7 @@ public class BattleshipHub : Hub
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
-            return;
+            throw new Exception(e.Message);
         }
 
         if (!hasShipBeenHit)

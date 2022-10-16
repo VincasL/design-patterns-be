@@ -21,6 +21,6 @@ public enum CellType{
     Ship,
     DamagedShip,
     DestroyedShip,
-    projectile,
-    mine
+    Projectile,
+    Mine
 }

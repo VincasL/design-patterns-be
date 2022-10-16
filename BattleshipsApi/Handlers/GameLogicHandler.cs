@@ -124,7 +124,14 @@ public class GameLogicHandler
                 var cell = board.Cells[ship.Cell.X][y];
                 if (cell.Ship != null)
                 {
-                    // consider rollback 
+                    // rollback
+                    while (y != ship.Cell.Y)
+                    {
+                        y--;
+                        cell = board.Cells[ship.Cell.X][y];
+                        cell.Ship = null;
+                    }
+                    
                     throw new Exception("Ships overlap");
                 }
 
@@ -136,9 +143,17 @@ public class GameLogicHandler
             for (var x = ship.Cell.X; x < ship.Cell.X + ship.Type.GetShipLength(); x++)
             {
                 var cell = board.Cells[x][ship.Cell.Y];
+                
                 if (cell.Ship != null)
                 {
-                    // consider rollback 
+                    // rollback
+                    while (x != ship.Cell.X)
+                    {
+                        x--;
+                        cell = board.Cells[x][ship.Cell.Y];
+                        cell.Ship = null;
+                    }
+                    
                     throw new Exception("Ships overlap");
                 }
 
@@ -149,32 +164,14 @@ public class GameLogicHandler
 
     public void UndoPlaceShipToBoardByCell(Ship ship, Board board)
     {
-        if (ship.IsHorizontal)
+        foreach (var row in board.Cells)
         {
-            for (var y = ship.Cell.Y; y < ship.Cell.Y + ship.Type.GetShipLength(); y++)
+            foreach (var cell in row)
             {
-                var cell = board.Cells[ship.Cell.X][y];
-                if (cell.Ship == null)
+                if (cell.Ship == ship)
                 {
-                    // consider rollback 
-                    throw new Exception("No ship here");
+                    cell.Ship = null;
                 }
-
-                cell.Ship = null;
-            }
-        }
-        else
-        {
-            for (var x = ship.Cell.X; x < ship.Cell.X + ship.Type.GetShipLength(); x++)
-            {
-                var cell = board.Cells[x][ship.Cell.Y];
-                if (cell.Ship == null)
-                {
-                    // consider rollback 
-                    throw new Exception("No ship here");
-                }
-
-                cell.Ship = null;
             }
         }
     }

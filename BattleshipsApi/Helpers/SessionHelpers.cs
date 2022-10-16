@@ -20,7 +20,12 @@ public static class SessionHelpers
         var session = sessions.FirstOrDefault(
             x => x.PlayerOne.ConnectionId == connectionId || x.PlayerTwo.ConnectionId == connectionId);
 
-        return session ?? sessions.Last();
+        if (session == null)
+        {
+            throw new Exception("No connection found with this connectionId! Try restarting the game");
+        }
+        
+        return session;
     }
 
     public static void BindNewConnectionIdToPlayer(string oldConnectionId, string newConnectionId, GameSession session)
