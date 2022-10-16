@@ -23,7 +23,4 @@ public static class Helpers
                 throw new ArgumentOutOfRangeException(nameof(shipType), shipType, null);
         }
     }
-    
-
-    
 }

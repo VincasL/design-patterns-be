@@ -9,12 +9,6 @@ public enum ShipType
     Destroyer // 2 tiles
 }
 
-public enum PlayerTurn
-{
-    FirstPlayer,
-    SecondPlayer
-}
-
 public enum CellType{
     NotShot,
     Empty,
