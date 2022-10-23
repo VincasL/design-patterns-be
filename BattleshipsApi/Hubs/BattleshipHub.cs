@@ -1,4 +1,6 @@
 ﻿using BattleshipsApi.Entities;
+using BattleshipsApi.Enums;
+using BattleshipsApi.Factories;
 using BattleshipsApi.Handlers;
 using BattleshipsApi.Helpers;
 using Microsoft.AspNetCore.SignalR;
@@ -56,8 +58,11 @@ public class BattleshipHub : Hub
         SendGameData(session);
     }
 
-    public async Task PlaceShip(Ship ship)
+    public async Task PlaceShip(CellCoordinates cellCoordinates, ShipType type)
     {
+        var shipFactory = new ShipFactory();
+        var ship = shipFactory.GetShip(type);
+        
         var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
@@ -77,13 +82,13 @@ public class BattleshipHub : Hub
             throw new Exception("Such ship has already been placed");
         }
         
-        _gameLogicHandler.PlaceShipToBoard( ship , board);
+        _gameLogicHandler.PlaceShipToBoard(ship , board, cellCoordinates);
         player.PlacedShips.Add(ship);
 
         SendGameData(session);
     }
     
-    public async Task UndoPlaceShip(Move move)
+    public async Task UndoPlaceShip(CellCoordinates cellCoordinates)
     {
         var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
@@ -94,7 +99,7 @@ public class BattleshipHub : Hub
             throw new Exception("all ships are placed");
         }
 
-        var ship = _gameLogicHandler.GetShipByCellCoordinates(move, board);
+        var ship = _gameLogicHandler.GetShipByCellCoordinates(cellCoordinates, board);
         if (ship == null)
         {
             throw new Exception("no ship here");
@@ -110,12 +115,12 @@ public class BattleshipHub : Hub
         SendGameData(session);
     }
 
-    public async Task RotateShip(Move move)
+    public async Task RotateShip(CellCoordinates cellCoordinates)
     {
         var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
         
-        var ship = _gameLogicHandler.GetShipByCellCoordinates(move, board);
+        var ship = _gameLogicHandler.GetShipByCellCoordinates(cellCoordinates, board);
         
         if (ship == null)
         {
@@ -127,21 +132,21 @@ public class BattleshipHub : Hub
         try
         {
             ship.IsHorizontal = !ship.IsHorizontal;
-            _gameLogicHandler.PlaceShipToBoard(ship, board);
+            _gameLogicHandler.PlaceShipToBoard(ship, board, cellCoordinates);
 
         }
         catch
         {
             // rollback
             ship.IsHorizontal = !ship.IsHorizontal;
-            _gameLogicHandler.PlaceShipToBoard(ship, board);
+            _gameLogicHandler.PlaceShipToBoard(ship, board, cellCoordinates);
             throw;
         }
             
         SendGameData(session);
     }
     
-    public async Task MakeMove(Move move)
+    public async Task MakeMove(CellCoordinates cellCoordinates)
     {
         //TODO: validation
         var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
@@ -169,7 +174,7 @@ public class BattleshipHub : Hub
 
         try
         {
-            (hasShipBeenHit, hasShipBeenDestroyed) = _gameLogicHandler.MakeMoveToEnemyBoard(move, board);
+            (hasShipBeenHit, hasShipBeenDestroyed) = _gameLogicHandler.MakeMoveToEnemyBoard(cellCoordinates, board);
         }
         catch (Exception e)
         {

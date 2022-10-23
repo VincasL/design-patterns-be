@@ -69,9 +69,9 @@ public class GameLogicHandler
         return gameData;
     }
 
-    public (bool hasShipBeenHit, bool isGameOver) MakeMoveToEnemyBoard(Move move, Board board)
+    public (bool hasShipBeenHit, bool isGameOver) MakeMoveToEnemyBoard(CellCoordinates cellCoordinates, Board board)
     {
-        var hitCell = board.Cells[move.X][ move.Y];
+        var hitCell = board.Cells[cellCoordinates.X][ cellCoordinates.Y];
 
         if (hitCell.Type != CellType.NotShot)
         {
@@ -102,7 +102,7 @@ public class GameLogicHandler
             }
         }
 
-        shipHasBeenDestroyed = damagedShipCells.Count == hitCell.Ship!.Type.GetShipLength();
+        shipHasBeenDestroyed = damagedShipCells.Count == hitCell.Ship!.Length;
 
         if (shipHasBeenDestroyed)
         {
@@ -115,20 +115,20 @@ public class GameLogicHandler
         return (shipHasBeenHit, shipHasBeenDestroyed);
     }
 
-    public void PlaceShipToBoard(Ship ship, Board board)
+    public void PlaceShipToBoard(Ship ship, Board board, CellCoordinates coordinates)
     {
         if (ship.IsHorizontal)
         {
-            for (var y = ship.Cell.Y; y < ship.Cell.Y + ship.Type.GetShipLength(); y++)
+            for (var y = coordinates.Y; y < coordinates.Y + ship.Length; y++)
             {
-                var cell = board.Cells[ship.Cell.X][y];
+                var cell = board.Cells[coordinates.X][y];
                 if (cell.Ship != null)
                 {
                     // rollback
-                    while (y != ship.Cell.Y)
+                    while (y != coordinates.Y)
                     {
                         y--;
-                        cell = board.Cells[ship.Cell.X][y];
+                        cell = board.Cells[coordinates.X][y];
                         cell.Ship = null;
                     }
                     
@@ -140,17 +140,17 @@ public class GameLogicHandler
         }
         else
         {
-            for (var x = ship.Cell.X; x < ship.Cell.X + ship.Type.GetShipLength(); x++)
+            for (var x = coordinates.X; x < coordinates.X + ship.Length; x++)
             {
-                var cell = board.Cells[x][ship.Cell.Y];
+                var cell = board.Cells[x][coordinates.Y];
                 
                 if (cell.Ship != null)
                 {
                     // rollback
-                    while (x != ship.Cell.X)
+                    while (x != coordinates.X)
                     {
                         x--;
-                        cell = board.Cells[x][ship.Cell.Y];
+                        cell = board.Cells[x][coordinates.Y];
                         cell.Ship = null;
                     }
                     
@@ -176,9 +176,9 @@ public class GameLogicHandler
         }
     }
 
-    public Ship? GetShipByCellCoordinates(Move move, Board board)
+    public Ship? GetShipByCellCoordinates(CellCoordinates cellCoordinates, Board board)
     {
-        var ship = board.Cells[move.X][move.Y].Ship;
+        var ship = board.Cells[cellCoordinates.X][cellCoordinates.Y].Ship;
         return ship;
     }
 }

@@ -6,6 +6,7 @@ public class ShipBuilder : IBuilder
 {
     public ShipBuilder(Unit rawUnit) : base(rawUnit)
     {
+        
     }
 
     public override IBuilder AddParts()

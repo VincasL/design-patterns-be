@@ -1,6 +1,6 @@
 ﻿namespace BattleshipsApi.Entities;
 
-public class Move
+public class CellCoordinates
 {
     public int X { get; set; }
     public int Y { get; set; }

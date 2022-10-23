@@ -9,6 +9,18 @@ public enum ShipType
     Destroyer // 2 tiles
 }
 
+public enum MineType
+{
+    Small,
+    Huge,
+    RemoteControlled
+}
+
+public enum MissileType
+{
+    Default
+}
+
 public enum CellType{
     NotShot,
     Empty,

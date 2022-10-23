@@ -14,7 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Builders", "Builders", "{E2
 	ProjectSection(SolutionItems) = preProject
 		MineBuilder.cs = MineBuilder.cs
 		MissileBuilder.cs = MissileBuilder.cs
-		ShipBuilder.cs = ShipBuilder.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Strategy", "Strategy", "{C57993D0-5680-4AEA-8B49-616FDBE3750B}"
