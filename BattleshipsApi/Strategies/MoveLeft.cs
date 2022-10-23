@@ -1,9 +1,9 @@
 ﻿using BattleshipsApi.Entities;
 using System;
 
-public class FastMoveLeft : MoveStrategy
+public class MoveLeft : MoveStrategy
 {
-    public FastMoveLeft()
+    public MoveLeft()
     {
     }
 
@@ -45,7 +45,7 @@ public class FastMoveLeft : MoveStrategy
 			var boardCellUnit = board.Cells[cell.X - 1][cell.Y].Unit;
 			if (boardCellUnit != null && boardCellUnit != unit)
 			{
-				throw new Exception("ship already exists to the right");
+				throw new Exception("ship already exists to the left");
 			}
 		}
 
@@ -60,4 +60,4 @@ public class FastMoveLeft : MoveStrategy
 		}
 	}
 }
-}
+
