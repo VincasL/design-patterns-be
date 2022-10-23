@@ -2,7 +2,7 @@
 
 namespace BattleshipsApi.Entities;
 
-public abstract class Ship:Unit
+public abstract class Ship
 {
     public ShipType Type { get; set; }
     public bool IsHorizontal { get; set; }
