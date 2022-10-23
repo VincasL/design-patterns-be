@@ -4,9 +4,9 @@ namespace BattleshipsApi.Strategies
 {
     public class DontMove : MoveStrategy
     {
-        public override void MoveDifferently()
+        public override void MoveDifferently(Board board, Unit unit)
         {
- 
+            throw new NotImplementedException();
         }
     }
 }
