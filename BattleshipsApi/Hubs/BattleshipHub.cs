@@ -205,13 +205,13 @@ public class BattleshipHub : Hub
         var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
         var ship = _gameLogicHandler.GetUnitByCellCoordinates(coordinates, board);
+
         if (ship == null)
         {
             throw new Exception("no ship :(");
         }
-        var x = new MoveUp();
-        x.MoveDifferently(board, ship);
-
+        ship.MoveStrategy = new MoveUp();
+        ship.MoveStrategy.MoveDifferently(board, ship);
         SendGameData(session);
     }
     public async Task MoveShipDown(CellCoordinates coordinates)
@@ -223,8 +223,8 @@ public class BattleshipHub : Hub
         {
             throw new Exception("no ship :(");
         }
-        var x = new MoveDown();
-        x.MoveDifferently(board, ship);
+        ship.MoveStrategy = new MoveDown();
+        ship.MoveStrategy.MoveDifferently(board, ship);
 
         SendGameData(session);
     }
@@ -237,9 +237,9 @@ public class BattleshipHub : Hub
         {
             throw new Exception("no ship :(");
         }
-        var x = new MoveLeft();
-        x.MoveDifferently(board, ship);
-        
+        ship.MoveStrategy = new MoveLeft();
+        ship.MoveStrategy.MoveDifferently(board, ship);
+
         SendGameData(session);
     }
 
@@ -252,9 +252,9 @@ public class BattleshipHub : Hub
         {
             throw new Exception("no ship :(");
         }
-        var x = new MoveRight();
-        x.MoveDifferently(board, ship);
-        
+        ship.MoveStrategy = new MoveRight();
+        ship.MoveStrategy.MoveDifferently(board, ship);
+
         SendGameData(session);
     }
 
