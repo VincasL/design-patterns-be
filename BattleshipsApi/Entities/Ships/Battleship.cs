@@ -4,7 +4,7 @@
     {
         public Battleship()
         {
-            this.Length = 4;
+            Length = 4;
         }
     }
 }
