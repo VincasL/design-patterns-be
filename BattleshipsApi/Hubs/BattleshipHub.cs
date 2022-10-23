@@ -60,8 +60,9 @@ public class BattleshipHub : Hub
 
     public async Task PlaceShip(CellCoordinates cellCoordinates, ShipType type)
     {
-        var shipFactory = new ShipFactory();
-        var ship = shipFactory.GetShip(type);
+        var factory = new AbstractFactory();
+
+        var ship = factory.CreateShip(type);
         
         var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);

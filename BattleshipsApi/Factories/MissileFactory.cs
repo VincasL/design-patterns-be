@@ -6,7 +6,7 @@ namespace BattleshipsApi.Factories;
 
 public class MissileFactory
 {
-    public Missile GetMine(MissileType type)
+    public Missile GetMissile(MissileType type)
     {
         switch (type)
         {
