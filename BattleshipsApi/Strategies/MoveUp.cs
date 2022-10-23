@@ -29,7 +29,7 @@ public class MoveUp : MoveStrategy
 
 		foreach (var cell in unitCoordinates)
 		{
-			if (cell.Y + 1 >= board.BoardSize)
+			if (cell.X == 0)
 			{
 				throw new Exception("overflows");
 			}
@@ -37,15 +37,15 @@ public class MoveUp : MoveStrategy
 
 		foreach (var cell in unitCoordinates)
 		{
-			if (cell.Y + 1 == board.BoardSize)
+			if (cell.X == 0)
 			{
 				continue;
 			}
 
-			var boardCellUnit = board.Cells[cell.X][cell.Y + 1].Unit;
+			var boardCellUnit = board.Cells[cell.X][cell.Y - 1].Unit;
 			if (boardCellUnit != null && boardCellUnit != unit)
 			{
-				throw new Exception("ship already exists to the top");
+				throw new Exception("ship already exists to the left");
 			}
 		}
 
@@ -56,7 +56,9 @@ public class MoveUp : MoveStrategy
 
 		foreach (var cell in unitCoordinates)
 		{
-			board.Cells[cell.X][cell.Y + 1].Unit = unit;
+			board.Cells[cell.X][cell.Y - 1].Unit = unit;
 		}
+
+
 	}
 }
