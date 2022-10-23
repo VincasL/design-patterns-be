@@ -45,7 +45,7 @@ public class FastMoveLeft : MoveStrategy
 			var boardCellUnit = board.Cells[cell.X - 1][cell.Y].Unit;
 			if (boardCellUnit != null && boardCellUnit != unit)
 			{
-				throw new Exception("ship already exists to the right");
+				throw new Exception("ship already exists to the left");
 			}
 		}
 
