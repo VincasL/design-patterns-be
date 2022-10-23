@@ -1,9 +1,9 @@
 ﻿using BattleshipsApi.Entities;
 using System;
 
-public class FastMoveLeft : MoveStrategy
+public class MoveLeft : MoveStrategy
 {
-    public FastMoveLeft()
+    public MoveLeft()
     {
     }
 
@@ -60,4 +60,4 @@ public class FastMoveLeft : MoveStrategy
 		}
 	}
 }
-}
+
