@@ -2,5 +2,10 @@
 {
     public class Carrier : Ship
     {
+        public Carrier()
+        {
+            Length = 5;
+        }
+
     }
 }

@@ -2,5 +2,9 @@
 {
     public class Submarine : Ship
     {
+        public Submarine()
+        {
+            Length = 3;
+        }
     }
 }

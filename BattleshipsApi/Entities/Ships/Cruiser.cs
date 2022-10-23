@@ -2,5 +2,9 @@
 {
     public class Cruiser : Ship
     {
+        public Cruiser()
+        {
+            Length = 3;
+        }
     }
 }
