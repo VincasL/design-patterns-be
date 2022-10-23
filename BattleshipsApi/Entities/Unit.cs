@@ -2,6 +2,6 @@
 {
     public class Unit
     {
-
+        public int Length { get; set; }
     }
 }

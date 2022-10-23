@@ -3,6 +3,7 @@ using BattleshipsApi.Enums;
 using BattleshipsApi.Factories;
 using BattleshipsApi.Handlers;
 using BattleshipsApi.Helpers;
+using BattleshipsApi.Strategies;
 using Microsoft.AspNetCore.SignalR;
 using SignalRSwaggerGen.Attributes;
 
@@ -100,7 +101,7 @@ public class BattleshipHub : Hub
             throw new Exception("all ships are placed");
         }
 
-        var ship = _gameLogicHandler.GetShipByCellCoordinates(cellCoordinates, board);
+        var ship = _gameLogicHandler.GetUnitByCellCoordinates(cellCoordinates, board) as Ship;
         if (ship == null)
         {
             throw new Exception("no ship here");
@@ -121,7 +122,7 @@ public class BattleshipHub : Hub
         var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
         
-        var ship = _gameLogicHandler.GetShipByCellCoordinates(cellCoordinates, board);
+        var ship = _gameLogicHandler.GetUnitByCellCoordinates(cellCoordinates, board) as Ship;
         
         if (ship == null)
         {
@@ -197,6 +198,21 @@ public class BattleshipHub : Hub
             }
         }
 
+        SendGameData(session);
+    }
+
+    public async Task MoveShipToTheRight(CellCoordinates coordinates)
+    {
+        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
+        var ship = _gameLogicHandler.GetUnitByCellCoordinates(coordinates, board);
+        if (ship == null)
+        {
+            throw new Exception("no ship :(");
+        }
+        var x = new MoveRight();
+        x.MoveDifferently(board, ship);
+        
         SendGameData(session);
     }
 

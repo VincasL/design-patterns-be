@@ -1,7 +1,6 @@
 ﻿using BattleshipsApi.Entities;
-using BattleshipsApi.Enums;
-using BattleshipsApi.Helpers;
-using System;
+
+namespace BattleshipsApi.Strategies;
 
 public class MoveRight : MoveStrategy
 {
@@ -9,27 +8,56 @@ public class MoveRight : MoveStrategy
 	{
 	}
 
-    public override void MoveDifferently(Missile ship, Board board)
-    {
-        if (ship.IsHorizontal)
-        {
-            for (var y = coordinates.Y; y < coordinates.Y + ship.Length; y++)
-            {
-                var cell = board.Cells[coordinates.X][y];
-                if (cell.Ship != null)
-                {
-                    // rollback
-                    while (y != coordinates.Y)
-                    {
-                        y--;
-                        cell = board.Cells[coordinates.X][y];
-                        cell.Ship = null;
-                    }
+	public override void MoveDifferently(Board board, Unit unit)
+	{
+		var unitCoordinates = new List<CellCoordinates>();
+		
+		foreach (var row in board.Cells)
+		{
+			foreach (var cell in row)
+			{
+				if (cell.Unit == unit)
+				{
+					unitCoordinates.Add(new CellCoordinates {X = cell.X, Y = cell.Y});
+				}
+			}
+		}
 
-                    throw new Exception("Ships overlap");
-                }
+		if (unitCoordinates.Count == 0)
+		{
+			throw new Exception("couldnt find unit in cell");
+		}
 
-                cell.Ship = ship;
-            }
-        }
+		foreach (var cell in unitCoordinates)
+		{
+			if (cell.X + 1 >= board.BoardSize)
+			{
+				throw new Exception("overflows");
+			}
+		}
+
+		foreach (var cell in unitCoordinates)
+		{
+			if (cell.X + 1 == board.BoardSize)
+			{
+				continue;
+			}
+			
+			var boardCellUnit = board.Cells[cell.X + 1][cell.Y].Unit;
+			if (boardCellUnit != null && boardCellUnit != unit)
+			{
+				throw new Exception("ship already exists to the right");
+			}
+		}
+
+		foreach (var cell in unitCoordinates)
+		{
+			board.Cells[cell.X][cell.Y].Unit = null;
+		}
+		
+		foreach (var cell in unitCoordinates)
+		{
+			board.Cells[cell.X + 1][cell.Y].Unit = unit;
+		}
+	}
 }

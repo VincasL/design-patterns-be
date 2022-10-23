@@ -3,6 +3,7 @@
 public class Board
 {
     public Cell[][] Cells { get; set; }
+    public int BoardSize { get; }
 
     public Board(int boardSize)
     {
@@ -21,5 +22,6 @@ public class Board
         }
 
         Cells = cells;
+        BoardSize = boardSize;
     }
 }

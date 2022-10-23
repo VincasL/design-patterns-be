@@ -25,7 +25,7 @@ public class GameLogicHandler
             for (var j = 0; j < row.Length; j++)
             {
                 var cell = row[j];
-                if (cell.Ship != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
+                if (cell.Unit != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
                 {
                     gameData.PlayerOne.Board.Cells[i][j].Type = CellType.Ship;
                 }
@@ -50,7 +50,7 @@ public class GameLogicHandler
             for (var j = 0; j < row.Length; j++)
             {
                 var cell = row[j];
-                if (cell.Ship != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
+                if (cell.Unit != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
                 {
                     gameData.PlayerTwo.Board.Cells[i][j].Type = CellType.Ship;
                 }
@@ -78,7 +78,7 @@ public class GameLogicHandler
             throw new Exception("Cell has already been hit");
         }
 
-        var shipHasBeenHit = hitCell.Ship != null;
+        var shipHasBeenHit = hitCell.Unit != null;
         var shipHasBeenDestroyed = false;
 
         if (!shipHasBeenHit)
@@ -95,14 +95,14 @@ public class GameLogicHandler
         {
             foreach (var cell in row)
             {
-                if (cell.Ship == hitCell.Ship && cell.Type == CellType.DamagedShip)
+                if (cell.Unit == hitCell.Unit && cell.Type == CellType.DamagedShip)
                 {
                     damagedShipCells.Add(cell);
                 }
             }
         }
 
-        shipHasBeenDestroyed = damagedShipCells.Count == hitCell.Ship!.Length;
+        shipHasBeenDestroyed = damagedShipCells.Count == hitCell.Unit!.Length;
 
         if (shipHasBeenDestroyed)
         {
@@ -122,20 +122,20 @@ public class GameLogicHandler
             for (var y = coordinates.Y; y < coordinates.Y + ship.Length; y++)
             {
                 var cell = board.Cells[coordinates.X][y];
-                if (cell.Ship != null)
+                if (cell.Unit != null)
                 {
                     // rollback
                     while (y != coordinates.Y)
                     {
                         y--;
                         cell = board.Cells[coordinates.X][y];
-                        cell.Ship = null;
+                        cell.Unit = null;
                     }
                     
                     throw new Exception("Ships overlap");
                 }
 
-                cell.Ship = ship;
+                cell.Unit = ship;
             }
         }
         else
@@ -144,41 +144,41 @@ public class GameLogicHandler
             {
                 var cell = board.Cells[x][coordinates.Y];
                 
-                if (cell.Ship != null)
+                if (cell.Unit != null)
                 {
                     // rollback
                     while (x != coordinates.X)
                     {
                         x--;
                         cell = board.Cells[x][coordinates.Y];
-                        cell.Ship = null;
+                        cell.Unit = null;
                     }
                     
                     throw new Exception("Ships overlap");
                 }
 
-                cell.Ship = ship;
+                cell.Unit = ship;
             }
         }
     }
 
-    public void UndoPlaceShipToBoardByCell(Ship ship, Board board)
+    public void UndoPlaceShipToBoardByCell(Unit unit, Board board)
     {
         foreach (var row in board.Cells)
         {
             foreach (var cell in row)
             {
-                if (cell.Ship == ship)
+                if (cell.Unit == unit)
                 {
-                    cell.Ship = null;
+                    cell.Unit = null;
                 }
             }
         }
     }
 
-    public Ship? GetShipByCellCoordinates(CellCoordinates cellCoordinates, Board board)
+    public Unit? GetUnitByCellCoordinates(CellCoordinates cellCoordinates, Board board)
     {
-        var ship = board.Cells[cellCoordinates.X][cellCoordinates.Y].Ship;
-        return ship;
+        var unit = board.Cells[cellCoordinates.X][cellCoordinates.Y].Unit;
+        return unit;
     }
 }
