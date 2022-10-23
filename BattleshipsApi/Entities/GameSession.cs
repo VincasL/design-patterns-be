@@ -1,16 +1,8 @@
 ﻿namespace BattleshipsApi.Entities;
 
-public class GameSession
+public class GameSession: IGameSession
 {
     private Settings _defaultSettings = new Settings(10);
-
-    public Player PlayerOne { get; set; }
-    public Player PlayerTwo { get; set; }
-    public string NextPlayerTurnConnectionId { get; set; }
-    public bool IsGameOver { get; set; } = false;
-    public Settings Settings { get; set; }
-    public bool AllPlayersPlacedShips =>
-        PlayerOne.AreAllShipsPlaced && PlayerTwo.AreAllShipsPlaced;
 
     public GameSession(Player playerOne, Player playerTwo, Settings? gameSettings = null)
     {
@@ -22,7 +14,6 @@ public class GameSession
         NextPlayerTurnConnectionId = PlayerOne.ConnectionId;
     }
     
-
     public Player GetPlayerByConnectionId(string connectionId)
     {
         return PlayerOne.ConnectionId == connectionId ? PlayerOne : PlayerTwo;
