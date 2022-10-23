@@ -200,7 +200,34 @@ public class BattleshipHub : Hub
 
         SendGameData(session);
     }
-    
+    public async Task MoveShipUp(CellCoordinates coordinates)
+    {
+        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
+        var ship = _gameLogicHandler.GetUnitByCellCoordinates(coordinates, board);
+        if (ship == null)
+        {
+            throw new Exception("no ship :(");
+        }
+        var x = new MoveUp();
+        x.MoveDifferently(board, ship);
+
+        SendGameData(session);
+    }
+    public async Task MoveShipDown(CellCoordinates coordinates)
+    {
+        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
+        var ship = _gameLogicHandler.GetUnitByCellCoordinates(coordinates, board);
+        if (ship == null)
+        {
+            throw new Exception("no ship :(");
+        }
+        var x = new MoveDown();
+        x.MoveDifferently(board, ship);
+
+        SendGameData(session);
+    }
     public async Task MoveShipToTheLeft(CellCoordinates coordinates)
     {
         var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
