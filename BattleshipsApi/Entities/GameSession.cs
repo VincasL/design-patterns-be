@@ -1,11 +1,15 @@
-﻿namespace BattleshipsApi.Entities;
+﻿using AutoMapper;
+
+namespace BattleshipsApi.Entities;
 
 public class GameSession: IGameSession
 {
+    private readonly IMapper _mapper;
     private Settings _defaultSettings = new Settings(10);
 
-    public GameSession(Player playerOne, Player playerTwo, Settings? gameSettings = null)
+    public GameSession(Player playerOne, Player playerTwo, IMapper mapper, Settings? gameSettings = null)
     {
+        _mapper = mapper;
         Settings = gameSettings ?? _defaultSettings;
         PlayerOne = playerOne;
         PlayerTwo = playerTwo;
@@ -24,8 +28,28 @@ public class GameSession: IGameSession
         return PlayerOne.ConnectionId != connectionId ? PlayerOne : PlayerTwo;
     }
 
+    public GameSession ShowPlayerOneShips()
+    {
+        PlayerOne.Board.RevealBoardShips();
+        return this;
+    }
+
+    public GameSession SwapPlayers()
+    {
+        (PlayerOne, PlayerTwo) = (PlayerTwo, PlayerOne);
+        return this;
+    }
 
 
-    public void SetMoveToNextPlayer() => 
+
+    public GameSession SetMoveToNextPlayer()
+    {
         NextPlayerTurnConnectionId = NextPlayerTurnConnectionId == PlayerOne.ConnectionId ? PlayerTwo.ConnectionId : PlayerOne.ConnectionId;
+        return this;
+    }
+
+    public GameSession Clone()
+    {
+        return _mapper.Map<GameSession>(this);
+    }
 }

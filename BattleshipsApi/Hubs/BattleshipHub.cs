@@ -14,11 +14,15 @@ public class BattleshipHub : Hub
 {
     private readonly QueueHandler _queueHandler;
     private readonly GameLogicHandler _gameLogicHandler;
+    private readonly IHubContext<BattleshipHub> _hubContext;
+    private readonly GameDataAdapter _gameDataAdapter;
 
-    public BattleshipHub(QueueHandler queueHandler, GameLogicHandler gameLogicHandler)
+    public BattleshipHub(QueueHandler queueHandler, GameLogicHandler gameLogicHandler, IHubContext<BattleshipHub> hubContext)
     {
         _queueHandler = queueHandler;
         _gameLogicHandler = gameLogicHandler;
+        _hubContext = hubContext;
+        _gameDataAdapter = new GameDataAdapter(hubContext);
     }
 
     public async Task JoinQueue(string name)
@@ -273,12 +277,11 @@ public class BattleshipHub : Hub
 
     public async void SendGameData(GameSession gameSession)
     {
+        var playerOneSessionData = gameSession.Clone().ShowPlayerOneShips();
+        var playerTwoSessionData = gameSession.Clone().SwapPlayers().ShowPlayerOneShips();
 
-        var gameDataPlayerOne = _gameLogicHandler.MapSessionToGameDataDtoPlayerOne(gameSession);
-        var gameDataPlayerTwo = _gameLogicHandler.MapSessionToGameDataDtoPlayerTwo(gameSession);
-
-        await Clients.Client(gameSession.PlayerOne.ConnectionId).SendAsync("gameData", gameDataPlayerOne);
-        await Clients.Client(gameSession.PlayerTwo.ConnectionId).SendAsync("gameData", gameDataPlayerTwo);
+        await _gameDataAdapter.SendGameData(playerOneSessionData);
+        await _gameDataAdapter.SendGameData(playerTwoSessionData);
     }
 
     public async Task AssignNewConnectionId(string connectionId)

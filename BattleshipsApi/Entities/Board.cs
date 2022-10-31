@@ -1,4 +1,6 @@
-﻿namespace BattleshipsApi.Entities;
+﻿using BattleshipsApi.Enums;
+
+namespace BattleshipsApi.Entities;
 
 public class Board
 {
@@ -23,5 +25,21 @@ public class Board
 
         Cells = cells;
         BoardSize = boardSize;
+    }
+
+    public Board RevealBoardShips()
+    {
+        foreach (var row in Cells)
+        {
+            foreach (var cell in row)
+            {
+                if (cell.Unit != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
+                {
+                    cell.Type = CellType.Ship;
+                }
+            }
+        }
+
+        return this;
     }
 }
