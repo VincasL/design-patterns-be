@@ -1,5 +1,5 @@
 ﻿using BattleshipsApi.DTO;
-using BattleshipsApi.Helpers;
+using BattleshipsApi.Entities;
 using BattleshipsApi.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
@@ -16,6 +16,6 @@ public class GameDataSender
     public async Task SendGameData(GameData data, string connectionId)
     {
         Console.WriteLine($"Sending data to ${connectionId}");
-        await _context.Clients.Client(connectionId).SendAsync("gameData", new GameData());
+        await _context.Clients.Client(connectionId).SendAsync("gameData", data);
     }
 }

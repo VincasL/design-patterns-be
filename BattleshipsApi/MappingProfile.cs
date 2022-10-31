@@ -10,7 +10,8 @@ namespace BattleshipsApi
         {
             CreateMap<GameSession, GameData>();
             CreateMap<Player, PlayerDto>();
-            CreateMap<Board, BoardDto>();
+            CreateMap<Board, BoardDto>()
+                .ForMember(x => x.Cells, opt => opt.Ignore());
             CreateMap<Cell, CellDto>();
         }
     }

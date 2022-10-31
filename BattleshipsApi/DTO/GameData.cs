@@ -1,4 +1,6 @@
-﻿namespace BattleshipsApi.DTO;
+﻿using BattleshipsApi.Entities;
+
+namespace BattleshipsApi.DTO;
 
 public class GameData
 {

@@ -1,4 +1,5 @@
-﻿using BattleshipsApi.Entities;
+﻿using AutoMapper;
+using BattleshipsApi.Entities;
 using BattleshipsApi.Enums;
 using BattleshipsApi.Factories;
 using BattleshipsApi.Handlers;
@@ -17,12 +18,12 @@ public class BattleshipHub : Hub
     private readonly IHubContext<BattleshipHub> _hubContext;
     private readonly GameDataAdapter _gameDataAdapter;
 
-    public BattleshipHub(QueueHandler queueHandler, GameLogicHandler gameLogicHandler, IHubContext<BattleshipHub> hubContext)
+    public BattleshipHub(QueueHandler queueHandler, GameLogicHandler gameLogicHandler, IHubContext<BattleshipHub> hubContext, IMapper mapper)
     {
         _queueHandler = queueHandler;
         _gameLogicHandler = gameLogicHandler;
         _hubContext = hubContext;
-        _gameDataAdapter = new GameDataAdapter(hubContext);
+        _gameDataAdapter = new GameDataAdapter(hubContext, mapper);
     }
 
     public async Task JoinQueue(string name)

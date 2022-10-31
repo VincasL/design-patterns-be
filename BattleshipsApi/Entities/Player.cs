@@ -15,4 +15,14 @@ public class Player
         ConnectionId = connectionId;
         Name = name;
     }
+
+    public Player(string connectionId, string name, Board board, bool areAllShipsPlaced, int destroyedShipCount, bool winner)
+    {
+        ConnectionId = connectionId;
+        Name = name;
+        Board = board;
+        AreAllShipsPlaced = areAllShipsPlaced;
+        DestroyedShipCount = destroyedShipCount;
+        Winner = winner;
+    }
 }

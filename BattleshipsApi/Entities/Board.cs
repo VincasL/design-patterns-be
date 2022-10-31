@@ -1,25 +1,29 @@
-﻿using BattleshipsApi.Enums;
+﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+using BattleshipsApi.Enums;
 
 namespace BattleshipsApi.Entities;
 
 public class Board
 {
-    public Cell[][] Cells { get; set; }
+    public Cell[,] Cells { get; set; }
     public int BoardSize { get; }
 
+    public Board(Cell[,] cells, int boardSize)
+    {
+        Cells = cells;
+        BoardSize = boardSize;
+    }
+    
     public Board(int boardSize)
     {
-        var cells = new Cell[boardSize][];
-        for(var i = 0; i < boardSize; i++)
-        {
-            cells[i] = new Cell[boardSize];
-        }
+        var cells = new Cell[boardSize, boardSize];
 
-        for (var i = 0; i < boardSize; i++)
+        for (int i = 0; i < boardSize; i++)
         {
             for (var j = 0; j < boardSize; j++)
             {
-                cells[i][j] = new Cell(i,j);
+                cells[i,j] = new Cell(i, j);
             }
         }
 
@@ -29,17 +33,29 @@ public class Board
 
     public Board RevealBoardShips()
     {
-        foreach (var row in Cells)
+        foreach (var cell in Cells)
         {
-            foreach (var cell in row)
+            if (cell.Unit != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
             {
-                if (cell.Unit != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
-                {
-                    cell.Type = CellType.Ship;
-                }
+                cell.Type = CellType.Ship;
             }
         }
 
         return this;
+    }
+
+    public Board Clone()
+    {
+        var cells = new Cell[BoardSize, BoardSize];
+
+        for (int i = 0; i < BoardSize; i++)
+        {
+            for (var j = 0; j < BoardSize; j++)
+            {
+                cells[i,j] = new Cell(i, j, Cells[i,j].Type, Cells[i,j].Unit);
+            }
+        }
+
+        return new Board(cells, BoardSize);
     }
 }

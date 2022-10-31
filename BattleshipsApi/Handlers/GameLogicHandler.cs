@@ -14,64 +14,10 @@ public class GameLogicHandler
     {
         _mapper = mapper;
     }
-    
-    public GameData MapSessionToGameDataDtoPlayerOne(GameSession gameSession)
-    {
-        var gameData = _mapper.Map<GameData>(gameSession);
-        
-        for (var i = 0; i < gameSession.PlayerOne.Board.Cells.Length; i++)
-        {
-            var row = gameSession.PlayerOne.Board.Cells[i];
-            for (var j = 0; j < row.Length; j++)
-            {
-                var cell = row[j];
-                if (cell.Unit != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
-                {
-                    gameData.PlayerOne.Board.Cells[i][j].Type = CellType.Ship;
-                }
-            }
-        }
-        
-        gameData.IsYourMove = gameSession.NextPlayerTurnConnectionId == gameSession.PlayerOne.ConnectionId;
-        if (gameSession.IsGameOver)
-        {
-            gameData.Winner = gameSession.PlayerOne.Winner;
-        }
-
-        return gameData;
-    }
-    
-    public GameData MapSessionToGameDataDtoPlayerTwo(GameSession gameSession)
-    {
-        var gameData = _mapper.Map<GameData>(gameSession);
-        for (var i = 0; i < gameSession.PlayerTwo.Board.Cells.Length; i++)
-        {
-            var row = gameSession.PlayerTwo.Board.Cells[i];
-            for (var j = 0; j < row.Length; j++)
-            {
-                var cell = row[j];
-                if (cell.Unit != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
-                {
-                    gameData.PlayerTwo.Board.Cells[i][j].Type = CellType.Ship;
-                }
-            }
-        }
-        
-        gameData.IsYourMove = gameSession.NextPlayerTurnConnectionId == gameSession.PlayerTwo.ConnectionId;
-        if (gameSession.IsGameOver)
-        {
-            gameData.Winner = gameSession.PlayerTwo.Winner;
-        }
-        
-        // Switch players: so enemy always displays on the right
-        (gameData.PlayerOne, gameData.PlayerTwo) = (gameData.PlayerTwo, gameData.PlayerOne);
-
-        return gameData;
-    }
 
     public (bool hasShipBeenHit, bool isGameOver) MakeMoveToEnemyBoard(CellCoordinates cellCoordinates, Board board)
     {
-        var hitCell = board.Cells[cellCoordinates.X][ cellCoordinates.Y];
+        var hitCell = board.Cells[cellCoordinates.X, cellCoordinates.Y];
 
         if (hitCell.Type != CellType.NotShot)
         {
@@ -91,14 +37,11 @@ public class GameLogicHandler
 
         var damagedShipCells = new List<Cell>();
 
-        foreach (var row in board.Cells)
+        foreach (var cell in board.Cells)
         {
-            foreach (var cell in row)
+            if (cell.Unit == hitCell.Unit && cell.Type == CellType.DamagedShip)
             {
-                if (cell.Unit == hitCell.Unit && cell.Type == CellType.DamagedShip)
-                {
-                    damagedShipCells.Add(cell);
-                }
+                damagedShipCells.Add(cell);
             }
         }
 
@@ -121,14 +64,14 @@ public class GameLogicHandler
         {
             for (var y = coordinates.Y; y < coordinates.Y + ship.Length; y++)
             {
-                var cell = board.Cells[coordinates.X][y];
+                var cell = board.Cells[coordinates.X,y];
                 if (cell.Unit != null)
                 {
                     // rollback
                     while (y != coordinates.Y)
                     {
                         y--;
-                        cell = board.Cells[coordinates.X][y];
+                        cell = board.Cells[coordinates.X,y];
                         cell.Unit = null;
                     }
                     
@@ -142,7 +85,7 @@ public class GameLogicHandler
         {
             for (var x = coordinates.X; x < coordinates.X + ship.Length; x++)
             {
-                var cell = board.Cells[x][coordinates.Y];
+                var cell = board.Cells[x,coordinates.Y];
                 
                 if (cell.Unit != null)
                 {
@@ -150,7 +93,7 @@ public class GameLogicHandler
                     while (x != coordinates.X)
                     {
                         x--;
-                        cell = board.Cells[x][coordinates.Y];
+                        cell = board.Cells[x,coordinates.Y];
                         cell.Unit = null;
                     }
                     
@@ -164,21 +107,18 @@ public class GameLogicHandler
 
     public void UndoPlaceShipToBoardByCell(Unit unit, Board board)
     {
-        foreach (var row in board.Cells)
+        foreach (var cell in board.Cells)
         {
-            foreach (var cell in row)
+            if (cell.Unit == unit)
             {
-                if (cell.Unit == unit)
-                {
-                    cell.Unit = null;
-                }
+                cell.Unit = null;
             }
         }
     }
 
     public Unit? GetUnitByCellCoordinates(CellCoordinates cellCoordinates, Board board)
     {
-        var unit = board.Cells[cellCoordinates.X][cellCoordinates.Y].Unit;
+        var unit = board.Cells[cellCoordinates.X,cellCoordinates.Y].Unit;
         return unit;
     }
 }

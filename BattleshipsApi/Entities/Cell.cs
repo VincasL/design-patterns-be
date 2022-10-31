@@ -15,5 +15,13 @@ public class Cell
         X = x;
         Y = y;
     }
+
+    public Cell(int x, int y, CellType type, Unit? unit)
+    {
+        X = x;
+        Y = y;
+        Type = type;
+        Unit = unit;
+    }
 }
 
