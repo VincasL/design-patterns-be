@@ -4,12 +4,12 @@ namespace BattleshipsApi.Handlers;
 
 public static class Sessions
 {
-    private static List<GameSession>? _sessions = null;
-    private static object _threadLock = new object();
+    private static List<GameSession>? _sessions;
+    private static readonly object ThreadLock = new();
 
     public static List<GameSession> GetSessions()
     {
-        lock (_threadLock)
+        lock (ThreadLock)
         {
             if (_sessions == null)
             {
