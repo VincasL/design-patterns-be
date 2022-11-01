@@ -60,8 +60,10 @@ public class BattleshipHub : Hub
     {
         var factory = new AbstractFactory();
 
-        var ship = factory.CreateShip(type);
-        
+        var ship = factory.CreateShip(type,"American");
+        //var ship = factory.CreateShip(type, "Russian");
+        //var ship = factory.CreateShip(type, "German");
+
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;

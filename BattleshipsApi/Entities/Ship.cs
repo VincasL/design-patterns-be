@@ -7,7 +7,7 @@ public abstract class Ship : Unit
 {
     public ShipType Type { get; set; }
     public bool IsHorizontal { get; set; }
-    public int ShieldStrength { get; set; }
+
     public int ArmourStrength { get; set; }
     public int Fuel { get; set; }
 }

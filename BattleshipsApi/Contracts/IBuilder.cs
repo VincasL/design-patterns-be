@@ -9,15 +9,16 @@ namespace BattleshipsApi.Contracts
         {
             this.rawUnit = rawUnit;
         }
-        public abstract IBuilder AddParts();
-        public abstract IBuilder AssemblyBody();
-        public Unit build()
+        public abstract IBuilder AddArmour(int armour);
+        public abstract IBuilder AddDammage(int dammage);
+        public IBuilder AddStrategy(MoveStrategy strategy)
         {
-            return null;
+            rawUnit.MoveStrategy = strategy;
+            return this;
         }
-        public IBuilder AddAlgorithm(MoveStrategy algo)
+        public Unit Build()
         {
-            return null;
+            return rawUnit;
         }
     }
 }

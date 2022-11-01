@@ -4,18 +4,21 @@ using System;
 
 public class ShipBuilder : IBuilder
 {
-    public ShipBuilder(Unit rawUnit) : base(rawUnit)
+    private Ship _ship;
+
+    public ShipBuilder(Ship rawUnit) : base(rawUnit)
     {
-        
+        _ship = rawUnit;
     }
 
-    public override IBuilder AddParts()
+    public override IBuilder AddArmour(int armour)
     {
-        throw new NotImplementedException();
+        _ship.ArmourStrength = armour;
+        return this;
     }
 
-    public override IBuilder AssemblyBody()
+    public override IBuilder AddDammage(int dammage)
     {
-        throw new NotImplementedException();
+        return this;
     }
 }

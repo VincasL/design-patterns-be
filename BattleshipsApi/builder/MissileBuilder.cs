@@ -4,17 +4,20 @@ using System;
 
 public class MissileBuilder : IBuilder
 {
-    public MissileBuilder(Unit rawUnit) : base(rawUnit)
+    private Missile _missile;
+    public MissileBuilder(Missile rawUnit) : base(rawUnit)
     {
+        _missile = rawUnit;
     }
 
-    public override IBuilder AddParts()
+    public override IBuilder AddArmour(int armour)
     {
-        throw new NotImplementedException();
+        return this;
     }
 
-    public override IBuilder AssemblyBody()
+    public override IBuilder AddDammage(int dammage)
     {
-        throw new NotImplementedException();
+        _missile.Dammage = dammage;
+        return this;
     }
 }
