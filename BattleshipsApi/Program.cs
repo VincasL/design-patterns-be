@@ -37,11 +37,6 @@ var mapperConfig = new MapperConfiguration(mc =>
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
-
-// builder.Services.AddDbContext<ApplicationDbContext>(
-//     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {

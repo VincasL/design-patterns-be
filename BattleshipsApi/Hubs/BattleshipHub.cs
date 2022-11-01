@@ -15,14 +15,12 @@ public class BattleshipHub : Hub
 {
     private readonly QueueHandler _queueHandler;
     private readonly GameLogicHandler _gameLogicHandler;
-    private readonly IHubContext<BattleshipHub> _hubContext;
     private readonly GameDataAdapter _gameDataAdapter;
 
     public BattleshipHub(QueueHandler queueHandler, GameLogicHandler gameLogicHandler, IHubContext<BattleshipHub> hubContext, IMapper mapper)
     {
         _queueHandler = queueHandler;
         _gameLogicHandler = gameLogicHandler;
-        _hubContext = hubContext;
         _gameDataAdapter = new GameDataAdapter(hubContext, mapper);
     }
 

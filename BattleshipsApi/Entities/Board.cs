@@ -7,6 +7,8 @@ namespace BattleshipsApi.Entities;
 public class Board
 {
     public Cell[,] Cells { get; set; }
+
+
     public int BoardSize { get; }
 
     public Board(Cell[,] cells, int boardSize)

@@ -1,5 +1,4 @@
 ﻿using BattleshipsApi.DTO;
-using BattleshipsApi.Entities;
 using BattleshipsApi.Hubs;
 using Microsoft.AspNetCore.SignalR;
 

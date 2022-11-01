@@ -8,13 +8,6 @@ namespace BattleshipsApi.Handlers;
 
 public class GameLogicHandler
 {
-    private IMapper _mapper;
-
-    public GameLogicHandler(IMapper mapper)
-    {
-        _mapper = mapper;
-    }
-
     public (bool hasShipBeenHit, bool isGameOver) MakeMoveToEnemyBoard(CellCoordinates cellCoordinates, Board board)
     {
         var hitCell = board.Cells[cellCoordinates.X, cellCoordinates.Y];
