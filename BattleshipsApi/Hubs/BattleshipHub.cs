@@ -128,28 +128,62 @@ public class BattleshipHub : Hub
     {
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
-        
         var ship = _battleshipsFacade.GetUnitByCellCoordinates(cellCoordinates, board) as Ship;
         
         if (ship == null)
         {
             throw new Exception("No ship to rotate in this cell");
         }
-        
-        _battleshipsFacade.UndoPlaceShipToBoardByCell(ship, board);
 
-        try
+        var unitCoordinates = new List<CellCoordinates>();
+
+        foreach (var cell in board.Cells)
         {
-            ship.IsHorizontal = !ship.IsHorizontal;
-            _battleshipsFacade.PlaceShipToBoard(ship, board, cellCoordinates);
-
+            if (cell.Unit == ship)
+            {
+                unitCoordinates.Add(new CellCoordinates { X = cell.X, Y = cell.Y });
+            }
         }
-        catch
+        foreach (var cell in unitCoordinates)
         {
-            // rollback
-            ship.IsHorizontal = !ship.IsHorizontal;
-            _battleshipsFacade.PlaceShipToBoard(ship, board, cellCoordinates);
-            throw;
+            if ((cell.Y + ship.Length > board.BoardSize && !ship.IsHorizontal) || (cell.X + ship.Length > board.BoardSize && ship.IsHorizontal))
+            {
+                throw new Exception("out of bounds");
+            }
+        }
+        if (!ship.IsHorizontal)
+        {
+            var first_coord = unitCoordinates[0];
+            for (int i = 1; i < ship.Length; i++)
+            {
+                if (board.Cells[first_coord.X, first_coord.Y + i].Unit != null)
+                {
+                    throw new Exception("ship already exists below");
+                }
+            }
+            for (int i = 1; i < unitCoordinates.Count; i++)
+            {
+                board.Cells[unitCoordinates[i].X, unitCoordinates[i].Y].Unit = null;
+                board.Cells[first_coord.X, first_coord.Y + i].Unit = ship;
+            }
+            ship.IsHorizontal = true;
+        }
+        else
+        {
+            var first_coord = unitCoordinates[0];
+            for (int i = 1; i < ship.Length; i++)
+            {
+                if (board.Cells[first_coord.X + i, first_coord.Y].Unit != null)
+                {
+                    throw new Exception("ship already exists to the right");
+                }
+            }
+            for (int i = 1; i < unitCoordinates.Count; i++)
+            {
+                board.Cells[unitCoordinates[i].X, unitCoordinates[i].Y].Unit = null;
+                board.Cells[first_coord.X + i, first_coord.Y].Unit = ship;
+            }
+            ship.IsHorizontal = false;
         }
             
         SendGameData(session);
