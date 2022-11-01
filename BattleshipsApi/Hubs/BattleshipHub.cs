@@ -30,13 +30,13 @@ public class BattleshipHub : Hub
         }
     }
 
-    public async Task PlaceShips()
+    public async Task SaveUnits()
     {
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
 
-        if (session.AllPlayersPlacedShips || player.AreAllShipsPlaced)
+        if (session.AllPlayersPlacedUnits || player.AreAllUnitsPlaced)
         {
             throw new Exception("Ships already placed");
         }
@@ -46,12 +46,12 @@ public class BattleshipHub : Hub
             throw new Exception("Game is over bro");
         }
 
-        if (player.PlacedShips.Count != 5)
+        if (player.PlacedShips.Count != session.Settings.ShipCount)
         {
             throw new Exception("Not all ships placed");
         }
 
-        player.AreAllShipsPlaced = true;
+        player.AreAllUnitsPlaced = true;
         
         SendGameData(session);
     }
@@ -68,12 +68,12 @@ public class BattleshipHub : Hub
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
         
-        if (player.AreAllShipsPlaced || session.AllPlayersPlacedShips)
+        if (player.AreAllUnitsPlaced || session.AllPlayersPlacedUnits)
         {
             throw new Exception("all ships are placed");
         }
 
-        if (player.PlacedShips.Count > 5)
+        if (player.PlacedShips.Count > session.Settings.ShipCount)
         {
             throw new Exception("enough ships are placed");
         }
@@ -95,7 +95,7 @@ public class BattleshipHub : Hub
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
         
-        if (player.AreAllShipsPlaced || session.AllPlayersPlacedShips)
+        if (player.AreAllUnitsPlaced || session.AllPlayersPlacedUnits)
         {
             throw new Exception("all ships are placed");
         }
@@ -152,7 +152,7 @@ public class BattleshipHub : Hub
         //TODO: validation
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
 
-        if (!session.AllPlayersPlacedShips)
+        if (!session.AllPlayersPlacedUnits)
         {
             throw new Exception("Not all ships placed");
         }
@@ -266,7 +266,7 @@ public class BattleshipHub : Hub
     public async void StartGame(Player player1, Player player2)
     {
         var session = _battleshipsFacade.CreateSession(player1, player2);
-        await Clients.Clients(player1.ConnectionId, player2.ConnectionId).SendAsync("startGame");
+        await _battleshipsFacade.StartGame(session);
         SendGameData(session);
     }
 
@@ -277,7 +277,6 @@ public class BattleshipHub : Hub
 
         await _battleshipsFacade.SendGameData(playerOneSessionData);
         await _battleshipsFacade.SendGameData(playerTwoSessionData);
-        
     }
 
     public async Task AssignNewConnectionId(string connectionId)

@@ -46,6 +46,7 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddSingleton<QueueHandler>();
 builder.Services.AddTransient<GameLogicHandler>();
+builder.Services.AddTransient<GameDataSender>();
 builder.Services.AddSingleton<BattleshipsFacade>();
 
 builder.Services.AddSignalR(c =>

@@ -12,11 +12,13 @@ public class BattleshipsFacade
     private readonly QueueHandler _queueHandler;
     private readonly GameLogicHandler _gameLogicHandler;
     private readonly GameDataAdapter _gameDataAdapter;
+    private readonly GameDataSender _gameDataSender;
 
-    public BattleshipsFacade(QueueHandler queueHandler, GameLogicHandler gameLogicHandler, IMapper mapper, IHubContext<BattleshipHub> hubContext)
+    public BattleshipsFacade(QueueHandler queueHandler, GameLogicHandler gameLogicHandler, IMapper mapper, IHubContext<BattleshipHub> hubContext, GameDataSender gameDataSender)
     {
         _queueHandler = queueHandler;
         _gameLogicHandler = gameLogicHandler;
+        _gameDataSender = gameDataSender;
         _gameDataAdapter = new GameDataAdapter(hubContext, mapper);
     }
 
@@ -54,6 +56,11 @@ public class BattleshipsFacade
     {
         await _gameDataAdapter.SendGameData(session);
     }
+    
+    public async Task StartGame(GameSession session)
+    {
+        await _gameDataSender.SendStartGame(session.PlayerOne.ConnectionId, session.PlayerTwo.ConnectionId);
+    }
 
     public GameSession GetSessionByConnectionId(string contextConnectionId)
     {
@@ -69,4 +76,5 @@ public class BattleshipsFacade
     {
         Sessions.BindNewConnectionIdToPlayer(connectionId, contextConnectionId, session);
     }
+    
 }
