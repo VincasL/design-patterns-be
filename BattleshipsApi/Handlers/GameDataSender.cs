@@ -17,4 +17,9 @@ public class GameDataSender
         Console.WriteLine($"Sending data to ${connectionId}");
         await _context.Clients.Client(connectionId).SendAsync("gameData", data);
     }
+
+    public async Task SendStartGame(string playerOneConnectionId, string playerTwoConnectionId)
+    {
+        await _context.Clients.Clients(playerOneConnectionId, playerTwoConnectionId).SendAsync("startGame");
+    }
 }
