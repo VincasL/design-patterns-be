@@ -28,6 +28,7 @@ public class GameDataAdapter : ITarget
         }
 
         gameData.PlayerOne.AreAllShipsPlaced = session.PlayerOne.AreAllUnitsPlaced;
+        gameData.AllPlayersPlacedShips = session.AllPlayersPlacedUnits;
 
         var boardSize = session.Settings.BoardSize;
         var playerOneBoardCells = new CellDto[session.Settings.BoardSize][];
