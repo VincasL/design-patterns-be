@@ -26,36 +26,25 @@ public class MoveUp : MoveStrategy
 
 		foreach (var cell in unitCoordinates)
 		{
-			if (cell.X == 0)
+			if (cell.Y == 0)
 			{
-				throw new Exception("overflows");
+				throw new Exception("out of bounds");
 			}
 		}
 
 		foreach (var cell in unitCoordinates)
 		{
-			if (cell.X == 0)
-			{
-				continue;
-			}
-
 			var boardCellUnit = board.Cells[cell.X,cell.Y - 1].Unit;
 			if (boardCellUnit != null && boardCellUnit != unit)
 			{
-				throw new Exception("ship already exists to the left");
+				throw new Exception("Ship already exists above");
 			}
 		}
 
 		foreach (var cell in unitCoordinates)
 		{
 			board.Cells[cell.X,cell.Y].Unit = null;
-		}
-
-		foreach (var cell in unitCoordinates)
-		{
-			board.Cells[cell.X,cell.Y - 1].Unit = unit;
-		}
-
-
+            board.Cells[cell.X, cell.Y - 1].Unit = unit;
+        }
 	}
 }

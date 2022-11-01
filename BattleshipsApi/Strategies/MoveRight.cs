@@ -29,7 +29,7 @@ public class MoveRight : MoveStrategy
 		{
 			if (cell.X + 1 >= board.BoardSize)
 			{
-				throw new Exception("overflows");
+				throw new Exception("out of bounds");
 			}
 		}
 
@@ -47,14 +47,10 @@ public class MoveRight : MoveStrategy
 			}
 		}
 
-		foreach (var cell in unitCoordinates)
+		foreach (var cell in unitCoordinates.AsEnumerable().Reverse())
 		{
 			board.Cells[cell.X,cell.Y].Unit = null;
-		}
-		
-		foreach (var cell in unitCoordinates)
-		{
-			board.Cells[cell.X + 1,cell.Y].Unit = unit;
-		}
+            board.Cells[cell.X + 1, cell.Y].Unit = unit;
+        }
 	}
 }

@@ -9,12 +9,6 @@ public class MoveDown : MoveStrategy
 
     public override void MoveDifferently(Board board, Unit unit)
     {
-		
-
-
-
-
-
 		var unitCoordinates = new List<CellCoordinates>();
 
 		foreach (var cell in board.Cells)
@@ -23,7 +17,6 @@ public class MoveDown : MoveStrategy
 			{
 				unitCoordinates.Add(new CellCoordinates { X = cell.X, Y = cell.Y });
 			}
-		
 		}
 
 		if (unitCoordinates.Count == 0)
@@ -35,7 +28,7 @@ public class MoveDown : MoveStrategy
 		{
 			if (cell.Y + 1 >= board.BoardSize)
 			{
-				throw new Exception("overflows");
+				throw new Exception("out of bounds");
 			}
 		}
 
@@ -49,18 +42,14 @@ public class MoveDown : MoveStrategy
 			var boardCellUnit = board.Cells[cell.X,cell.Y + 1].Unit;
 			if (boardCellUnit != null && boardCellUnit != unit)
 			{
-				throw new Exception("ship already exists to the top");
+				throw new Exception("ship already exists below");
 			}
 		}
 
-		foreach (var cell in unitCoordinates)
+		foreach (var cell in unitCoordinates.AsEnumerable().Reverse())
 		{
 			board.Cells[cell.X,cell.Y].Unit = null;
-		}
-
-		foreach (var cell in unitCoordinates)
-		{
-			board.Cells[cell.X,cell.Y + 1].Unit = unit;
-		}
+            board.Cells[cell.X, cell.Y + 1].Unit = unit;
+        }
 	}
 }

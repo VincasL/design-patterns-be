@@ -28,17 +28,12 @@ public class MoveLeft : MoveStrategy
 		{
 			if (cell.X == 0)
 			{
-				throw new Exception("overflows");
+				throw new Exception("out of bounds");
 			}
 		}
 
 		foreach (var cell in unitCoordinates)
 		{
-			if (cell.X == 0)
-			{
-				continue;
-			}
-
 			var boardCellUnit = board.Cells[cell.X - 1,cell.Y].Unit;
 			if (boardCellUnit != null && boardCellUnit != unit)
 			{
@@ -49,12 +44,8 @@ public class MoveLeft : MoveStrategy
 		foreach (var cell in unitCoordinates)
 		{
 			board.Cells[cell.X,cell.Y].Unit = null;
-		}
-
-		foreach (var cell in unitCoordinates)
-		{
-			board.Cells[cell.X - 1,cell.Y].Unit = unit;
-		}
+            board.Cells[cell.X - 1, cell.Y].Unit = unit;
+        }
 	}
 }
 
