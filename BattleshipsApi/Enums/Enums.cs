@@ -30,3 +30,9 @@ public enum CellType{
     Projectile,
     Mine
 }
+public enum NationType
+{
+    Russian,
+    American,
+    German
+}

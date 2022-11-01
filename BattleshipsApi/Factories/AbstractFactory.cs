@@ -6,7 +6,7 @@ namespace BattleshipsApi.Factories
 {
     public class AbstractFactory
     {
-        public Ship CreateShip(ShipType type, string nation)
+        public Ship CreateShip(ShipType type, NationType nation)
         {
             ShipFactory _shipFactory = new ShipFactory();
             Ship ship=_shipFactory.GetShip(type);
@@ -14,33 +14,33 @@ namespace BattleshipsApi.Factories
             return unit as Ship;
 
         }
-        public Mine CreateMine(MineType type, string nation)
+        public Mine CreateMine(MineType type, NationType nation)
         {
             MineFactory _mineFactory = new MineFactory();
             Mine mine = _mineFactory.GetMine(type);
             Unit unit = SetNation(new MineBuilder(mine), nation);
             return unit as Mine;
         }
-        public Missile CreateMissile(MissileType type, string nation)
+        public Missile CreateMissile(MissileType type, NationType nation)
         {
             MissileFactory _missileFactory = new MissileFactory();
             Missile missile = _missileFactory.GetMissile(type);
             Unit unit = SetNation(new MissileBuilder(missile), nation);
             return unit as Missile;
         }
-        private Unit SetNation(IBuilder builder, string nation)
+        private Unit SetNation(IBuilder builder, NationType nation)
         {
             Unit unit = new();
             Director _director = new Director();
-            if (nation == "American")
+            if (nation == NationType.American)
             {
                 unit = _director.ConstructAmerican(builder);
             }
-            else if (nation == "Russian")
+            else if (nation == NationType.Russian)
             {
                 unit = _director.ConstructRussian(builder);
             }
-            else if (nation == "German")
+            else if (nation == NationType.German)
             {
                 unit = _director.ConstructGerman(builder);
             }

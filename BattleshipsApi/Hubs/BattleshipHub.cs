@@ -18,9 +18,21 @@ public class BattleshipHub : Hub
         _battleshipsFacade = battleshipsFacade;
     }
 
-    public async Task JoinQueue(string name)
+    public async Task JoinQueue(string name,string nation)
     {
         var player = new Player(Context.ConnectionId, name);
+        if (nation == "Russian")
+        {
+            player.nationType = NationType.Russian;
+        }
+        else if (nation == "American")
+        {
+            player.nationType = NationType.American;
+        }
+        else if (nation == "German")
+        {
+            player.nationType = NationType.German;
+        }
         var moreThanTwoPlayersInTheQueue = _battleshipsFacade.AddPlayerToQueue(player);
 
         if (moreThanTwoPlayersInTheQueue)
@@ -58,16 +70,12 @@ public class BattleshipHub : Hub
 
     public async Task PlaceShip(CellCoordinates cellCoordinates, ShipType type)
     {
-        var factory = new AbstractFactory();
-
-        var ship = factory.CreateShip(type,"American");
-        //var ship = factory.CreateShip(type, "Russian");
-        //var ship = factory.CreateShip(type, "German");
-
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
-        
+        var factory = new AbstractFactory();
+        var ship = factory.CreateShip(type, player.nationType);
+
         if (player.AreAllUnitsPlaced || session.AllPlayersPlacedUnits)
         {
             throw new Exception("all ships are placed");
