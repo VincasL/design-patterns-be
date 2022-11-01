@@ -30,7 +30,7 @@ public class BattleshipHub : Hub
         }
     }
 
-    public async Task SaveUnits()
+    public async Task PlaceShips()
     {
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
