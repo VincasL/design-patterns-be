@@ -40,7 +40,7 @@ public class BattleshipHub : Hub
 
     public async Task PlaceShips()
     {
-        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var session = Sessions.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
 
@@ -70,7 +70,7 @@ public class BattleshipHub : Hub
 
         var ship = factory.CreateShip(type);
         
-        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var session = Sessions.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
         
@@ -97,7 +97,7 @@ public class BattleshipHub : Hub
     
     public async Task UndoPlaceShip(CellCoordinates cellCoordinates)
     {
-        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var session = Sessions.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
         
@@ -124,7 +124,7 @@ public class BattleshipHub : Hub
 
     public async Task RotateShip(CellCoordinates cellCoordinates)
     {
-        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var session = Sessions.GetSessionByConnectionId(Context.ConnectionId);
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
         
         var ship = _gameLogicHandler.GetUnitByCellCoordinates(cellCoordinates, board) as Ship;
@@ -156,7 +156,7 @@ public class BattleshipHub : Hub
     public async Task MakeMove(CellCoordinates cellCoordinates)
     {
         //TODO: validation
-        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var session = Sessions.GetSessionByConnectionId(Context.ConnectionId);
 
         if (!session.AllPlayersPlacedShips)
         {
@@ -207,7 +207,7 @@ public class BattleshipHub : Hub
     }
     public async Task MoveShipUp(CellCoordinates coordinates)
     {
-        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var session = Sessions.GetSessionByConnectionId(Context.ConnectionId);
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
         var ship = _gameLogicHandler.GetUnitByCellCoordinates(coordinates, board);
 
@@ -221,7 +221,7 @@ public class BattleshipHub : Hub
     }
     public async Task MoveShipDown(CellCoordinates coordinates)
     {
-        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var session = Sessions.GetSessionByConnectionId(Context.ConnectionId);
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
         var ship = _gameLogicHandler.GetUnitByCellCoordinates(coordinates, board);
         if (ship == null)
@@ -235,7 +235,7 @@ public class BattleshipHub : Hub
     }
     public async Task MoveShipToTheLeft(CellCoordinates coordinates)
     {
-        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var session = Sessions.GetSessionByConnectionId(Context.ConnectionId);
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
         var ship = _gameLogicHandler.GetUnitByCellCoordinates(coordinates, board);
         if (ship == null)
@@ -250,7 +250,7 @@ public class BattleshipHub : Hub
 
     public async Task MoveShipToTheRight(CellCoordinates coordinates)
     {
-        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var session = Sessions.GetSessionByConnectionId(Context.ConnectionId);
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
         var ship = _gameLogicHandler.GetUnitByCellCoordinates(coordinates, board);
         if (ship == null)
@@ -265,13 +265,13 @@ public class BattleshipHub : Hub
 
     public async Task RequestData()
     {
-        var session = SessionHelpers.GetSessionByConnectionId(Context.ConnectionId);
+        var session = Sessions.GetSessionByConnectionId(Context.ConnectionId);
         SendGameData(session);
     }
 
     public async void StartGame(Player player1, Player player2)
     {
-        var session = SessionHelpers.CreateSession(player1, player2);
+        var session = Sessions.CreateSession(player1, player2);
         await Clients.Clients(player1.ConnectionId, player2.ConnectionId).SendAsync("startGame");
         SendGameData(session);
     }
@@ -287,8 +287,8 @@ public class BattleshipHub : Hub
 
     public async Task AssignNewConnectionId(string connectionId)
     {
-        var session = SessionHelpers.GetSessionByConnectionId(connectionId);
-        SessionHelpers.BindNewConnectionIdToPlayer(connectionId, Context.ConnectionId, session);
+        var session = Sessions.GetSessionByConnectionId(connectionId);
+        Sessions.BindNewConnectionIdToPlayer(connectionId, Context.ConnectionId, session);
         SendGameData(session);
     }
 }

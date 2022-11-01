@@ -47,6 +47,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.AddSignalRSwaggerGen();
 });
+
 builder.Services.AddSingleton<QueueHandler>();
 builder.Services.AddTransient<GameLogicHandler>();
 
