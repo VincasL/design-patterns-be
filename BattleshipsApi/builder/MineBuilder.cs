@@ -4,17 +4,21 @@ using System;
 
 public class MineBuilder : IBuilder
 {
-    public MineBuilder(Unit rawUnit) : base(rawUnit)
+    private Mine _mine;
+    public MineBuilder(Mine rawUnit) : base(rawUnit)
     {
+        _mine = rawUnit;
     }
 
-    public override IBuilder AddParts()
+    public override IBuilder AddArmour(int armour)
     {
-        throw new NotImplementedException();
+        _mine.ArmourStrength = armour;
+        return this;
     }
 
-    public override IBuilder AssemblyBody()
+    public override IBuilder AddDammage(int dammage)
     {
-        throw new NotImplementedException();
+        _mine.Dammage = dammage;
+        return this;
     }
 }
