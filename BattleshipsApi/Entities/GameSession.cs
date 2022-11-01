@@ -13,8 +13,8 @@ public class GameSession
     public bool IsGameOver { get; set; }
     public Settings Settings { get; set; }
     
-    public bool AllPlayersPlacedShips =>
-        PlayerOne.AreAllShipsPlaced && PlayerTwo.AreAllShipsPlaced;
+    public bool AllPlayersPlacedUnits =>
+        PlayerOne.AreAllUnitsPlaced && PlayerTwo.AreAllUnitsPlaced;
 
     public GameSession(Player playerOne, Player playerTwo, Settings? gameSettings = null)
     {
@@ -68,10 +68,10 @@ public class GameSession
     public GameSession Clone()
     {
         var newGameSession = new GameSession(
-            new Player(PlayerOne.ConnectionId, PlayerOne.Name, PlayerOne.Board.Clone(), PlayerOne.AreAllShipsPlaced,
-                PlayerOne.DestroyedShipCount, PlayerOne.Winner),
-            new Player(PlayerTwo.ConnectionId, PlayerTwo.Name, PlayerTwo.Board.Clone(), PlayerTwo.AreAllShipsPlaced,
-                PlayerTwo.DestroyedShipCount, PlayerTwo.Winner),
+            new Player(PlayerOne.ConnectionId, PlayerOne.Name, PlayerOne.Board.Clone(), PlayerOne.AreAllUnitsPlaced,
+                PlayerOne.DestroyedShipCount, PlayerOne.Winner, PlayerOne.PlacedShips, PlayerOne.PlacedMines),
+            new Player(PlayerTwo.ConnectionId, PlayerTwo.Name, PlayerTwo.Board.Clone(), PlayerTwo.AreAllUnitsPlaced,
+                PlayerTwo.DestroyedShipCount, PlayerTwo.Winner, PlayerTwo.PlacedShips, PlayerTwo.PlacedMines),
             NextPlayerTurnConnectionId,
             IsGameOver,
             Settings

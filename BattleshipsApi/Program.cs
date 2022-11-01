@@ -1,6 +1,7 @@
 using BattleshipsApi;
 using BattleshipsApi.Hubs;
 using AutoMapper;
+using BattleshipsApi.Facades;
 using BattleshipsApi.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +46,8 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddSingleton<QueueHandler>();
 builder.Services.AddTransient<GameLogicHandler>();
+builder.Services.AddTransient<GameDataSender>();
+builder.Services.AddSingleton<BattleshipsFacade>();
 
 builder.Services.AddSignalR(c =>
 {

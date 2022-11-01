@@ -4,5 +4,6 @@
     {
         public int ExplosionRadious { get; set; }
         public int Dammage { get; set; }
+        public int ArmourStrength { get; set; }
     }
 }
