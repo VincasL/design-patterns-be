@@ -7,14 +7,14 @@ public class Director
 {
     public Unit ConstructRussian(IBuilder builder)
     {
-        return builder.AddArmour(1).AddDammage(1).AddStrategy(new MoveLeft()).Build();
+        return builder.AddArmour(1).AddDammage(1).Build();
     }
     public Unit ConstructAmerican(IBuilder builder)
     {
-        return builder.AddArmour(2).AddDammage(2).AddStrategy(new MoveUp()).Build();
+        return builder.AddArmour(2).AddDammage(2).Build();
     }
     public Unit ConstructGerman(IBuilder builder)
     {
-        return builder.AddArmour(3).AddDammage(3).AddStrategy(new MoveRight()).Build();
+        return builder.AddArmour(3).AddDammage(3).Build();
     }
 }

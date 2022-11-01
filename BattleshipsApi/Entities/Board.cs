@@ -31,7 +31,18 @@ public class Board
         Cells = cells;
         BoardSize = boardSize;
     }
-
+    public Mine getHeatSeakingMine()
+    {
+        Mine mine = new();
+        foreach (var cell in Cells)
+        {
+            if (cell.Mine != null && cell.Mine.Type == MineType.RemoteControlled)
+            {
+                mine=cell.Mine;
+            }
+        }
+        return mine;
+    }
     public Board RevealBoardShips()
     {
         foreach (var cell in Cells)

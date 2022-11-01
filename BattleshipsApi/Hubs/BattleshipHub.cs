@@ -102,7 +102,7 @@ public class BattleshipHub : Hub
         var factory = new AbstractFactory();
 
         var mine = factory.CreateMine(type, NationType.American);
-
+        
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetEnemyPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
@@ -249,6 +249,8 @@ public class BattleshipHub : Hub
         try
         {
             (hasShipBeenHit, hasShipBeenDestroyed) = _battleshipsFacade.MakeMoveToEnemyBoard(cellCoordinates, board);
+            Mine mine= board.getHeatSeakingMine();
+            mine.MoveStrategy.MoveDifferently(board, mine);
         }
         catch (Exception e)
         {

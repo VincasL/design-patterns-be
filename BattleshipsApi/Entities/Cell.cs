@@ -10,6 +10,7 @@ public class Cell
     public Ship? Ship { get; set; }
     public Mine? Mine { get; set; }
 
+
     public Cell(int x, int y)
     {
         Type = CellType.NotShot;

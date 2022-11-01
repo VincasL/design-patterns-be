@@ -15,7 +15,9 @@ public class MineFactory
             case MineType.Huge:
                 return new HugeMine();
             case MineType.RemoteControlled:
-                return new RemoteControlledMIne();
+                RemoteControlledMIne mine = new RemoteControlledMIne();
+                mine.MoveStrategy = new MoveToShip();
+                return mine;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
