@@ -97,6 +97,37 @@ public class BattleshipHub : Hub
         SendGameData(session);
     }
     
+    public async Task PlaceMine(CellCoordinates cellCoordinates, MineType type)
+    {
+        var factory = new AbstractFactory();
+
+        var mine = factory.CreateMine(type, NationType.American);
+
+        var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
+        var player = session.GetEnemyPlayerByConnectionId(Context.ConnectionId);
+        var board = player.Board;
+        
+        if (player.AreAllUnitsPlaced || session.AllPlayersPlacedUnits)
+        {
+            throw new Exception("all units are placed");
+        }
+
+        if (player.PlacedMines.Count > session.Settings.MineCount)
+        {
+            throw new Exception("all mines are placed");
+        }
+
+        if(player.PlacedMines.Any(placedMine => placedMine.Type == mine.Type))
+        {
+            throw new Exception("Such ship has already been placed");
+        }
+        
+        _battleshipsFacade.PlaceMineToBoard(mine , board, cellCoordinates);
+        player.PlacedMines.Add(mine);
+
+        SendGameData(session);
+    }
+    
     public async Task UndoPlaceShip(CellCoordinates cellCoordinates)
     {
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
@@ -139,7 +170,7 @@ public class BattleshipHub : Hub
 
         foreach (var cell in board.Cells)
         {
-            if (cell.Unit == ship)
+            if (cell.Ship == ship)
             {
                 unitCoordinates.Add(new CellCoordinates { X = cell.X, Y = cell.Y });
             }
@@ -156,15 +187,15 @@ public class BattleshipHub : Hub
             var first_coord = unitCoordinates[0];
             for (int i = 1; i < ship.Length; i++)
             {
-                if (board.Cells[first_coord.X, first_coord.Y + i].Unit != null)
+                if (board.Cells[first_coord.X, first_coord.Y + i].Ship != null)
                 {
                     throw new Exception("ship already exists below");
                 }
             }
             for (int i = 1; i < unitCoordinates.Count; i++)
             {
-                board.Cells[unitCoordinates[i].X, unitCoordinates[i].Y].Unit = null;
-                board.Cells[first_coord.X, first_coord.Y + i].Unit = ship;
+                board.Cells[unitCoordinates[i].X, unitCoordinates[i].Y].Ship = null;
+                board.Cells[first_coord.X, first_coord.Y + i].Ship = ship;
             }
             ship.IsHorizontal = true;
         }
@@ -173,15 +204,15 @@ public class BattleshipHub : Hub
             var first_coord = unitCoordinates[0];
             for (int i = 1; i < ship.Length; i++)
             {
-                if (board.Cells[first_coord.X + i, first_coord.Y].Unit != null)
+                if (board.Cells[first_coord.X + i, first_coord.Y].Ship != null)
                 {
                     throw new Exception("ship already exists to the right");
                 }
             }
             for (int i = 1; i < unitCoordinates.Count; i++)
             {
-                board.Cells[unitCoordinates[i].X, unitCoordinates[i].Y].Unit = null;
-                board.Cells[first_coord.X + i, first_coord.Y].Unit = ship;
+                board.Cells[unitCoordinates[i].X, unitCoordinates[i].Y].Ship = null;
+                board.Cells[first_coord.X + i, first_coord.Y].Ship = ship;
             }
             ship.IsHorizontal = false;
         }
@@ -315,7 +346,7 @@ public class BattleshipHub : Hub
     public async void SendGameData(GameSession gameSession)
     {
         var playerOneSessionData = gameSession.Clone().ShowPlayerOneShips();
-        var playerTwoSessionData = gameSession.Clone().SwapPlayers().ShowPlayerOneShips();
+        var playerTwoSessionData = gameSession.Clone().SwapPlayers().ShowPlayerOneShips().ShowPlayerTwoMines();
 
         await _battleshipsFacade.SendGameData(playerOneSessionData);
         await _battleshipsFacade.SendGameData(playerTwoSessionData);

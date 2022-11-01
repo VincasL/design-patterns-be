@@ -13,7 +13,7 @@ public class MoveUp : MoveStrategy
 
 		foreach (var cell in board.Cells)
 		{
-			if (cell.Unit == unit)
+			if (cell.Ship == unit)
 			{
 				unitCoordinates.Add(new CellCoordinates { X = cell.X, Y = cell.Y });
 			}
@@ -34,7 +34,7 @@ public class MoveUp : MoveStrategy
 
 		foreach (var cell in unitCoordinates)
 		{
-			var boardCellUnit = board.Cells[cell.X,cell.Y - 1].Unit;
+			var boardCellUnit = board.Cells[cell.X,cell.Y - 1].Ship;
 			if (boardCellUnit != null && boardCellUnit != unit)
 			{
 				throw new Exception("Ship already exists above");
@@ -43,8 +43,8 @@ public class MoveUp : MoveStrategy
 
 		foreach (var cell in unitCoordinates)
 		{
-			board.Cells[cell.X,cell.Y].Unit = null;
-            board.Cells[cell.X, cell.Y - 1].Unit = unit;
+			board.Cells[cell.X,cell.Y].Ship = null;
+            board.Cells[cell.X, cell.Y - 1].Ship = unit as Ship;
         }
 	}
 }

@@ -17,7 +17,7 @@ public class GameLogicHandler
             throw new Exception("Cell has already been hit");
         }
 
-        var shipHasBeenHit = hitCell.Unit != null;
+        var shipHasBeenHit = hitCell.Ship != null;
         var shipHasBeenDestroyed = false;
 
         if (!shipHasBeenHit)
@@ -32,13 +32,13 @@ public class GameLogicHandler
 
         foreach (var cell in board.Cells)
         {
-            if (cell.Unit == hitCell.Unit && cell.Type == CellType.DamagedShip)
+            if (cell.Ship == hitCell.Ship && cell.Type == CellType.DamagedShip)
             {
                 damagedShipCells.Add(cell);
             }
         }
 
-        shipHasBeenDestroyed = damagedShipCells.Count == hitCell.Unit!.Length;
+        shipHasBeenDestroyed = damagedShipCells.Count == hitCell.Ship!.Length;
 
         if (shipHasBeenDestroyed)
         {
@@ -50,6 +50,8 @@ public class GameLogicHandler
 
         return (shipHasBeenHit, shipHasBeenDestroyed);
     }
+    
+
 
     public void PlaceShipToBoard(Ship ship, Board board, CellCoordinates coordinates)
     {
@@ -58,20 +60,20 @@ public class GameLogicHandler
             for (var y = coordinates.Y; y < coordinates.Y + ship.Length; y++)
             {
                 var cell = board.Cells[coordinates.X,y];
-                if (cell.Unit != null)
+                if (cell.Ship != null)
                 {
                     // rollback
                     while (y != coordinates.Y)
                     {
                         y--;
                         cell = board.Cells[coordinates.X,y];
-                        cell.Unit = null;
+                        cell.Ship = null;
                     }
                     
                     throw new Exception("Ships overlap");
                 }
 
-                cell.Unit = ship;
+                cell.Ship = ship;
             }
         }
         else
@@ -80,38 +82,83 @@ public class GameLogicHandler
             {
                 var cell = board.Cells[x,coordinates.Y];
                 
-                if (cell.Unit != null)
+                if (cell.Ship != null)
                 {
                     // rollback
                     while (x != coordinates.X)
                     {
                         x--;
                         cell = board.Cells[x,coordinates.Y];
-                        cell.Unit = null;
+                        cell.Ship = null;
                     }
                     
                     throw new Exception("Ships overlap");
                 }
 
-                cell.Unit = ship;
+                cell.Ship = ship;
             }
         }
+    }
+    
+    public void PlaceMineToBoard(Mine mine, Board board, CellCoordinates cellCoordinates)
+    {
+        var cellToPlaceMineAt = board.Cells[cellCoordinates.X, cellCoordinates.Y];
+
+        if (cellToPlaceMineAt.Mine != null)
+        {
+            throw new Exception("Mine already placed here");
+        }
+
+        if (mine.Type is MineType.Small or MineType.RemoteControlled)
+        {
+            cellToPlaceMineAt.Mine = mine;
+            return;
+        }
+        
+        // if huge mine: 
+        
+        if (cellToPlaceMineAt.X + 1 == board.BoardSize || cellToPlaceMineAt.X + 1 == board.BoardSize)
+        {
+            throw new Exception("overflow");
+        }
+
+        var cellsToPlaceHugeMineAt = new List<Cell>
+        {
+            board.Cells[cellToPlaceMineAt.X, cellToPlaceMineAt.Y],
+            board.Cells[cellToPlaceMineAt.X + 1, cellToPlaceMineAt.Y],
+            board.Cells[cellToPlaceMineAt.X, cellToPlaceMineAt.Y + 1],
+            board.Cells[cellToPlaceMineAt.X + 1, cellToPlaceMineAt.Y + 1]
+        };
+        
+        foreach (var cell in cellsToPlaceHugeMineAt)
+        {
+            if (cell.Mine != null)
+            {
+                throw new Exception("space occupied");
+            }
+        }
+        
+        foreach (var cell in cellsToPlaceHugeMineAt)
+        {
+            cell.Mine = mine;
+        }
+
     }
 
     public void UndoPlaceShipToBoardByCell(Unit unit, Board board)
     {
         foreach (var cell in board.Cells)
         {
-            if (cell.Unit == unit)
+            if (cell.Ship == unit)
             {
-                cell.Unit = null;
+                cell.Ship = null;
             }
         }
     }
 
     public Unit? GetUnitByCellCoordinates(CellCoordinates cellCoordinates, Board board)
     {
-        var unit = board.Cells[cellCoordinates.X,cellCoordinates.Y].Unit;
+        var unit = board.Cells[cellCoordinates.X,cellCoordinates.Y].Ship;
         return unit;
     }
 }

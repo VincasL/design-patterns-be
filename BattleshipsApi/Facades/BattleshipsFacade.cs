@@ -36,6 +36,11 @@ public class BattleshipsFacade
     {
         _gameLogicHandler.PlaceShipToBoard(ship, board, cellCoordinates);
     }
+    
+    public void PlaceMineToBoard(Mine mine, Board board, CellCoordinates cellCoordinates)
+    {
+        _gameLogicHandler.PlaceMineToBoard(mine, board, cellCoordinates);
+    }
 
     public Unit? GetUnitByCellCoordinates(CellCoordinates cellCoordinates, Board board)
     {
@@ -76,5 +81,6 @@ public class BattleshipsFacade
     {
         Sessions.BindNewConnectionIdToPlayer(connectionId, contextConnectionId, session);
     }
-    
+
+
 }

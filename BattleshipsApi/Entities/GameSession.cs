@@ -50,6 +50,12 @@ public class GameSession
         PlayerOne.Board.RevealBoardShips();
         return this;
     }
+    
+    public GameSession ShowPlayerTwoMines()
+    {
+        PlayerTwo.Board.RevealBoardMines();
+        return this;
+    }
 
     public GameSession SwapPlayers()
     {

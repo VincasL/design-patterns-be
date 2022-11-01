@@ -8,5 +8,7 @@ public class PlayerDto
     public string Name { get; set; }
     public BoardDto Board { get; set; }
     public List<Ship> PlacedShips { get; set; }
+    public List<Mine> PlacedMines { get; set; }
+
     public bool AreAllShipsPlaced { get; set; }
 }
