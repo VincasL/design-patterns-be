@@ -27,6 +27,9 @@ public class GameDataAdapter : ITarget
             gameData.Winner = session.PlayerOne.Winner;
         }
 
+        gameData.PlayerOne.AreAllShipsPlaced = session.PlayerOne.AreAllUnitsPlaced;
+        gameData.AllPlayersPlacedShips = session.AllPlayersPlacedUnits;
+
         var boardSize = session.Settings.BoardSize;
         var playerOneBoardCells = new CellDto[session.Settings.BoardSize][];
         var playerTwoBoardCells = new CellDto[session.Settings.BoardSize][];
