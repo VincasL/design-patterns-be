@@ -3,16 +3,16 @@ using BattleshipsApi.Helpers;
 
 namespace BattleshipsApi.Entities;
 
-public class GameSession
+public class GameSession : IPrototype
 {
     private Settings _defaultSettings = new Settings(10);
-    
+
     public Player PlayerOne { get; set; }
     public Player PlayerTwo { get; set; }
     public string NextPlayerTurnConnectionId { get; set; }
     public bool IsGameOver { get; set; }
     public Settings Settings { get; set; }
-    
+
     public bool AllPlayersPlacedUnits =>
         PlayerOne.AreAllUnitsPlaced && PlayerTwo.AreAllUnitsPlaced;
 
@@ -34,12 +34,12 @@ public class GameSession
         IsGameOver = isGameOver;
         Settings = settings;
     }
-    
+
     public Player GetPlayerByConnectionId(string connectionId)
     {
         return PlayerOne.ConnectionId == connectionId ? PlayerOne : PlayerTwo;
     }
-    
+
     public Player GetEnemyPlayerByConnectionId(string connectionId)
     {
         return PlayerOne.ConnectionId != connectionId ? PlayerOne : PlayerTwo;
@@ -50,7 +50,7 @@ public class GameSession
         PlayerOne.Board.RevealBoardShips();
         return this;
     }
-    
+
     public GameSession ShowPlayerTwoMines()
     {
         PlayerTwo.Board.RevealBoardMines();
@@ -71,17 +71,22 @@ public class GameSession
         return this;
     }
 
-    public GameSession Clone()
+    public object Clone()
     {
         var newGameSession = new GameSession(
-            new Player(PlayerOne.ConnectionId, PlayerOne.Name, PlayerOne.Board.Clone(), PlayerOne.AreAllUnitsPlaced,
+            new Player(PlayerOne.ConnectionId, PlayerOne.Name, (Board)PlayerOne.Board.Clone(), PlayerOne.AreAllUnitsPlaced,
                  PlayerOne.Winner, PlayerOne.PlacedShips, PlayerOne.PlacedMines),
-            new Player(PlayerTwo.ConnectionId, PlayerTwo.Name, PlayerTwo.Board.Clone(), PlayerTwo.AreAllUnitsPlaced,
+            new Player(PlayerTwo.ConnectionId, PlayerTwo.Name, (Board)PlayerTwo.Board.Clone(), PlayerTwo.AreAllUnitsPlaced,
                  PlayerTwo.Winner, PlayerTwo.PlacedShips, PlayerTwo.PlacedMines),
             NextPlayerTurnConnectionId,
             IsGameOver,
             Settings
         );
         return newGameSession;
+    }
+
+    public object ShallowClone()
+    {
+        return this.MemberwiseClone();
     }
 }

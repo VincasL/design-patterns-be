@@ -1,10 +1,11 @@
 ﻿using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using BattleshipsApi.Enums;
+using BattleshipsApi.Helpers;
 
 namespace BattleshipsApi.Entities;
 
-public class Board
+public class Board : IPrototype
 {
     public Cell[,] Cells { get; set; }
     
@@ -72,7 +73,12 @@ public class Board
         return this;
     }
 
-    public Board Clone()
+    public object ShallowClone()
+    {
+        return this.MemberwiseClone();
+    }
+
+    public object Clone()
     {
         var cells = new Cell[BoardSize, BoardSize];
 
@@ -80,12 +86,10 @@ public class Board
         {
             for (var j = 0; j < BoardSize; j++)
             {
-                cells[i,j] = new Cell(i, j, Cells[i,j].Type, Cells[i,j].Ship, Cells[i,j].Mine);
+                cells[i, j] = new Cell(i, j, Cells[i, j].Type, Cells[i, j].Ship, Cells[i, j].Mine);
             }
         }
 
         return new Board(cells, BoardSize, DestroyedShipCount);
     }
-
-
 }

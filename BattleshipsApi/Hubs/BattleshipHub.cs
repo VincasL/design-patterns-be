@@ -347,8 +347,8 @@ public class BattleshipHub : Hub
 
     public async void SendGameData(GameSession gameSession)
     {
-        var playerOneSessionData = gameSession.Clone().ShowPlayerOneShips();
-        var playerTwoSessionData = gameSession.Clone().SwapPlayers().ShowPlayerOneShips().ShowPlayerTwoMines();
+        var playerOneSessionData = ((GameSession)gameSession.Clone()).ShowPlayerOneShips();
+        var playerTwoSessionData = ((GameSession)gameSession.Clone()).SwapPlayers().ShowPlayerOneShips().ShowPlayerTwoMines();
 
         await _battleshipsFacade.SendGameData(playerOneSessionData);
         await _battleshipsFacade.SendGameData(playerTwoSessionData);
