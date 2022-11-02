@@ -9,11 +9,13 @@ public class Board
     public Cell[,] Cells { get; set; }
     
     public int BoardSize { get; }
-
-    public Board(Cell[,] cells, int boardSize)
+    public int DestroyedShipCount { get; set; }
+    
+    public Board(Cell[,] cells, int boardSize, int destroyedShipCount)
     {
         Cells = cells;
         BoardSize = boardSize;
+        DestroyedShipCount = destroyedShipCount;
     }
     
     public Board(int boardSize)
@@ -30,6 +32,7 @@ public class Board
 
         Cells = cells;
         BoardSize = boardSize;
+
     }
     public Mine getHeatSeakingMine()
     {
@@ -81,7 +84,7 @@ public class Board
             }
         }
 
-        return new Board(cells, BoardSize);
+        return new Board(cells, BoardSize, DestroyedShipCount);
     }
 
 

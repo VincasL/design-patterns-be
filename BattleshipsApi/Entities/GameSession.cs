@@ -75,9 +75,9 @@ public class GameSession
     {
         var newGameSession = new GameSession(
             new Player(PlayerOne.ConnectionId, PlayerOne.Name, PlayerOne.Board.Clone(), PlayerOne.AreAllUnitsPlaced,
-                PlayerOne.DestroyedShipCount, PlayerOne.Winner, PlayerOne.PlacedShips, PlayerOne.PlacedMines),
+                 PlayerOne.Winner, PlayerOne.PlacedShips, PlayerOne.PlacedMines),
             new Player(PlayerTwo.ConnectionId, PlayerTwo.Name, PlayerTwo.Board.Clone(), PlayerTwo.AreAllUnitsPlaced,
-                PlayerTwo.DestroyedShipCount, PlayerTwo.Winner, PlayerTwo.PlacedShips, PlayerTwo.PlacedMines),
+                 PlayerTwo.Winner, PlayerTwo.PlacedShips, PlayerTwo.PlacedMines),
             NextPlayerTurnConnectionId,
             IsGameOver,
             Settings

@@ -1,7 +1,6 @@
 ﻿using BattleshipsApi.Entities;
 using BattleshipsApi.Enums;
 using BattleshipsApi.Facades;
-using BattleshipsApi.Factories;
 using BattleshipsApi.Strategies;
 using Microsoft.AspNetCore.SignalR;
 using SignalRSwaggerGen.Attributes;
@@ -265,8 +264,8 @@ public class BattleshipHub : Hub
 
         if (hasShipBeenDestroyed)
         {
-            player.DestroyedShipCount++;
-            if (session.Settings.ShipCount <= player.DestroyedShipCount)
+            player.Board.DestroyedShipCount++;
+            if (session.Settings.ShipCount <= player.Board.DestroyedShipCount)
             {
                 session.IsGameOver = true;
                 session.GetPlayerByConnectionId(Context.ConnectionId).Winner = true;

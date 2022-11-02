@@ -11,7 +11,6 @@ public class Player
     public List<Ship> PlacedShips { get; set; }
     public List<Mine> PlacedMines { get; set; } 
     public bool AreAllUnitsPlaced { get; set; }
-    public int DestroyedShipCount { get; set; }
     public bool Winner { get; set; }
 
     public Player(string connectionId, string name)
@@ -22,13 +21,12 @@ public class Player
         PlacedShips = new List<Ship>();
     }
 
-    public Player(string connectionId, string name, Board board, bool areAllUnitsPlaced, int destroyedShipCount, bool winner, List<Ship> placedShips, List<Mine> placedMines)
+    public Player(string connectionId, string name, Board board, bool areAllUnitsPlaced, bool winner, List<Ship> placedShips, List<Mine> placedMines)
     {
         ConnectionId = connectionId;
         Name = name;
         Board = board;
         AreAllUnitsPlaced = areAllUnitsPlaced;
-        DestroyedShipCount = destroyedShipCount;
         Winner = winner;
         PlacedShips = placedShips;
         PlacedMines = placedMines;
