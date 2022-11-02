@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BattleshipsApi.Entities;
+using BattleshipsApi.Factories;
 using BattleshipsApi.Handlers;
 using BattleshipsApi.Helpers;
 using BattleshipsApi.Hubs;
@@ -19,6 +20,7 @@ public class BattleshipsFacade
         _queueHandler = queueHandler;
         _gameLogicHandler = gameLogicHandler;
         _gameDataSender = gameDataSender;
+        Factory = new AbstractFactory();
         _gameDataAdapter = new GameDataAdapter(hubContext, mapper);
     }
 
@@ -81,6 +83,7 @@ public class BattleshipsFacade
     {
         Sessions.BindNewConnectionIdToPlayer(connectionId, contextConnectionId, session);
     }
+    
 
-
+    public AbstractFactory Factory { get; }
 }

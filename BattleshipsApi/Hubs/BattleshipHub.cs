@@ -73,7 +73,8 @@ public class BattleshipHub : Hub
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
-        var factory = new AbstractFactory();
+
+        var factory = _battleshipsFacade.Factory;
         var ship = factory.CreateShip(type, player.nationType);
 
         if (player.AreAllUnitsPlaced || session.AllPlayersPlacedUnits)
@@ -99,7 +100,7 @@ public class BattleshipHub : Hub
     
     public async Task PlaceMine(CellCoordinates cellCoordinates, MineType type)
     {
-        var factory = new AbstractFactory();
+        var factory = _battleshipsFacade.Factory;
 
         var mine = factory.CreateMine(type, NationType.American);
         
