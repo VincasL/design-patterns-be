@@ -308,49 +308,6 @@ public class BattleshipHub : Hub
         unit.MoveStrategy.MoveDifferently(board, unit);
         SendGameData(session);
     }
-    public async Task MoveShipDown(CellCoordinates coordinates)
-    {
-        var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
-        var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
-        var ship = _battleshipsFacade.GetUnitByCellCoordinates(coordinates, board);
-        if (ship == null)
-        {
-            throw new Exception("no ship :(");
-        }
-        ship.MoveStrategy = new MoveDown();
-        ship.MoveStrategy.MoveDifferently(board, ship);
-
-        SendGameData(session);
-    }
-    public async Task MoveShipToTheLeft(CellCoordinates coordinates)
-    {
-        var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
-        var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
-        var ship = _battleshipsFacade.GetUnitByCellCoordinates(coordinates, board);
-        if (ship == null)
-        {
-            throw new Exception("no ship :(");
-        }
-        ship.MoveStrategy = new MoveLeft();
-        ship.MoveStrategy.MoveDifferently(board, ship);
-
-        SendGameData(session);
-    }
-
-    public async Task MoveShipToTheRight(CellCoordinates coordinates)
-    {
-        var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
-        var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
-        var ship = _battleshipsFacade.GetUnitByCellCoordinates(coordinates, board);
-        if (ship == null)
-        {
-            throw new Exception("no ship :(");
-        }
-        ship.MoveStrategy = new MoveRight();
-        ship.MoveStrategy.MoveDifferently(board, ship);
-
-        SendGameData(session);
-    }
 
     public async Task RequestData()
     {
