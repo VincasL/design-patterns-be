@@ -51,8 +51,6 @@ public class GameLogicHandler
         return (shipHasBeenHit, shipHasBeenDestroyed);
     }
     
-
-
     public void PlaceShipToBoard(Ship ship, Board board, CellCoordinates coordinates)
     {
         if (ship.IsHorizontal)
@@ -161,4 +159,55 @@ public class GameLogicHandler
         var unit = board.Cells[cellCoordinates.X,cellCoordinates.Y].Ship;
         return unit;
     }
+
+    public bool HasShipBeenDestroyed(Board board, Ship ship)
+    {
+        // If ship is destroyed, mark its cells as destroyed
+
+        var damagedShipCells = new List<Cell>();
+        
+        foreach (var cell in board.Cells)
+        {
+            if (cell.Ship == ship && cell.Type == CellType.DamagedShip)
+            {
+                damagedShipCells.Add(cell);
+            }
+        }
+
+        var shipHasBeenDestroyed = damagedShipCells.Count == ship.Length;
+
+        if (shipHasBeenDestroyed)
+        {
+            foreach (var cell in damagedShipCells)
+            {
+                cell.Type = CellType.DestroyedShip;
+            }
+        }
+        
+        return shipHasBeenDestroyed;
+    }
+    
+
+    public int ExplodeMinesInCellsIfThereAreShips(Board board)
+    {
+        var destroyedShipsCount = 0;
+        
+        foreach (var cell in board.Cells)
+        {
+            if (cell.Ship != null && cell.Mine != null && !cell.Mine.HasExploded)
+            {
+                cell.Mine.HasExploded = true;
+                cell.Type = CellType.DamagedShip;
+
+                if (HasShipBeenDestroyed(board, cell.Ship))
+                {
+                    destroyedShipsCount++;
+                }
+            }
+        }
+
+        return destroyedShipsCount;
+    }
+    
+    
 }

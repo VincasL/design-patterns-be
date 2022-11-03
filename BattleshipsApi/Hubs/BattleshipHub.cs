@@ -57,13 +57,14 @@ public class BattleshipHub : Hub
             throw new Exception("Game is over bro");
         }
 
-        if (player.PlacedShips.Count != session.Settings.ShipCount)
+        if (player.PlacedShips.Count != session.Settings.ShipCount ||
+            player.PlacedMines.Count != session.Settings.MineCount) 
         {
-            throw new Exception("Not all ships placed");
+            throw new Exception("Not all units placed");
         }
 
         player.AreAllUnitsPlaced = true;
-        
+
         SendGameData(session);
     }
 
@@ -104,8 +105,9 @@ public class BattleshipHub : Hub
         var mine = factory.CreateMine(type, NationType.American);
         
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
-        var player = session.GetEnemyPlayerByConnectionId(Context.ConnectionId);
-        var board = player.Board;
+        var player = session.GetPlayerByConnectionId(Context.ConnectionId);
+        var enemyPlayer = session.GetEnemyPlayerByConnectionId(Context.ConnectionId);
+        var enemyBoard = enemyPlayer.Board;
         
         if (player.AreAllUnitsPlaced || session.AllPlayersPlacedUnits)
         {
@@ -122,7 +124,7 @@ public class BattleshipHub : Hub
             throw new Exception("Such ship has already been placed");
         }
         
-        _battleshipsFacade.PlaceMineToBoard(mine , board, cellCoordinates);
+        _battleshipsFacade.PlaceMineToBoard(mine , enemyBoard, cellCoordinates);
         player.PlacedMines.Add(mine);
 
         SendGameData(session);
@@ -243,35 +245,41 @@ public class BattleshipHub : Hub
         var player = session.GetEnemyPlayerByConnectionId(Context.ConnectionId);
         var board = player.Board;
 
-        bool hasShipBeenHit;
-        bool hasShipBeenDestroyed;
-
-        try
+        var (hasShipBeenHit, hasShipBeenDestroyed) = _battleshipsFacade.MakeMoveToEnemyBoard(cellCoordinates, board);
+        
+        // moves heat seeking mine
+        if (!hasShipBeenDestroyed && !hasShipBeenHit)
         {
-            (hasShipBeenHit, hasShipBeenDestroyed) = _battleshipsFacade.MakeMoveToEnemyBoard(cellCoordinates, board);
-            var mine= board.getHeatSeakingMine();
-            mine?.MoveStrategy.MoveDifferently(board, mine);
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-
-        if (!hasShipBeenHit)
-        {
-            session.SetMoveToNextPlayer();
+            var mine = board.getHeatSeakingMine();
+            if (mine != null && mine.HasExploded == false)
+            {
+                mine.MoveStrategy.MoveDifferently(board, mine);
+            }
         }
 
         if (hasShipBeenDestroyed)
         {
             player.Board.DestroyedShipCount++;
-            if (session.Settings.ShipCount <= player.Board.DestroyedShipCount)
+        }
+        
+        if (!hasShipBeenHit)
+        {
+            var destroyedShipCountByMines = _battleshipsFacade.ExplodeMinesInCellsIfThereAreShips(board);
+            if (destroyedShipCountByMines > 0)
             {
-                session.IsGameOver = true;
-                session.GetPlayerByConnectionId(Context.ConnectionId).Winner = true;
+                hasShipBeenDestroyed = true;
+                player.Board.DestroyedShipCount += destroyedShipCountByMines;
             }
+            session.SetMoveToNextPlayer();
         }
 
+        // check if all ships destroyed
+        if (session.Settings.ShipCount <= player.Board.DestroyedShipCount)
+        {
+            session.IsGameOver = true;
+            session.GetPlayerByConnectionId(Context.ConnectionId).Winner = true;
+        }
+        
         SendGameData(session);
     }
     public async Task MoveShipUp(CellCoordinates coordinates)

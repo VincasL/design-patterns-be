@@ -86,4 +86,9 @@ public class BattleshipsFacade
     
 
     public AbstractFactory Factory { get; }
+
+    public int ExplodeMinesInCellsIfThereAreShips(Board board)
+    {
+        return _gameLogicHandler.ExplodeMinesInCellsIfThereAreShips(board);
+    }
 }
