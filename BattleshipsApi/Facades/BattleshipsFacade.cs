@@ -44,9 +44,9 @@ public class BattleshipsFacade
         _gameLogicHandler.PlaceMineToBoard(mine, board, cellCoordinates);
     }
 
-    public Unit? GetUnitByCellCoordinates(CellCoordinates cellCoordinates, Board board)
+    public Unit? GetUnitByCellCoordinates(CellCoordinates cellCoordinates, Board board, Type? unitType = null)
     {
-        return _gameLogicHandler.GetUnitByCellCoordinates(cellCoordinates, board);
+        return _gameLogicHandler.GetUnitByCellCoordinates(cellCoordinates, board, unitType);
     }
 
     public void UndoPlaceShipToBoardByCell(Ship ship, Board board)

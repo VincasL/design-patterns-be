@@ -154,9 +154,9 @@ public class GameLogicHandler
         }
     }
 
-    public Unit? GetUnitByCellCoordinates(CellCoordinates cellCoordinates, Board board)
+    public Unit? GetUnitByCellCoordinates(CellCoordinates cellCoordinates, Board board, Type? unitType = null)
     {
-        var unit = board.Cells[cellCoordinates.X,cellCoordinates.Y].Ship;
+        var unit = board.Cells[cellCoordinates.X, cellCoordinates.Y].Unit(unitType);
         return unit;
     }
 

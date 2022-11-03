@@ -13,7 +13,7 @@ public class MoveDown : MoveStrategy
 
 		foreach (var cell in board.Cells)
 		{
-			if (cell.Ship == unit)
+			if (cell.Unit(unit.GetType()) == unit)
 			{
 				unitCoordinates.Add(new CellCoordinates { X = cell.X, Y = cell.Y });
 			}
@@ -39,17 +39,17 @@ public class MoveDown : MoveStrategy
 				continue;
 			}
 
-			var boardCellUnit = board.Cells[cell.X,cell.Y + 1].Ship;
+			var boardCellUnit = board.Cells[cell.X,cell.Y + 1].Unit(unit.GetType().BaseType);
 			if (boardCellUnit != null && boardCellUnit != unit)
 			{
-				throw new Exception("ship already exists below");
+				throw new Exception("unit already exists below");
 			}
 		}
 
 		foreach (var cell in unitCoordinates.AsEnumerable().Reverse())
 		{
-			board.Cells[cell.X,cell.Y].Ship = null;
-            board.Cells[cell.X, cell.Y + 1].Ship = unit as Ship;
+			board.Cells[cell.X,cell.Y].Remove(unit);
+            board.Cells[cell.X, cell.Y + 1].Set(unit, unit.GetType());
         }
 	}
 }

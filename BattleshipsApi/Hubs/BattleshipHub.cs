@@ -282,17 +282,29 @@ public class BattleshipHub : Hub
         
         SendGameData(session);
     }
-    public async Task MoveShipUp(CellCoordinates coordinates)
+    public async Task MoveUnit(CellCoordinates coordinates, MoveDirection direction, bool isEnemyBoard)
     {
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
-        var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
-        var unit = _battleshipsFacade.GetUnitByCellCoordinates(coordinates, board);
+        var board = isEnemyBoard
+            ? session.GetEnemyPlayerByConnectionId(Context.ConnectionId).Board
+            : session.GetPlayerByConnectionId(Context.ConnectionId).Board;
+        var unit = _battleshipsFacade.GetUnitByCellCoordinates(coordinates, board, isEnemyBoard? typeof(Mine) : typeof(Ship));
 
         if (unit == null)
         {
-            throw new Exception("no ship :(");
+            throw new Exception("no unit :(");
         }
-        unit.MoveStrategy = new MoveUp();
+
+        MoveStrategy strategy = direction switch
+        {
+            MoveDirection.Up => new MoveUp(),
+            MoveDirection.Right => new MoveRight(),
+            MoveDirection.Down => new MoveDown(),
+            MoveDirection.Left => new MoveLeft(),
+            _ => new DontMove()
+        };
+
+        unit.MoveStrategy = strategy;
         unit.MoveStrategy.MoveDifferently(board, unit);
         SendGameData(session);
     }

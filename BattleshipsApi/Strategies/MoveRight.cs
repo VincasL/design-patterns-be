@@ -14,7 +14,7 @@ public class MoveRight : MoveStrategy
 		
 		foreach (var cell in board.Cells)
 		{
-			if (cell.Ship == unit)
+			if (cell.Unit(unit.GetType()) == unit)
 			{
 				unitCoordinates.Add(new CellCoordinates {X = cell.X, Y = cell.Y});
 			}
@@ -39,18 +39,18 @@ public class MoveRight : MoveStrategy
 			{
 				continue;
 			}
-			
-			var boardCellUnit = board.Cells[cell.X + 1,cell.Y].Ship;
+
+			var boardCellUnit = board.Cells[cell.X + 1, cell.Y].Unit(unit.GetType().BaseType);
 			if (boardCellUnit != null && boardCellUnit != unit)
 			{
-				throw new Exception("ship already exists to the right");
+				throw new Exception("unit already exists to the right");
 			}
 		}
 
 		foreach (var cell in unitCoordinates.AsEnumerable().Reverse())
 		{
-			board.Cells[cell.X,cell.Y].Ship = null;
-            board.Cells[cell.X + 1, cell.Y].Ship = unit as Ship;
+			board.Cells[cell.X,cell.Y].Remove(unit);
+            board.Cells[cell.X + 1, cell.Y].Set(unit, unit.GetType());
         }
 	}
 }

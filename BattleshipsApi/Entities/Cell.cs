@@ -27,23 +27,30 @@ public class Cell
 
     public bool UnitTypeExistsInCell(Type type) => Units.Any(x => x.GetType() == type);
 
-    public void AddUnit(Unit unit)
+    public void Add(Unit unit)
     {
         if (UnitTypeExistsInCell(unit.GetType()))
         {
             throw new Exception("Ship already exists in this cell");
         }
+
         Units.Add(unit);
     }
-    
-    public void SetUnit(Unit? unit, Type type)
+
+    public void Set(Unit? unit, Type type)
     {
         var oldUnit = Units.Find(x => IsSameOrSubclass(type, x.GetType()));
-        if (oldUnit != null ) 
+        if (oldUnit != null)
             Units.Remove(oldUnit);
         if (unit != null)
             Units.Add(unit);
     }
+
+    public void Remove(Unit unit)
+    {
+        Units.Remove(unit);
+    }
+
 
     // consider making generic
     public Ship? Ship
@@ -53,15 +60,15 @@ public class Cell
         {
             if (Ship == null && value != null)
             {
-                AddUnit(value);
+                Add(value);
             }
             else
             {
-                SetUnit(value, typeof(Ship));
+                Set(value, typeof(Ship));
             }
         }
     }
-    
+
     public Mine? Mine
     {
         get => Units.Find(x => IsSameOrSubclass(typeof(Mine), x.GetType())) as Mine;
@@ -69,11 +76,11 @@ public class Cell
         {
             if (Mine == null && value != null)
             {
-                AddUnit(value);
+                Add(value);
             }
             else
             {
-                SetUnit(value, typeof(Mine));
+                Set(value, typeof(Mine));
             }
         }
     }
@@ -85,11 +92,11 @@ public class Cell
         {
             if (Missile == null && value != null)
             {
-                AddUnit(value);
+                Add(value);
             }
             else
             {
-                SetUnit(value, typeof(Missile));
+                Set(value, typeof(Missile));
             }
         }
     }
@@ -99,5 +106,12 @@ public class Cell
         return potentialDescendant.IsSubclassOf(potentialBase)
                || potentialDescendant == potentialBase;
     }
+
+    public Unit? Unit(Type? unitType = null)
+    {
+        return Units.Find(x => IsSameOrSubclass(unitType ?? typeof(Ship),x.GetType() ));
+    }
 }
+
+
 

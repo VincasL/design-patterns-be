@@ -36,3 +36,11 @@ public enum NationType
     American,
     German
 }
+
+public enum MoveDirection
+{
+    Up,
+    Right,
+    Down,
+    Left
+}
