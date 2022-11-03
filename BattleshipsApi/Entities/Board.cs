@@ -35,9 +35,9 @@ public class Board : IPrototype
         BoardSize = boardSize;
 
     }
-    public Mine getHeatSeakingMine()
+    public Mine? getHeatSeakingMine()
     {
-        Mine mine = new();
+        Mine? mine = null;
         foreach (var cell in Cells)
         {
             if (cell.Mine != null && cell.Mine.Type == MineType.RemoteControlled)
@@ -86,7 +86,7 @@ public class Board : IPrototype
         {
             for (var j = 0; j < BoardSize; j++)
             {
-                cells[i, j] = new Cell(i, j, Cells[i, j].Type, Cells[i, j].Ship, Cells[i, j].Mine);
+                cells[i, j] = new Cell(i, j, Cells[i, j].Type, Cells[i, j].Ship?.Clone(), Cells[i, j].Mine);
             }
         }
 

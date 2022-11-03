@@ -9,5 +9,15 @@ namespace BattleshipsApi.Entities.Ships
             Length = 5;
             Type = ShipType.Carrier;
         }
+
+        private Carrier(ShipType type, bool isHorizontal, int armourStrength, int fuel): base(type, isHorizontal, armourStrength, fuel)
+        {
+        }
+
+
+        public override Ship Clone()
+        {
+            return new Carrier(Type, IsHorizontal, ArmourStrength, Fuel);
+        }
     }
 }

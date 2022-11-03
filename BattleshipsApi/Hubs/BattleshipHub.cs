@@ -249,8 +249,8 @@ public class BattleshipHub : Hub
         try
         {
             (hasShipBeenHit, hasShipBeenDestroyed) = _battleshipsFacade.MakeMoveToEnemyBoard(cellCoordinates, board);
-            Mine mine= board.getHeatSeakingMine();
-            mine.MoveStrategy.MoveDifferently(board, mine);
+            var mine= board.getHeatSeakingMine();
+            mine?.MoveStrategy.MoveDifferently(board, mine);
         }
         catch (Exception e)
         {
@@ -347,15 +347,15 @@ public class BattleshipHub : Hub
 
     public async void SendGameData(GameSession gameSession)
     {
-        var playerOneSessionData = ((GameSession)gameSession.Clone()).ShowPlayerOneShips();
+        var playerOneSessionData = ((GameSession)gameSession.Clone()).ShowPlayerOneShips().ShowPlayerTwoMines();
         var playerTwoSessionData = ((GameSession)gameSession.Clone()).SwapPlayers().ShowPlayerOneShips().ShowPlayerTwoMines();
 
-        var playerOneSessionDataShallowClone = ((GameSession)gameSession.ShallowClone()).ShowPlayerOneShips();
+        // var playerOneSessionDataShallowClone = ((GameSession)gameSession.ShallowClone()).ShowPlayerOneShips();
 
 
         Console.WriteLine($"main\n{gameSession}\n");
         Console.WriteLine($"deep\n{playerOneSessionData}\n");
-        Console.WriteLine($"shallow\n{playerOneSessionDataShallowClone}\n");
+        // Console.WriteLine($"shallow\n{playerOneSessionDataShallowClone}\n");
 
         await _battleshipsFacade.SendGameData(playerOneSessionData);
         await _battleshipsFacade.SendGameData(playerTwoSessionData);
