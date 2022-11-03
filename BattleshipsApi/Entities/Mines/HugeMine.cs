@@ -8,5 +8,15 @@ namespace BattleshipsApi.Entities.Mines
         {
             Type = MineType.Huge;
         }
+
+        private HugeMine(int dammage, MineType type, int armourStrength, int explosionRadious, bool hasExploded)
+        {
+        }
+
+
+        public override Unit Clone()
+        {
+            return new HugeMine(Dammage, Type, ArmourStrength, ExplosionRadious, HasExploded);
+        }
     }
 }

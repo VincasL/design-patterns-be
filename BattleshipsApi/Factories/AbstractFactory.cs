@@ -30,7 +30,7 @@ namespace BattleshipsApi.Factories
         }
         private Unit SetNation(IBuilder builder, NationType nation)
         {
-            Unit unit = new();
+            Unit unit;
             Director _director = new Director();
             if (nation == NationType.American)
             {
@@ -40,7 +40,7 @@ namespace BattleshipsApi.Factories
             {
                 unit = _director.ConstructRussian(builder);
             }
-            else if (nation == NationType.German)
+            else
             {
                 unit = _director.ConstructGerman(builder);
             }

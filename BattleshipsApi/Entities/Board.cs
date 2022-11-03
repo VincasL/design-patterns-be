@@ -51,6 +51,13 @@ public class Board : IPrototype
     {
         foreach (var cell in Cells)
         {
+            var units = cell.Units;
+
+            if (units.Count != 0)
+            {
+                Console.WriteLine('a');
+            }
+            
             if (cell.Ship != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
             {
                 cell.Type = CellType.Ship;
@@ -82,11 +89,19 @@ public class Board : IPrototype
     {
         var cells = new Cell[BoardSize, BoardSize];
 
+        
         for (var i = 0; i < BoardSize; i++)
         {
+            
             for (var j = 0; j < BoardSize; j++)
             {
-                cells[i, j] = new Cell(i, j, Cells[i, j].Type, Cells[i, j].Ship?.Clone(), Cells[i, j].Mine);
+                var newUnits = new List<Unit>();
+                foreach (var unit in Cells[i, j].Units)
+                {
+                    newUnits.Add(unit.Clone());
+                }
+                
+                cells[i, j] = new Cell(i, j, Cells[i, j].Type, newUnits);
             }
         }
 

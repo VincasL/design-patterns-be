@@ -6,6 +6,7 @@ namespace BattleshipsApi.Entities;
 
 public abstract class Ship : Unit
 {
+    public int Length { get; set; }
     public ShipType Type { get; set; }
     public bool IsHorizontal { get; set; }
 
@@ -23,7 +24,4 @@ public abstract class Ship : Unit
     protected Ship()
     {
     }
-
-    public abstract Ship Clone();
-
 }

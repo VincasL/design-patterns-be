@@ -286,14 +286,14 @@ public class BattleshipHub : Hub
     {
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
         var board = session.GetPlayerByConnectionId(Context.ConnectionId).Board;
-        var ship = _battleshipsFacade.GetUnitByCellCoordinates(coordinates, board);
+        var unit = _battleshipsFacade.GetUnitByCellCoordinates(coordinates, board);
 
-        if (ship == null)
+        if (unit == null)
         {
             throw new Exception("no ship :(");
         }
-        ship.MoveStrategy = new MoveUp();
-        ship.MoveStrategy.MoveDifferently(board, ship);
+        unit.MoveStrategy = new MoveUp();
+        unit.MoveStrategy.MoveDifferently(board, unit);
         SendGameData(session);
     }
     public async Task MoveShipDown(CellCoordinates coordinates)

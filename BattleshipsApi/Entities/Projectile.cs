@@ -1,6 +1,6 @@
 ﻿namespace BattleshipsApi.Entities
 {
-    public class Projectile:Unit
+    public abstract class Projectile:Unit
     {
         public int ExplosionRadious { get; set; }
         public int Dammage { get; set; }
