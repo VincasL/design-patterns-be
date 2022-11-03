@@ -71,6 +71,11 @@ public class GameSession : IPrototype
         return this;
     }
 
+    public override string ToString()
+    {
+        return $"Hash:{this.GetHashCode()}\nP1 Board hash:{this.PlayerOne.Board.GetHashCode()}";
+    }
+    
     public object Clone()
     {
         var newGameSession = new GameSession(

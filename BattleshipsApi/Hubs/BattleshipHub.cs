@@ -350,6 +350,13 @@ public class BattleshipHub : Hub
         var playerOneSessionData = ((GameSession)gameSession.Clone()).ShowPlayerOneShips();
         var playerTwoSessionData = ((GameSession)gameSession.Clone()).SwapPlayers().ShowPlayerOneShips().ShowPlayerTwoMines();
 
+        var playerOneSessionDataShallowClone = ((GameSession)gameSession.ShallowClone()).ShowPlayerOneShips();
+
+
+        Console.WriteLine($"main\n{gameSession}\n");
+        Console.WriteLine($"deep\n{playerOneSessionData}\n");
+        Console.WriteLine($"shallow\n{playerOneSessionDataShallowClone}\n");
+
         await _battleshipsFacade.SendGameData(playerOneSessionData);
         await _battleshipsFacade.SendGameData(playerTwoSessionData);
     }
