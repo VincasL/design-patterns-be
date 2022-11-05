@@ -8,7 +8,7 @@ namespace BattleshipsApi.Handlers;
 
 public class GameLogicHandler
 {
-    public (bool hasShipBeenHit, bool isGameOver) MakeMoveToEnemyBoard(CellCoordinates cellCoordinates, Board board)
+    public (bool hasShipBeenHit, bool hasShipBeenDestroyed) MakeMoveToEnemyBoard(CellCoordinates cellCoordinates, Board board)
     {
         var hitCell = board.Cells[cellCoordinates.X, cellCoordinates.Y];
 
@@ -17,14 +17,13 @@ public class GameLogicHandler
             throw new Exception("Cell has already been hit");
         }
 
-        var shipHasBeenHit = hitCell.Ship != null;
-        var shipHasBeenDestroyed = false;
-
-        if (!shipHasBeenHit)
+        if (hitCell.Ship == null)
         {
             hitCell.Type = CellType.Empty;
-            return (shipHasBeenHit, shipHasBeenDestroyed);
+            return (false, false);
         }
+
+        
 
         hitCell.Type = CellType.DamagedShip;
 
@@ -38,17 +37,16 @@ public class GameLogicHandler
             }
         }
 
-        shipHasBeenDestroyed = damagedShipCells.Count == hitCell.Ship!.Length;
+        var shipHasBeenDestroyed = damagedShipCells.Count == hitCell.Ship!.Length;
 
-        if (shipHasBeenDestroyed)
+        if (!shipHasBeenDestroyed) return (true, false);
+
+        foreach (var cell in damagedShipCells)
         {
-            foreach (var cell in damagedShipCells)
-            {
-                cell.Type = CellType.DestroyedShip;
-            }
+            cell.Type = CellType.DestroyedShip;
         }
 
-        return (shipHasBeenHit, shipHasBeenDestroyed);
+        return (true, true);
     }
     
     public void PlaceShipToBoard(Ship ship, Board board, CellCoordinates coordinates)
