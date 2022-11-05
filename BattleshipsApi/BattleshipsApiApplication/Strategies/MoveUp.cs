@@ -1,5 +1,4 @@
 ﻿using BattleshipsApi.Entities;
-using System;
 
 public class MoveUp : MoveStrategy
 {

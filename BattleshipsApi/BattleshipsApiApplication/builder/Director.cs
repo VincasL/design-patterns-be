@@ -1,7 +1,5 @@
 ﻿using BattleshipsApi.Contracts;
 using BattleshipsApi.Entities;
-using BattleshipsApi.Strategies;
-using System;
 
 public class Director
 {

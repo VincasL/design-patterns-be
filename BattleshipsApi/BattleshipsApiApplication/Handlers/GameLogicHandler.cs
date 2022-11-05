@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using BattleshipsApi.DTO;
-using BattleshipsApi.Entities;
+﻿using BattleshipsApi.Entities;
 using BattleshipsApi.Enums;
-using BattleshipsApi.Helpers;
 
 namespace BattleshipsApi.Handlers;
 

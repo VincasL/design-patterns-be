@@ -1,9 +1,3 @@
-using BattleshipsApi.Entities;
-using BattleshipsApi.Entities.Ships;
-using BattleshipsApi.Enums;
-using BattleshipsApi.Handlers;
-using FluentAssertions;
-
 namespace BattleshipApiTests.Handlers.GameLogicHandlerTests;
 
 public class GameLogicHandler_MakeMoveToEnemyBoard_Tests

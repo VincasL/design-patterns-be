@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BattleshipsApi.Helpers;
+﻿using BattleshipsApi.Helpers;
 
 namespace BattleshipsApi.Entities;
 

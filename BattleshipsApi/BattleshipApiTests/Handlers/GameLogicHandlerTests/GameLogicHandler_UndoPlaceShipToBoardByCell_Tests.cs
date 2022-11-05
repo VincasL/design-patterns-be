@@ -1,5 +1,3 @@
-using BattleshipsApi.Handlers;
-
 namespace BattleshipApiTests.Handlers.GameLogicHandlerTests;
 
 public class GameLogicHandler_UndoPlaceShipToBoardByCell_Tests

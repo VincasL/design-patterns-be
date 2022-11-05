@@ -1,5 +1,4 @@
-﻿using System;
-namespace BattleshipsApi.Helpers
+﻿namespace BattleshipsApi.Helpers
 {
     interface IPrototype : ICloneable
     {

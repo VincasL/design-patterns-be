@@ -1,6 +1,5 @@
 ﻿using BattleshipsApi.Contracts;
 using BattleshipsApi.Entities;
-using System;
 
 public class MineBuilder : IBuilder
 {

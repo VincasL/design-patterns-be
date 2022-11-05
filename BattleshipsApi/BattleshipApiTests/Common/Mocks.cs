@@ -1,6 +1,4 @@
-﻿using BattleshipsApi.Entities;
-
-namespace BattleshipApiTests.Common;
+﻿namespace BattleshipApiTests.Common;
 
 public static class Mocks
 {

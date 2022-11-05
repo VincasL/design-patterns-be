@@ -1,5 +1,4 @@
-﻿using System;
-using BattleshipsApi.Entities;
+﻿using BattleshipsApi.Entities;
 
 public abstract class MoveStrategy
 {
