@@ -1,12 +1,12 @@
-namespace BattleshipApiTests.Handlers;
+namespace BattleshipApiTests.Handlers.QueueHandler;
 
 public class QueueHandlerTests
 {
-    private QueueHandler _queueHandler;
+    private BattleshipsApi.Handlers.QueueHandler _queueHandler;
     [SetUp]
     public void Setup()
     {
-        _queueHandler = new QueueHandler();
+        _queueHandler = new BattleshipsApi.Handlers.QueueHandler();
     }
 
     [Test]

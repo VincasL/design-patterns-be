@@ -1,5 +1,6 @@
 ﻿namespace BattleshipApiTests.Common;
 
+// Add objects that need to be used frequently here
 public static class Mocks
 {
     public static GameSession GameSession

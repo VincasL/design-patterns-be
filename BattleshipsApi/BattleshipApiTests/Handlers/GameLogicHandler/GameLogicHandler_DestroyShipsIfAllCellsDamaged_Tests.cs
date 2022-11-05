@@ -1,8 +1,8 @@
-namespace BattleshipApiTests.Handlers.GameLogicHandlerTests;
+namespace BattleshipApiTests.Handlers.GameLogicHandler;
 
 public class GameLogicHandler_DestroyShipsIfAllCellsDamaged_Tests
 {
-    private readonly GameLogicHandler _gameLogicHandler = new();
+    private readonly BattleshipsApi.Handlers.GameLogicHandler _gameLogicHandler = new();
 
     [SetUp]
     public void Setup()
