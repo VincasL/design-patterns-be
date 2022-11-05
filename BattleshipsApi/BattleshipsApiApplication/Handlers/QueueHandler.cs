@@ -5,7 +5,7 @@ namespace BattleshipsApi.Handlers;
 public class QueueHandler
 {
     private LinkedList<Player> _playersQueue = new();
-
+    
     public bool AddPlayerToQueue(Player player)
     {
         if (_playersQueue.Any(x => x.ConnectionId == player.ConnectionId))
