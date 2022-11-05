@@ -1,13 +1,14 @@
 using BattleshipsApi.Entities;
 using BattleshipsApi.Entities.Ships;
 using BattleshipsApi.Enums;
+using BattleshipsApi.Handlers;
 using FluentAssertions;
 
-namespace BattleshipApiTests.Handlers.GameLogicHandler;
+namespace BattleshipApiTests.Handlers.GameLogicHandlerTests;
 
 public class GameLogicHandler_MakeMoveToEnemyBoard_Tests
 {
-    private readonly BattleshipsApi.Handlers.GameLogicHandler _gameLogicHandler = new ();
+    private readonly GameLogicHandler _gameLogicHandler = new();
     private const int BoardSize = 10;
 
     [SetUp]

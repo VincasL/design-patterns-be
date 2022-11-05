@@ -22,29 +22,12 @@ public class GameLogicHandler
             hitCell.Type = CellType.Empty;
             return (false, false);
         }
-
         
-
         hitCell.Type = CellType.DamagedShip;
 
-        var damagedShipCells = new List<Cell>();
-
-        foreach (var cell in board.Cells)
-        {
-            if (cell.Ship == hitCell.Ship && cell.Type == CellType.DamagedShip)
-            {
-                damagedShipCells.Add(cell);
-            }
-        }
-
-        var shipHasBeenDestroyed = damagedShipCells.Count == hitCell.Ship!.Length;
+        var shipHasBeenDestroyed = DestroyShipsIfAllCellsDamaged(board, hitCell.Ship);
 
         if (!shipHasBeenDestroyed) return (true, false);
-
-        foreach (var cell in damagedShipCells)
-        {
-            cell.Type = CellType.DestroyedShip;
-        }
 
         return (true, true);
     }
@@ -158,7 +141,7 @@ public class GameLogicHandler
         return unit;
     }
 
-    public bool HasShipBeenDestroyed(Board board, Ship ship)
+    public bool DestroyShipsIfAllCellsDamaged(Board board, Ship ship)
     {
         // If ship is destroyed, mark its cells as destroyed
 
@@ -197,7 +180,7 @@ public class GameLogicHandler
                 cell.Mine.HasExploded = true;
                 cell.Type = CellType.DamagedShip;
 
-                if (HasShipBeenDestroyed(board, cell.Ship))
+                if (DestroyShipsIfAllCellsDamaged(board, cell.Ship))
                 {
                     destroyedShipsCount++;
                 }
@@ -206,6 +189,4 @@ public class GameLogicHandler
 
         return destroyedShipsCount;
     }
-    
-    
 }
