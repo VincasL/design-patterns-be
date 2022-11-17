@@ -1,4 +1,5 @@
-﻿using BattleshipsApi.Enums;
+﻿using BattleshipsApi.Composite;
+using BattleshipsApi.Enums;
 
 namespace BattleshipsApi.Entities.Ships
 {
@@ -8,17 +9,16 @@ namespace BattleshipsApi.Entities.Ships
         {
             Length = 3;
             Type = ShipType.Submarine;
-
         }
         
-        private Submarine(ShipType type, bool isHorizontal, int armourStrength, int fuel): base(type, isHorizontal, armourStrength, fuel)
+        private Submarine(ShipType type, bool isHorizontal, int armourStrength, int fuel, List<IShipComponent> components): base(type, isHorizontal, armourStrength, fuel, components)
         {
         }
 
 
         public override Ship Clone()
         {
-            return new Submarine(Type, IsHorizontal, ArmourStrength, Fuel);
+            return new Submarine(Type, IsHorizontal, ArmourStrength, Fuel, new List<IShipComponent>(Children));
         }
     }
 }

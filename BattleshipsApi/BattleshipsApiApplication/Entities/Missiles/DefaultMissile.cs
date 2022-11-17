@@ -1,9 +1,21 @@
-﻿namespace BattleshipsApi.Entities.Missiles;
+﻿using BattleshipsApi.Composite;
 
-public class DefaultMissile : Missile
+namespace BattleshipsApi.Entities.Missiles;
+
+public class DefaultMissile : Missile, IShipComponent
 {
     public override Unit Clone()
     {
-        throw new NotImplementedException();
+        return new DefaultMissile();
+    }
+
+    public int GetArmourStrength()
+    {
+        return 5;
+    }
+
+    public int GetFuel()
+    {
+        return 0;
     }
 }
