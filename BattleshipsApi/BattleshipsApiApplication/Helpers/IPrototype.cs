@@ -1,4 +1,6 @@
-﻿namespace BattleshipsApi.Helpers
+﻿using BattleshipsApi.Contracts;
+
+namespace BattleshipsApi.Helpers
 {
     interface IPrototype : ICloneable
     {

@@ -1,5 +1,7 @@
-﻿using BattleshipsApi.Enums;
+﻿using BattleshipsApi.Contracts;
+using BattleshipsApi.Enums;
 using BattleshipsApi.Helpers;
+using BattleshipsApi.Iterators;
 
 namespace BattleshipsApi.Entities;
 
@@ -33,6 +35,44 @@ public class Board : IPrototype
         BoardSize = boardSize;
 
     }
+
+    public IIterator getMineIterator()
+    {
+        List<Mine> mines = new List<Mine>();
+        foreach (Cell cell in Cells)
+        {
+            if (cell.Mine != null && !mines.Contains(cell.Mine))
+            {
+                mines.Add(cell.Mine);
+            }
+        }
+        return new MineIterator(mines);
+    }
+    public IIterator getShipIterator()
+    {
+        List<Ship> ships = new List<Ship>();
+        foreach (Cell cell in Cells)
+        {
+            if (cell.Ship != null && !ships.Contains(cell.Ship))
+            {
+                ships.Add(cell.Ship);
+            }
+        }
+        return new ShipIterator(ships);
+    }
+    public IIterator getMissileIterator()
+    {
+        List<Missile> missiles = new List<Missile>();
+        foreach (Cell cell in Cells)
+        {
+            if (cell.Missile != null && !missiles.Contains(cell.Missile))
+            {
+                missiles.Add(cell.Missile);
+            }
+        }
+        return new MissileIterator(missiles);
+    }
+
     public Mine? getHeatSeakingMine()
     {
         Mine? mine = null;
@@ -105,4 +145,6 @@ public class Board : IPrototype
 
         return new Board(cells, BoardSize, DestroyedShipCount);
     }
+
+
 }
