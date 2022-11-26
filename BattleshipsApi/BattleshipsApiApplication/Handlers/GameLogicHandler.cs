@@ -172,9 +172,9 @@ public class GameLogicHandler
         
         foreach (var cell in board.Cells)
         {
-            if (cell.Ship != null && cell.Mine != null && !cell.Mine.HasExploded)
+            if (cell.Ship != null && cell.Mine != null) // && !cell.Mine.HasExploded
             {
-                cell.Mine.HasExploded = true;
+                //cell.Mine.HasExploded = true;
                 cell.Type = CellType.DamagedShip;
 
                 if (DestroyShipsIfAllCellsDamaged(board, cell.Ship))

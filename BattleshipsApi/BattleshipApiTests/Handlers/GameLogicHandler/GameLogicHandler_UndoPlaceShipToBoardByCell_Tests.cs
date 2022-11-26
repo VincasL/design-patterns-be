@@ -1,3 +1,6 @@
+using BattleshipsApi.Entities;
+using BattleshipsApi.Entities.Mines;
+
 namespace BattleshipApiTests.Handlers.GameLogicHandler;
 
 public class GameLogicHandler_UndoPlaceShipToBoardByCell_Tests
@@ -7,7 +10,21 @@ public class GameLogicHandler_UndoPlaceShipToBoardByCell_Tests
     [SetUp]
     public void Setup()
     {
-        //TODO: tests
+
     }
-    
+
+    [Test]
+    public void UndoPlaceBattleshipToBoard()
+    {
+        //Arrange
+        var coordinates = new CellCoordinates(0, 0);
+        var board = new Board(10);
+        var ship = new Battleship();
+        _gameLogicHandler.PlaceShipToBoard(ship, board, coordinates);
+
+        //Act & Assert
+        _gameLogicHandler.Invoking(handler => handler.UndoPlaceShipToBoardByCell(ship, board))
+            .Should().NotThrow();
+    }
+
 }
