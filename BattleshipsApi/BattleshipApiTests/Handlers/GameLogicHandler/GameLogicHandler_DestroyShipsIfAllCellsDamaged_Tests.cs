@@ -1,3 +1,5 @@
+using BattleshipsApi.Entities.Mines;
+
 namespace BattleshipApiTests.Handlers.GameLogicHandler;
 
 public class GameLogicHandler_DestroyShipsIfAllCellsDamaged_Tests
@@ -7,7 +9,7 @@ public class GameLogicHandler_DestroyShipsIfAllCellsDamaged_Tests
     [SetUp]
     public void Setup()
     {
-        //TODO: tests
+
     }
-    
+
 }
