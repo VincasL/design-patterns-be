@@ -9,11 +9,6 @@ public class RocketLauncher: IShipWeapon
         return 5;
     }
 
-    public int GetFuel()
-    {
-        return 2;
-    }
-
     public int Damage()
     {
         return 25;

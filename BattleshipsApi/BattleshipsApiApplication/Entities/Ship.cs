@@ -31,9 +31,4 @@ public abstract class Ship : Unit, IShipComponent
     {
         return Children.Aggregate(0, (acc, x) => acc + x.GetArmourStrength());
     }
-
-    public int GetFuel()
-    {
-        return Children.Aggregate(0, (acc, x) => acc + x.GetFuel());
-    }
 }
