@@ -46,7 +46,8 @@ public class Board : IPrototype
                 mines.Add(cell.Mine);
             }
         }
-        return new MineIterator(mines);
+        var a = new MineAggregate(mines);
+        return a.CreateIterator();
     }
     public IIterator getShipIterator()
     {
@@ -58,7 +59,8 @@ public class Board : IPrototype
                 ships.Add(cell.Ship);
             }
         }
-        return new ShipIterator(ships);
+        var a = new ShipAggregate(ships);
+        return a.CreateIterator();
     }
     public IIterator getMissileIterator()
     {
@@ -70,7 +72,8 @@ public class Board : IPrototype
                 missiles.Add(cell.Missile);
             }
         }
-        return new MissileIterator(missiles);
+        var a = new MissileAggregate(missiles);
+        return a.CreateIterator();
     }
 
     public Mine? getHeatSeakingMine()

@@ -1,7 +1,7 @@
 ﻿namespace BattleshipsApi.Contracts
 {
-    public abstract class IAggregate
+    public interface IAggregate
     {
-        public abstract IIterator CreateIterator<T>();
+        public abstract IIterator CreateIterator();
     }
 }

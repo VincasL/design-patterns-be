@@ -1,13 +1,14 @@
 ﻿using BattleshipsApi.Contracts;
 using BattleshipsApi.Entities;
+using System.Collections;
 
 namespace BattleshipsApi.Iterators
 {
     public class ShipIterator : IIterator
     {
-        List<Ship> aggregate;
+        ShipAggregate aggregate;
         // Constructor
-        public ShipIterator(List<Ship> aggregate)
+        public ShipIterator(ShipAggregate aggregate)
         {
             this.aggregate = aggregate;
         }
@@ -16,13 +17,14 @@ namespace BattleshipsApi.Iterators
         {
             return aggregate[0];
         }
-        // Gets next iteration item
+
         public IEnumerable<object> GetEnumerator()
         {
-            foreach (Ship ship in aggregate)
+            for (int i = 0; i < aggregate.Count; i++)
             {
-                yield return ship;
+                yield return aggregate[i];
             }
         }
+
     }
 }

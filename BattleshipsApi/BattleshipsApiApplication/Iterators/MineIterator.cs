@@ -5,9 +5,9 @@ namespace BattleshipsApi.Iterators
 {
     public class MineIterator : IIterator
     {
-        List<Mine> aggregate;
+        MineAggregate aggregate;
         // Constructor
-        public MineIterator(List<Mine> aggregate)
+        public MineIterator(MineAggregate aggregate)
         {
             this.aggregate = aggregate;
         }
@@ -19,9 +19,9 @@ namespace BattleshipsApi.Iterators
         // Gets next iteration item
         public IEnumerable<object> GetEnumerator()
         {
-            foreach (Mine ship in aggregate)
+            for (int i=0;i<aggregate.Count;i++)
             {
-                yield return ship;
+                yield return aggregate[i];
             }
         }
     }
