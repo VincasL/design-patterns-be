@@ -1,6 +1,3 @@
-using BattleshipsApi.Entities;
-using BattleshipsApi.Entities.Mines;
-
 namespace BattleshipApiTests.Handlers.GameLogicHandler;
 
 public class GameLogicHandler_UndoPlaceShipToBoardByCell_Tests

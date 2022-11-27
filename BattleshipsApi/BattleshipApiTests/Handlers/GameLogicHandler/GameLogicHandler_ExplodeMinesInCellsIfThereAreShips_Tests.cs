@@ -1,8 +1,6 @@
-using BattleshipsApi.Entities.Mines;
-
 namespace BattleshipApiTests.Handlers.GameLogicHandler;
 
-public class GameLogicHandler_ExplodeMinesInCellsIfThereAreShips_Tests
+public class GameDataSender_Tests
 {
     private readonly BattleshipsApi.Handlers.GameLogicHandler _gameLogicHandler = new();
 

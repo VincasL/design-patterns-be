@@ -38,14 +38,6 @@ public class GameLogicHandler
                 var cell = board.Cells[coordinates.X,y];
                 if (cell.Ship != null)
                 {
-                    // rollback
-                    while (y != coordinates.Y)
-                    {
-                        y--;
-                        cell = board.Cells[coordinates.X,y];
-                        cell.Ship = null;
-                    }
-                    
                     throw new Exception("Ships overlap");
                 }
 
@@ -59,15 +51,7 @@ public class GameLogicHandler
                 var cell = board.Cells[x,coordinates.Y];
                 
                 if (cell.Ship != null)
-                {
-                    // rollback
-                    while (x != coordinates.X)
-                    {
-                        x--;
-                        cell = board.Cells[x,coordinates.Y];
-                        cell.Ship = null;
-                    }
-                    
+                {                    
                     throw new Exception("Ships overlap");
                 }
 
@@ -105,14 +89,6 @@ public class GameLogicHandler
             board.Cells[cellToPlaceMineAt.X, cellToPlaceMineAt.Y + 1],
             board.Cells[cellToPlaceMineAt.X + 1, cellToPlaceMineAt.Y + 1]
         };
-        
-        foreach (var cell in cellsToPlaceHugeMineAt)
-        {
-            if (cell.Mine != null)
-            {
-                throw new Exception("space occupied");
-            }
-        }
         
         foreach (var cell in cellsToPlaceHugeMineAt)
         {
