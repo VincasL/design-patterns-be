@@ -1,6 +1,3 @@
-using BattleshipsApi.Entities.Ships;
-using System.Threading;
-
 namespace BattleshipApiTests.Handlers.GameLogicHandler;
 
 public class GameLogicHandler_GetUnitByCellCoordinates_Tests
@@ -23,7 +20,7 @@ public class GameLogicHandler_GetUnitByCellCoordinates_Tests
         _gameLogicHandler.PlaceShipToBoard(battleship, board, coordinates);
 
         //Act & Assert
-        var unit = _gameLogicHandler.GetUnitByCellCoordinates(coordinates, board)
+        _gameLogicHandler.GetUnitByCellCoordinates(coordinates, board)
             .Should().Be(battleship);
     }
 }
