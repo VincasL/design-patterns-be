@@ -2,19 +2,16 @@
 
 namespace BattleshipsApi.Entities.ShipModules;
 
-public class Turret: IShipWeapon 
+public class BigCannon: IShipWeapon
 {
-    public int Damage()
-    {
-        throw new NotImplementedException();
-    }
-
     public int GetArmourStrength()
     {
-        return 25;
+        return 5;
     }
 
-    public int GetFuel()
+
+
+    public int Damage()
     {
         return 25;
     }
