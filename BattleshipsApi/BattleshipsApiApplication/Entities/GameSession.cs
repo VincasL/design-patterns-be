@@ -36,12 +36,18 @@ public class GameSession : IPrototype
 
     public Player GetPlayerByConnectionId(string connectionId)
     {
-        return PlayerOne.ConnectionId == connectionId ? PlayerOne : PlayerTwo;
+        if (PlayerOne.ConnectionId == connectionId) return PlayerOne;
+        if (PlayerTwo.ConnectionId == connectionId) return PlayerTwo;
+
+        return null!;
     }
 
     public Player GetEnemyPlayerByConnectionId(string connectionId)
     {
-        return PlayerOne.ConnectionId != connectionId ? PlayerOne : PlayerTwo;
+        if (PlayerOne.ConnectionId == connectionId) return PlayerTwo;
+        if (PlayerTwo.ConnectionId == connectionId) return PlayerOne;
+
+        return null!;
     }
 
     public GameSession ShowPlayerOneShips()
