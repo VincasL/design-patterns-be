@@ -1,5 +1,7 @@
 ﻿using BattleshipsApi.Composite;
+using BattleshipsApi.Contracts;
 using BattleshipsApi.Enums;
+using BattleshipsApi.States.ShipStates;
 
 namespace BattleshipsApi.Entities;
 
@@ -8,9 +10,22 @@ public abstract class Ship : Unit, IShipComponent
     public int Length { get; set; }
     public ShipType Type { get; set; }
     public bool IsHorizontal { get; set; }
-
     public int ArmourStrength { get; set; }
     public int Fuel { get; set; }
+    IShipState state;
+    // Gets or sets the state
+    public IShipState ShipState
+    {
+        get { return state; }
+        set
+        {
+            state = value;
+        }
+    }
+    public void Request()
+    {
+        state.HandleState(this);
+    }
 
     public List<IShipComponent> Children { get; set; } = new(); 
 
@@ -21,10 +36,11 @@ public abstract class Ship : Unit, IShipComponent
         ArmourStrength = armourStrength;
         Fuel = fuel;
         Children = children;
+        this.ShipState = new ShipNotPlaced();
     }
-
-    protected Ship()
+    public Ship()
     {
+
     }
 
     public int GetArmourStrength()
