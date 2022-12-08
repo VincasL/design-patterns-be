@@ -35,7 +35,22 @@ public class Board : IPrototype
         BoardSize = boardSize;
 
     }
-
+    public IIterator? getIterator<T>()
+    {
+        if(typeof(Ship).IsSubclassOf(typeof(T)))
+        {
+            return getShipIterator();
+        }
+        else if(typeof(Mine).IsSubclassOf(typeof(T)))
+        {
+            return getMineIterator();
+        }
+        else if(typeof(Missile).IsSubclassOf(typeof(T)))
+        {
+            return getMissileIterator();
+        }
+        return null;
+    }
     public IIterator getMineIterator()
     {
         List<Mine> mines = new List<Mine>();
