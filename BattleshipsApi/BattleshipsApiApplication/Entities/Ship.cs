@@ -1,17 +1,20 @@
 ﻿using BattleshipsApi.Composite;
 using BattleshipsApi.Contracts;
 using BattleshipsApi.Enums;
+using BattleshipsApi.Proxy;
 using BattleshipsApi.States.ShipStates;
+using BattleshipsApi.VisitorPattern;
 
 namespace BattleshipsApi.Entities;
 
-public abstract class Ship : Unit, IShipComponent
+public abstract class Ship : Unit, IShipComponent, IGetShipData
 {
     public int Length { get; set; }
     public ShipType Type { get; set; }
     public bool IsHorizontal { get; set; }
     public int ArmourStrength { get; set; }
     public int Fuel { get; set; }
+    public int Speed { get; set; }
     IShipState state;
     // Gets or sets the state
     public IShipState ShipState
@@ -38,13 +41,15 @@ public abstract class Ship : Unit, IShipComponent
         Children = children;
         this.ShipState = new ShipNotPlaced();
     }
-    public Ship()
-    {
-
-    }
+    public Ship(){ }
 
     public int GetArmourStrength()
     {
         return Children.Aggregate(0, (acc, x) => acc + x.GetArmourStrength());
+    }
+
+    public int GetShipSize(ShipType type, NationType nationType)
+    {
+        return Length;
     }
 }

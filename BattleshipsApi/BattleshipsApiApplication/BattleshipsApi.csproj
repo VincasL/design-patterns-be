@@ -4,6 +4,9 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisMode>All</AnalysisMode>
+		<EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,6 +30,14 @@
 
     <ItemGroup>
       <Folder Include="Handlers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EditorConfigFiles Remove="C:\Users\tautvydas.juskys\source\repos\VincasL\design-patterns-be\BattleshipsApi\BattleshipsApiApplication\.editorconfig" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="C:\Users\tautvydas.juskys\source\repos\VincasL\design-patterns-be\BattleshipsApi\BattleshipsApiApplication\.editorconfig" />
     </ItemGroup>
 
 </Project>

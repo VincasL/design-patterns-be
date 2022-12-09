@@ -1,9 +1,10 @@
 ﻿using BattleshipsApi.Composite;
 using BattleshipsApi.Enums;
+using BattleshipsApi.VisitorPattern;
 
 namespace BattleshipsApi.Entities.Ships
 {
-    public class Carrier : Ship
+    public class Carrier : Ship, IVisitable
     {
         public Carrier()
         {
@@ -13,6 +14,10 @@ namespace BattleshipsApi.Entities.Ships
 
         private Carrier(ShipType type, bool isHorizontal, int armourStrength, int fuel, List<IShipComponent> components): base(type, isHorizontal, armourStrength, fuel, components)
         {
+        }
+        public int Accept(IVisitor visitor)
+        {
+            return visitor.Visit(this);
         }
 
 
