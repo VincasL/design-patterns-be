@@ -15,9 +15,7 @@ namespace BattleshipsApi.Entities.Ships
         private Cruiser(ShipType type, bool isHorizontal, int armourStrength, int fuel, List<IShipComponent> components): base(type, isHorizontal, armourStrength, fuel, components)
         {
         }
-
-
-        public int Accept(IVisitor visitor)
+        public override int Accept(IVisitor visitor)
         {
             return visitor.Visit(this);
         }

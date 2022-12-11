@@ -4,7 +4,7 @@ using BattleshipsApi.VisitorPattern;
 
 namespace BattleshipsApi.Entities.Ships
 {
-    public class Battleship : Ship, IVisitable
+    public class Battleship : Ship
     {
         public Battleship()
         {
@@ -16,7 +16,7 @@ namespace BattleshipsApi.Entities.Ships
         {
         }
 
-        public int Accept(IVisitor visitor)
+        public override int Accept(IVisitor visitor)
         {
             return visitor.Visit(this);
         }

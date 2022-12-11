@@ -11,6 +11,7 @@ public class GameSession : IPrototype
     public string NextPlayerTurnConnectionId { get; set; }
     public bool IsGameOver { get; set; }
     public Settings Settings { get; set; }
+    public DateTime GameStartedDateTime { get; set; }
 
     public bool AllPlayersPlacedUnits =>
         PlayerOne.AreAllUnitsPlaced && PlayerTwo.AreAllUnitsPlaced;

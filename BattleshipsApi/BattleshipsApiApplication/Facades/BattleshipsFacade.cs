@@ -14,6 +14,7 @@ public class BattleshipsFacade
     private readonly GameLogicHandler _gameLogicHandler;
     private readonly GameDataAdapter _gameDataAdapter;
     private readonly GameDataSender _gameDataSender;
+    public AbstractFactory Factory { get; }
 
     public BattleshipsFacade(QueueHandler queueHandler, GameLogicHandler gameLogicHandler, IMapper mapper, IHubContext<BattleshipHub> hubContext, GameDataSender gameDataSender)
     {
@@ -84,9 +85,6 @@ public class BattleshipsFacade
         Sessions.BindNewConnectionIdToPlayer(connectionId, contextConnectionId, session);
     }
     
-
-    public AbstractFactory Factory { get; }
-
     public int ExplodeMinesInCellsIfThereAreShips(Board board)
     {
         return _gameLogicHandler.ExplodeMinesInCellsIfThereAreShips(board);

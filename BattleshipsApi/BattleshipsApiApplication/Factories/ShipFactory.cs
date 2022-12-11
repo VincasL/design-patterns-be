@@ -1,7 +1,6 @@
 ﻿using BattleshipsApi.Entities;
 using BattleshipsApi.Entities.Ships;
 using BattleshipsApi.Enums;
-using BattleshipsApi.VisitorPattern;
 
 namespace BattleshipsApi.Factories;
 
@@ -9,29 +8,23 @@ public class ShipFactory
 {
     public Ship GetShip(ShipType type)
     {
-        var shipVisitor = new ShipVisitor();
         switch (type)
         {
             case ShipType.Battleship:
-                var battleship = new Battleship();
-                battleship.Accept(shipVisitor);
-                return battleship;
+                return new Battleship();
+
             case ShipType.Carrier:
-                var carrier = new Carrier();
-                carrier.Accept(shipVisitor);
-                return carrier;
+                return new Carrier();
+
             case ShipType.Cruiser:
-                var cruiser = new Cruiser();
-                cruiser.Accept(shipVisitor);
-                return cruiser;
+                return new Cruiser();
+
             case ShipType.Destroyer:
-                var destroyer = new Destroyer();
-                destroyer.Accept(shipVisitor);
-                return destroyer;
+                return new Destroyer();
+
             case ShipType.Submarine:
-                var submarine = new Submarine();
-                submarine.Accept(shipVisitor);
-                return submarine;
+                return new Submarine();
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }

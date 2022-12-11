@@ -1,7 +1,10 @@
-﻿using BattleshipsApi.Entities;
+﻿using BattleshipsApi.Contracts;
+using BattleshipsApi.Entities;
+using BattleshipsApi.Entities.Ships;
 using BattleshipsApi.Enums;
 using BattleshipsApi.Facades;
 using BattleshipsApi.Strategies;
+using BattleshipsApi.VisitorPattern;
 using Microsoft.AspNetCore.SignalR;
 using SignalRSwaggerGen.Attributes;
 
@@ -45,7 +48,6 @@ public class BattleshipHub : Hub
     {
         var session = _battleshipsFacade.GetSessionByConnectionId(Context.ConnectionId);
         var player = session.GetPlayerByConnectionId(Context.ConnectionId);
-        var board = player.Board;
 
         if (session.AllPlayersPlacedUnits || player.AreAllUnitsPlaced)
         {
@@ -64,6 +66,8 @@ public class BattleshipHub : Hub
         }
 
         player.AreAllUnitsPlaced = true;
+
+        session.GameStartedDateTime = DateTime.UtcNow;
 
         SendGameData(session);
     }
@@ -242,44 +246,55 @@ public class BattleshipHub : Hub
             throw new Exception("it's not your move bro");
         }
 
-        var player = session.GetEnemyPlayerByConnectionId(Context.ConnectionId);
-        var board = player.Board;
+        var enemyPlayer = session.GetEnemyPlayerByConnectionId(Context.ConnectionId);
+        var player = session.GetPlayerByConnectionId(Context.ConnectionId);
+        var enemyBoard = enemyPlayer.Board;
+        var visitor = new ShipVisitor(session.GameStartedDateTime);
 
-        var (hasShipBeenHit, hasShipBeenDestroyed) = _battleshipsFacade.MakeMoveToEnemyBoard(cellCoordinates, board);
+        var (hasShipBeenHit, hasShipBeenDestroyed) = _battleshipsFacade.MakeMoveToEnemyBoard(cellCoordinates, enemyBoard);
         
         // moves heat seeking mine
         if (!hasShipBeenDestroyed && !hasShipBeenHit)
         {
-            var mine = board.getHeatSeakingMine();
+            var mine = enemyBoard.getHeatSeakingMine();
             if (mine != null && mine.HasExploded == false)
             {
-                mine.MoveStrategy.MoveDifferently(board, mine);
+                mine.MoveStrategy.MoveDifferently(enemyBoard, mine);
             }
         }
 
         if (hasShipBeenDestroyed)
         {
-            player.Board.DestroyedShipCount++;
+            enemyPlayer.Board.DestroyedShipCount++;
         }
         
         if (!hasShipBeenHit)
         {
-            var destroyedShipCountByMines = _battleshipsFacade.ExplodeMinesInCellsIfThereAreShips(board);
+            var destroyedShipCountByMines = _battleshipsFacade.ExplodeMinesInCellsIfThereAreShips(enemyBoard);
             if (destroyedShipCountByMines > 0)
             {
                 hasShipBeenDestroyed = true;
-                player.Board.DestroyedShipCount += destroyedShipCountByMines;
+                enemyBoard.DestroyedShipCount += destroyedShipCountByMines;
             }
             session.SetMoveToNextPlayer();
         }
 
         // check if all ships destroyed
-        if (session.Settings.ShipCount <= player.Board.DestroyedShipCount)
+        if (session.Settings.ShipCount <= enemyBoard.DestroyedShipCount)
         {
             session.IsGameOver = true;
-            session.GetPlayerByConnectionId(Context.ConnectionId).Winner = true;
+            player.Winner = true;
         }
-        
+
+        foreach (Unit unit in enemyPlayer.PlacedShips)
+        {
+            if (unit is Ship)
+            {
+                ((Ship)unit).Accept(visitor);
+            }
+        }
+
+
         SendGameData(session);
     }
     public async Task MoveUnit(CellCoordinates coordinates, MoveDirection direction, bool isEnemyBoard)
@@ -290,23 +305,56 @@ public class BattleshipHub : Hub
             : session.GetPlayerByConnectionId(Context.ConnectionId).Board;
         var unit = _battleshipsFacade.GetUnitByCellCoordinates(coordinates, board, isEnemyBoard? typeof(Mine) : typeof(Ship));
 
+
         if (unit == null)
         {
             throw new Exception("no unit :(");
         }
-
-        MoveStrategy strategy = direction switch
+        foreach(var cell in board.Cells)
         {
-            MoveDirection.Up => new MoveUp(),
-            MoveDirection.Right => new MoveRight(),
-            MoveDirection.Down => new MoveDown(),
-            MoveDirection.Left => new MoveLeft(),
-            _ => new DontMove()
-        };
+            if(cell.Ship == (Ship)unit)
+            {
+                if(cell.Type == CellType.DamagedShip || cell.Type == CellType.DestroyedShip)
+                {
+                    throw new Exception("Your ship can't move bro, its broken");
+                }
+            }
+        }
 
-        unit.MoveStrategy = strategy;
-        unit.MoveStrategy.MoveDifferently(board, unit);
-        SendGameData(session);
+        if (session.AllPlayersPlacedUnits)
+        {
+            if (((Ship)unit).Speed <= 0)
+            {
+                throw new Exception("can't move no more :("); ;
+            }
+            MoveStrategy strategy = direction switch
+            {
+                MoveDirection.Up => new MoveUp(),
+                MoveDirection.Right => new MoveRight(),
+                MoveDirection.Down => new MoveDown(),
+                MoveDirection.Left => new MoveLeft(),
+                _ => new DontMove()
+            };
+            unit.MoveStrategy = strategy;
+            unit.MoveStrategy.MoveDifferently(board, unit);
+            SendGameData(session);
+
+            ((Ship)unit).Speed--;
+        }
+        else
+        {
+            MoveStrategy strategy = direction switch
+            {
+                MoveDirection.Up => new MoveUp(),
+                MoveDirection.Right => new MoveRight(),
+                MoveDirection.Down => new MoveDown(),
+                MoveDirection.Left => new MoveLeft(),
+                _ => new DontMove()
+            };
+            unit.MoveStrategy = strategy;
+            unit.MoveStrategy.MoveDifferently(board, unit);
+            SendGameData(session);
+        }
     }
 
     public async Task RequestData()
