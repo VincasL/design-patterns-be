@@ -29,7 +29,7 @@ public class GameLogicHandler_PlaceMineToBoard_Tests
         //Arrange
         var coordinates = new CellCoordinates(0, 0);
         var board = new Board(1);
-        var mine = new RemoteControlledMIne();
+        var mine = new RemoteControlledMine();
 
         //Act & Assert
         _gameLogicHandler.Invoking(handler => handler.PlaceMineToBoard(mine, board, coordinates))

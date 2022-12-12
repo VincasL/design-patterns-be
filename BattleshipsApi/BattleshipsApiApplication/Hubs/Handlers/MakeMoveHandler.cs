@@ -44,7 +44,7 @@ public class MakeMoveHandler : BaseHandler<MakeMoveCommand>
         // moves heat seeking mine
         if (!hasShipBeenDestroyed && !hasShipBeenHit)
         {
-            var mine = enemyBoard.getHeatSeakingMine();
+            var mine = enemyBoard.GetHeatSeakingMine();
             if (mine != null && mine.HasExploded == false)
             {
                 mine.MoveStrategy.MoveDifferently(enemyBoard, mine);

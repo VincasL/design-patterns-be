@@ -30,28 +30,28 @@ public class Board : IPrototype
                 cells[i,j] = new Cell(i, j);
             }
         }
-
         Cells = cells;
         BoardSize = boardSize;
-
     }
-    public IIterator? getIterator<T>()
+
+    public IIterator? GetIterator<T>()
     {
         if(typeof(Ship).IsSubclassOf(typeof(T)))
         {
-            return getShipIterator();
+            return GetShipIterator();
         }
         else if(typeof(Mine).IsSubclassOf(typeof(T)))
         {
-            return getMineIterator();
+            return GetMineIterator();
         }
         else if(typeof(Missile).IsSubclassOf(typeof(T)))
         {
-            return getMissileIterator();
+            return GetMissileIterator();
         }
         return null;
     }
-    public IIterator getMineIterator()
+
+    public IIterator GetMineIterator()
     {
         List<Mine> mines = new List<Mine>();
         foreach (Cell cell in Cells)
@@ -64,20 +64,8 @@ public class Board : IPrototype
         var a = new MineAggregate(mines);
         return a.CreateIterator();
     }
-    //public IIterator getShipIterator()
-    //{
-    //    List<Ship> ships = new List<Ship>();
-    //    foreach (Cell cell in Cells)
-    //    {
-    //        if (cell.Ship != null && !ships.Contains(cell.Ship))
-    //        {
-    //            ships.Add(cell.Ship);
-    //        }
-    //    }
-    //    var a = new ShipAggregate(ships);
-    //    return a.CreateIterator();
-    //}
-    public IIterator getShipIterator()
+
+    public IIterator GetShipIterator()
     {
         List<Unit> units = new List<Unit>();
         foreach (Cell cell in Cells)
@@ -87,7 +75,7 @@ public class Board : IPrototype
         var a = new ShipAggregate(units);
         return a.CreateIterator();
     }
-    public IIterator getMissileIterator()
+    public IIterator GetMissileIterator()
     {
         List<Missile> missiles = new List<Missile>();
         foreach (Cell cell in Cells)
@@ -101,7 +89,7 @@ public class Board : IPrototype
         return a.CreateIterator();
     }
 
-    public Mine? getHeatSeakingMine()
+    public Mine? GetHeatSeakingMine()
     {
         Mine? mine = null;
         foreach (var cell in Cells)
@@ -129,7 +117,6 @@ public class Board : IPrototype
                 cell.Type = CellType.Ship;
             }
         }
-
         return this;
     }
     
@@ -142,7 +129,6 @@ public class Board : IPrototype
                 cell.Type = CellType.Mine;
             }
         }
-
         return this;
     }
 
@@ -154,11 +140,9 @@ public class Board : IPrototype
     public object Clone()
     {
         var cells = new Cell[BoardSize, BoardSize];
-
         
         for (var i = 0; i < BoardSize; i++)
         {
-            
             for (var j = 0; j < BoardSize; j++)
             {
                 var newUnits = new List<Unit>();
@@ -166,13 +150,9 @@ public class Board : IPrototype
                 {
                     newUnits.Add(unit.Clone());
                 }
-                
                 cells[i, j] = new Cell(i, j, Cells[i, j].Type, newUnits);
             }
         }
-
         return new Board(cells, BoardSize, DestroyedShipCount);
     }
-
-
 }

@@ -16,19 +16,19 @@ public abstract class Ship : Unit, IShipComponent, IGetShipData, IPlaceItem
     public int ArmourStrength { get; set; }
     public int Fuel { get; set; }
     public int Speed { get; set; }
-    IShipState state;
-    // Gets or sets the state
+    IShipState State;
+    // Gets or sets the State
     public IShipState ShipState
     {
-        get { return state; }
+        get { return State; }
         set
         {
-            state = value;
+            State = value;
         }
     }
     public void Request()
     {
-        state.HandleState(this);
+        State.HandleState(this);
     }
 
     public List<IShipComponent> Children { get; set; } = new(); 
@@ -58,8 +58,6 @@ public abstract class Ship : Unit, IShipComponent, IGetShipData, IPlaceItem
     {
         throw new NotImplementedException();
     }
-
-   // public abstract int Accept(IVisitor visitor);
 
     public void PlaceObject(Unit unit, Board board, CellCoordinates coordinates)
     {

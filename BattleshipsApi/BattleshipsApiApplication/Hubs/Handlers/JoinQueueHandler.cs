@@ -15,12 +15,12 @@ public class JoinQueueHandler : BaseHandler<JoinQueueCommand>
         var nation = command.Nation;
         
         var player = new Player(command.ConnectionId, name);
-        player.nationType = nation switch
+        player.NationType = nation switch
         {
             "Russian" => NationType.Russian,
             "American" => NationType.American,
             "German" => NationType.German,
-            _ => player.nationType
+            _ => player.NationType
         };
         var moreThanTwoPlayersInTheQueue = BattleshipsFacade.AddPlayerToQueue(player);
 

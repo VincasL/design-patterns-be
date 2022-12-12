@@ -51,8 +51,6 @@ public class Cell
         Units.Remove(unit);
     }
 
-
-    // consider making generic
     public Ship? Ship
     {
         get => Units.Find(x => IsSameOrSubclass(typeof(Ship), x.GetType())) as Ship;
@@ -112,6 +110,3 @@ public class Cell
         return Units.Find(x => IsSameOrSubclass(unitType ?? typeof(Ship),x.GetType() ));
     }
 }
-
-
-

@@ -4,7 +4,7 @@ namespace BattleshipsApi.Entities;
 
 public class GameSession : IPrototype
 {
-    private Settings _defaultSettings = new Settings(10);
+    private readonly Settings _defaultSettings = new(10);
 
     public Player PlayerOne { get; set; }
     public Player PlayerTwo { get; set; }

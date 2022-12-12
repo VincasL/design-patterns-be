@@ -6,8 +6,8 @@ namespace BattleshipsApi.Entities
 {
     public abstract class Mine : Unit, IPlaceItem
     {
-        public int ExplosionRadious { get; set; }
-        public int Dammage { get; set; }
+        public int ExplosionRadius { get; set; }
+        public int Damage { get; set; }
         public int ArmourStrength { get; set; }
         public MineType Type { get; set; }
         public bool HasExploded { get; set; }
@@ -15,8 +15,8 @@ namespace BattleshipsApi.Entities
 
         protected Mine(int explosionRadious, int dammage, int armourStrength, MineType type, bool hasExploded)
         {
-            ExplosionRadious = explosionRadious;
-            Dammage = dammage;
+            ExplosionRadius = explosionRadious;
+            Damage = dammage;
             ArmourStrength = armourStrength;
             Type = type;
             HasExploded = hasExploded;

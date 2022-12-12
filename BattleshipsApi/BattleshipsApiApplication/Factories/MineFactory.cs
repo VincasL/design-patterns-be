@@ -15,7 +15,7 @@ public class MineFactory
             case MineType.Huge:
                 return new HugeMine();
             case MineType.RemoteControlled:
-                RemoteControlledMIne mine = new RemoteControlledMIne();
+                RemoteControlledMine mine = new RemoteControlledMine();
                 mine.MoveStrategy = new MoveToShip();
                 return mine;
             default:

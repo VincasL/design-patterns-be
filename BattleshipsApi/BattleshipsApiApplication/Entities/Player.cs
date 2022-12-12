@@ -7,7 +7,7 @@ public class Player : IGetPlayerData
 {
     public string ConnectionId { get; set; }
     public string Name { get; set; }
-    public NationType nationType {get;set;}
+    public NationType NationType {get;set;}
     public Board Board { get; set; }
     public List<Ship> PlacedShips { get; set; }
     public List<Mine> PlacedMines { get; set; } 

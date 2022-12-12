@@ -2,21 +2,21 @@
 
 namespace BattleshipsApi.Entities.Mines
 {
-    public class RemoteControlledMIne: Mine
+    public class RemoteControlledMine: Mine
     {
-        public RemoteControlledMIne()
+        public RemoteControlledMine()
         {
             Type = MineType.RemoteControlled;
         }
         
-        private RemoteControlledMIne(int dammage, MineType type, int armourStrength, int explosionRadious, bool hasExploded)
+        private RemoteControlledMine(int damage, MineType type, int armourStrength, int explosionRadius, bool hasExploded)
         {
         }
 
 
         public override Unit Clone()
         {
-            return new RemoteControlledMIne(Dammage, Type, ArmourStrength, ExplosionRadious, HasExploded);
+            return new RemoteControlledMine(Damage, Type, ArmourStrength, ExplosionRadius, HasExploded);
         }
     }
 }
