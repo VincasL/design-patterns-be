@@ -35,7 +35,22 @@ public class Board : IPrototype
         BoardSize = boardSize;
 
     }
-
+    public IIterator? getIterator<T>()
+    {
+        if(typeof(Ship).IsSubclassOf(typeof(T)))
+        {
+            return getShipIterator();
+        }
+        else if(typeof(Mine).IsSubclassOf(typeof(T)))
+        {
+            return getMineIterator();
+        }
+        else if(typeof(Missile).IsSubclassOf(typeof(T)))
+        {
+            return getMissileIterator();
+        }
+        return null;
+    }
     public IIterator getMineIterator()
     {
         List<Mine> mines = new List<Mine>();
@@ -49,17 +64,27 @@ public class Board : IPrototype
         var a = new MineAggregate(mines);
         return a.CreateIterator();
     }
+    //public IIterator getShipIterator()
+    //{
+    //    List<Ship> ships = new List<Ship>();
+    //    foreach (Cell cell in Cells)
+    //    {
+    //        if (cell.Ship != null && !ships.Contains(cell.Ship))
+    //        {
+    //            ships.Add(cell.Ship);
+    //        }
+    //    }
+    //    var a = new ShipAggregate(ships);
+    //    return a.CreateIterator();
+    //}
     public IIterator getShipIterator()
     {
-        List<Ship> ships = new List<Ship>();
+        List<Unit> units = new List<Unit>();
         foreach (Cell cell in Cells)
         {
-            if (cell.Ship != null && !ships.Contains(cell.Ship))
-            {
-                ships.Add(cell.Ship);
-            }
+            units.AddRange(cell.Units);
         }
-        var a = new ShipAggregate(ships);
+        var a = new ShipAggregate(units);
         return a.CreateIterator();
     }
     public IIterator getMissileIterator()

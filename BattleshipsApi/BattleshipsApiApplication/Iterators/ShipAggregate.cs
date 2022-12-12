@@ -5,9 +5,9 @@ namespace BattleshipsApi.Iterators
 {
     public class ShipAggregate : IAggregate
     {
-        List<Ship> items = new List<Ship>();
+        List<Unit> items = new List<Unit>();
 
-        public ShipAggregate(List<Ship> items)
+        public ShipAggregate(List<Unit> items)
         {
             this.items = items;
         }
@@ -23,7 +23,7 @@ namespace BattleshipsApi.Iterators
         // Indexer
         public Ship this[int index]
         {
-            get { return items[index]; }
+            get { return (Ship)items[index]; }
             set { items.Add(value); }
         }
     }

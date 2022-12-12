@@ -1,5 +1,6 @@
 ﻿using BattleshipsApi.Contracts;
 using BattleshipsApi.Entities;
+using BattleshipsApi.States.ShipStates;
 using System.Collections;
 
 namespace BattleshipsApi.Iterators
@@ -12,17 +13,27 @@ namespace BattleshipsApi.Iterators
         {
             this.aggregate = aggregate;
         }
-        // Gets first iteration item
+        //Gets first iteration item
         public object First()
         {
-            return aggregate[0];
+            for (int i = 0; i < aggregate.Count; i++)
+            {
+                if (aggregate[i] is Ship && !(aggregate[i].ShipState is ShipDestroyed))
+                {
+                    return aggregate[i];
+                }
+            }
+            return null;
         }
 
         public IEnumerable<object> GetEnumerator()
         {
             for (int i = 0; i < aggregate.Count; i++)
             {
-                yield return aggregate[i];
+                if (aggregate[i] is Ship && !(aggregate[i].ShipState is ShipDestroyed))
+                {
+                    yield return aggregate[i];
+                }
             }
         }
 
