@@ -1,5 +1,3 @@
-using BattleshipsApi.Handlers;
-
 namespace BattleshipApiTests.Entities;
 
 public class GameSessionTests

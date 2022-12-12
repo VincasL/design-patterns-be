@@ -3,6 +3,9 @@ using BattleshipsApi.Hubs;
 using AutoMapper;
 using BattleshipsApi.Facades;
 using BattleshipsApi.Handlers;
+using BattleshipsApi.Hubs.Handlers;
+using BattleshipsApi.Mediator;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +51,20 @@ builder.Services.AddSingleton<QueueHandler>();
 builder.Services.AddTransient<GameLogicHandler>();
 builder.Services.AddTransient<GameDataSender>();
 builder.Services.AddSingleton<BattleshipsFacade>();
+builder.Services.AddSingleton<BattleshipsMediator>();
+
+builder.Services.AddTransient<JoinQueueHandler>();
+builder.Services.AddTransient<StartGameHandler>();
+builder.Services.AddTransient<SendGameDataHandler>();
+builder.Services.AddTransient<AssignNewConnectionIdHandler>();
+builder.Services.AddTransient<MakeMoveHandler>();
+builder.Services.AddTransient<MoveUnitHandler>();
+builder.Services.AddTransient<PlaceShipHandler>();
+builder.Services.AddTransient<PlaceMineHandler>();
+builder.Services.AddTransient<PlaceShipsHandler>();
+builder.Services.AddTransient<RotateShipHandler>();
+builder.Services.AddTransient<UndoPlaceShipHandler>();
+
 
 builder.Services.AddSignalR(c =>
 {

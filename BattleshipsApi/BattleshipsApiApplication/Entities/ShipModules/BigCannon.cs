@@ -1,6 +1,4 @@
-﻿using BattleshipsApi.Composite;
-
-namespace BattleshipsApi.Entities.ShipModules;
+﻿namespace BattleshipsApi.Entities.ShipModules;
 
 public class BigCannon: IShipWeapon
 {
@@ -8,9 +6,7 @@ public class BigCannon: IShipWeapon
     {
         return 5;
     }
-
-
-
+    
     public int Damage()
     {
         return 25;

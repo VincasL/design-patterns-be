@@ -39,7 +39,7 @@ public class BattleshipsFacade
     {
         _gameLogicHandler.PlaceShipToBoard(ship, board, cellCoordinates);
     }
-    
+
     public void PlaceMineToBoard(Mine mine, Board board, CellCoordinates cellCoordinates)
     {
         _gameLogicHandler.PlaceMineToBoard(mine, board, cellCoordinates);
@@ -64,7 +64,7 @@ public class BattleshipsFacade
     {
         await _gameDataAdapter.SendGameData(session);
     }
-    
+
     public async Task StartGame(GameSession session)
     {
         await _gameDataSender.SendStartGame(session.PlayerOne.ConnectionId, session.PlayerTwo.ConnectionId);
@@ -84,7 +84,7 @@ public class BattleshipsFacade
     {
         Sessions.BindNewConnectionIdToPlayer(connectionId, contextConnectionId, session);
     }
-    
+
     public int ExplodeMinesInCellsIfThereAreShips(Board board)
     {
         return _gameLogicHandler.ExplodeMinesInCellsIfThereAreShips(board);
