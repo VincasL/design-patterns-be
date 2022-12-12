@@ -1,4 +1,4 @@
-namespace BattleshipApi.Handlers.Sessions;
+namespace BattleshipApiTests.Handlers.Sessions;
 
 public class SessionsTests
 {
@@ -27,7 +27,7 @@ public class SessionsTests
     {
         // Arrange & Act & Assert
         Assert.Throws<Exception>(() => BattleshipsApi.Handlers.Sessions.GetSessionByConnectionId("notExistingConnectionId"));
-        
+
     }
 
     [Test]

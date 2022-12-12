@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleshipApiTests", "Battl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleshipsApi", "BattleshipsApiApplication\BattleshipsApi.csproj", "{9DCB9B29-4970-4CCC-B2E7-EFED7F4DC874}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleshipsApiTests2", "BattleshipsApiTests2\BattleshipsApiTests2.csproj", "{ED171754-2240-4B0B-B032-8CA6FE8F3992}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{9DCB9B29-4970-4CCC-B2E7-EFED7F4DC874}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DCB9B29-4970-4CCC-B2E7-EFED7F4DC874}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DCB9B29-4970-4CCC-B2E7-EFED7F4DC874}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED171754-2240-4B0B-B032-8CA6FE8F3992}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED171754-2240-4B0B-B032-8CA6FE8F3992}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED171754-2240-4B0B-B032-8CA6FE8F3992}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED171754-2240-4B0B-B032-8CA6FE8F3992}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
