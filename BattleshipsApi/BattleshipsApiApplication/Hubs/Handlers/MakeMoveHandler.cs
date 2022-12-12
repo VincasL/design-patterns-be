@@ -1,14 +1,20 @@
 ﻿using BattleshipsApi.Entities;
 using BattleshipsApi.Facades;
 using BattleshipsApi.Mediator;
+using BattleshipsApi.VisitorPattern;
 
 namespace BattleshipsApi.Hubs.Handlers;
 public record MakeMoveCommand(CellCoordinates CellCoordinates, string ContextConnectionId) : ICommand;
 
-public class MakeMoveHandler: BaseHandler<MakeMoveCommand>
+public class MakeMoveHandler : BaseHandler<MakeMoveCommand>
 {
     public override async Task Handle(MakeMoveCommand command)
     {
+
+
+
+
+
         var connectionId = command.ContextConnectionId;
         //TODO: validation
         var session = BattleshipsFacade.GetSessionByConnectionId(connectionId);
@@ -28,42 +34,52 @@ public class MakeMoveHandler: BaseHandler<MakeMoveCommand>
             throw new Exception("it's not your move bro");
         }
 
-        var player = session.GetEnemyPlayerByConnectionId(connectionId);
-        var board = player.Board;
+        var enemyPlayer = session.GetEnemyPlayerByConnectionId(connectionId);
+        var player = session.GetPlayerByConnectionId(connectionId);
+        var enemyBoard = enemyPlayer.Board;
+        var visitor = new ShipVisitor(session.GameStartedDateTime);
 
-        var (hasShipBeenHit, hasShipBeenDestroyed) = BattleshipsFacade.MakeMoveToEnemyBoard(command.CellCoordinates, board);
-        
+        var (hasShipBeenHit, hasShipBeenDestroyed) = BattleshipsFacade.MakeMoveToEnemyBoard(command.CellCoordinates, enemyBoard);
+
         // moves heat seeking mine
         if (!hasShipBeenDestroyed && !hasShipBeenHit)
         {
-            var mine = board.getHeatSeakingMine();
+            var mine = enemyBoard.GetHeatSeakingMine();
             if (mine != null && mine.HasExploded == false)
             {
-                mine.MoveStrategy.MoveDifferently(board, mine);
+                mine.MoveStrategy.MoveDifferently(enemyBoard, mine);
             }
         }
 
         if (hasShipBeenDestroyed)
         {
-            player.Board.DestroyedShipCount++;
+            enemyBoard.DestroyedShipCount++;
         }
-        
+
         if (!hasShipBeenHit)
         {
-            var destroyedShipCountByMines = BattleshipsFacade.ExplodeMinesInCellsIfThereAreShips(board);
+            var destroyedShipCountByMines = BattleshipsFacade.ExplodeMinesInCellsIfThereAreShips(enemyBoard);
             if (destroyedShipCountByMines > 0)
             {
                 hasShipBeenDestroyed = true;
-                player.Board.DestroyedShipCount += destroyedShipCountByMines;
+                enemyBoard.DestroyedShipCount += destroyedShipCountByMines;
             }
             session.SetMoveToNextPlayer();
         }
 
         // check if all ships destroyed
-        if (session.Settings.ShipCount <= player.Board.DestroyedShipCount)
+        if (session.Settings.ShipCount <= enemyBoard.DestroyedShipCount)
         {
             session.IsGameOver = true;
-            session.GetPlayerByConnectionId(connectionId).Winner = true;
+            player.Winner = true;
+        }
+
+        foreach (Unit unit in enemyPlayer.PlacedShips)
+        {
+            if (unit is Ship)
+            {
+                ((Ship)unit).Accept(visitor);
+            }
         }
 
         await Mediator.Send(new SendGameDataCommand(session));

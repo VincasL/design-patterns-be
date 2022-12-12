@@ -1,9 +1,10 @@
 ﻿using BattleshipsApi.Composite;
 using BattleshipsApi.Enums;
+using BattleshipsApi.VisitorPattern;
 
 namespace BattleshipsApi.Entities.Ships
 {
-    public class Submarine : Ship
+    public class Submarine : Ship, IVisitable
     {
         public Submarine()
         {
@@ -15,6 +16,10 @@ namespace BattleshipsApi.Entities.Ships
         {
         }
 
+        public override int Accept(IVisitor visitor)
+        {
+            return visitor.Visit(this);
+        }
 
         public override Ship Clone()
         {

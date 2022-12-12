@@ -11,7 +11,6 @@ public class PlaceShipsHandler : BaseHandler<PlaceShipsCommand>
     {
         var session = BattleshipsFacade.GetSessionByConnectionId(command.ConnectionId);
         var player = session.GetPlayerByConnectionId(command.ConnectionId);
-        var board = player.Board;
 
         if (session.AllPlayersPlacedUnits || player.AreAllUnitsPlaced)
         {
@@ -30,6 +29,8 @@ public class PlaceShipsHandler : BaseHandler<PlaceShipsCommand>
         }
 
         player.AreAllUnitsPlaced = true;
+
+        session.GameStartedDateTime = DateTime.UtcNow;
 
         await Mediator.Send(new SendGameDataCommand(session));
     }

@@ -45,7 +45,7 @@ public class BoardTests
         cells[0, 1].Add(ship2);
         cells[0, 2].Add(mine1);
 
-        var iterator=board.getShipIterator();
+        var iterator=board.GetShipIterator();
         var enumerator=iterator.GetEnumerator();
         
         foreach (var a in enumerator)
@@ -70,7 +70,7 @@ public class BoardTests
         cells[0, 1].Add(unit2);
         cells[0, 2].Add(unit3);
 
-        var iterator = board.getMineIterator();
+        var iterator = board.GetMineIterator();
         var enumerator = iterator.GetEnumerator();
 
         foreach (var a in enumerator)
@@ -95,7 +95,7 @@ public class BoardTests
         cells[0, 1].Add(unit2);
         cells[0, 2].Add(unit3);
 
-        var iterator = board.getMissileIterator();
+        var iterator = board.GetMissileIterator();
         var enumerator = iterator.GetEnumerator();
 
         foreach (var a in enumerator)
@@ -121,7 +121,7 @@ public class BoardTests
         cells[0, 1].Add(unit2);
         cells[0, 2].Add(mine1);
 
-        var iterator = board.getShipIterator();
+        var iterator = board.GetShipIterator();
         var enumerator = iterator.GetEnumerator();
 
         foreach (var a in enumerator)
@@ -146,7 +146,7 @@ public class BoardTests
         cells[0, 1].Add(unit2);
         cells[0, 2].Add(unit3);
 
-        var iterator = board.getMineIterator();
+        var iterator = board.GetMineIterator();
         var enumerator = iterator.GetEnumerator();
 
         foreach (var a in enumerator)
@@ -171,7 +171,7 @@ public class BoardTests
         cells[0, 1].Add(unit2);
         cells[0, 2].Add(unit3);
 
-        var iterator = board.getMissileIterator();
+        var iterator = board.GetMissileIterator();
         var enumerator = iterator.GetEnumerator();
 
         foreach (var a in enumerator)

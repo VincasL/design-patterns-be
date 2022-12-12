@@ -1,9 +1,7 @@
 ﻿using BattleshipsApi.Entities;
 using BattleshipsApi.Enums;
-using BattleshipsApi.Facades;
 using BattleshipsApi.Hubs.Handlers;
 using BattleshipsApi.Mediator;
-using BattleshipsApi.Strategies;
 using Microsoft.AspNetCore.SignalR;
 using SignalRSwaggerGen.Attributes;
 
@@ -12,17 +10,14 @@ namespace BattleshipsApi.Hubs;
 [SignalRHub]
 public class BattleshipHub : Hub
 {
-    
-    private readonly BattleshipsFacade _battleshipsFacade;
     private readonly BattleshipsMediator _mediator;
 
-    public BattleshipHub(BattleshipsFacade battleshipsFacade, BattleshipsMediator mediator)
+    public BattleshipHub(BattleshipsMediator mediator)
     {
-        _battleshipsFacade = battleshipsFacade;
         _mediator = mediator;
     }
 
-    public async Task JoinQueue(string name,string nation)
+    public async Task JoinQueue(string name, string nation)
     {
         await _mediator.Send(new JoinQueueCommand(name, nation, Context.ConnectionId));
     }
@@ -36,12 +31,12 @@ public class BattleshipHub : Hub
     {
         await _mediator.Send(new PlaceShipCommand(cellCoordinates, type, Context.ConnectionId));
     }
-    
+
     public async Task PlaceMine(CellCoordinates cellCoordinates, MineType type)
     {
         await _mediator.Send(new PlaceMineCommand(cellCoordinates, type, Context.ConnectionId));
     }
-    
+
     public async Task UndoPlaceShip(CellCoordinates cellCoordinates)
     {
         await _mediator.Send(new UndoPlaceShipCommand(cellCoordinates, Context.ConnectionId));
@@ -51,16 +46,14 @@ public class BattleshipHub : Hub
     {
         await _mediator.Send(new RotateShipCommand(cellCoordinates, Context.ConnectionId));
     }
-    
+
     public async Task MakeMove(CellCoordinates cellCoordinates)
     {
         await _mediator.Send(new MakeMoveCommand(cellCoordinates, Context.ConnectionId));
-      
     }
     public async Task MoveUnit(CellCoordinates coordinates, MoveDirection direction, bool isEnemyBoard)
     {
         await _mediator.Send(new MoveUnitCommand(coordinates, direction, isEnemyBoard, Context.ConnectionId));
-
     }
 
     public async void StartGame(Player player1, Player player2)

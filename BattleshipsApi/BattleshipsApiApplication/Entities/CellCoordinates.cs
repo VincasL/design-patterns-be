@@ -11,8 +11,5 @@ public class CellCoordinates
         Y = y;
     }
 
-    public CellCoordinates()
-    {
-        
-    }
+    public CellCoordinates(){ }
 }

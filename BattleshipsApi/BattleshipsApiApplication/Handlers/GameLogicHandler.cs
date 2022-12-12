@@ -1,5 +1,8 @@
 ﻿using BattleshipsApi.Entities;
+using BattleshipsApi.Entities.Mines;
+using BattleshipsApi.Entities.Ships;
 using BattleshipsApi.Enums;
+using BattleshipsApi.Template;
 
 namespace BattleshipsApi.Handlers;
 
@@ -31,70 +34,14 @@ public class GameLogicHandler
     
     public void PlaceShipToBoard(Ship ship, Board board, CellCoordinates coordinates)
     {
-        if (ship.IsHorizontal)
-        {
-            for (var y = coordinates.Y; y < coordinates.Y + ship.Length; y++)
-            {
-                var cell = board.Cells[coordinates.X,y];
-                if (cell.Ship != null)
-                {
-                    throw new Exception("Ships overlap");
-                }
-
-                cell.Ship = ship;
-            }
-        }
-        else
-        {
-            for (var x = coordinates.X; x < coordinates.X + ship.Length; x++)
-            {
-                var cell = board.Cells[x,coordinates.Y];
-                
-                if (cell.Ship != null)
-                {                    
-                    throw new Exception("Ships overlap");
-                }
-
-                cell.Ship = ship;
-            }
-        }
+        IPlaceItem ships = new Battleship();
+        ships.Place(ship,board,coordinates);
     }
     
     public void PlaceMineToBoard(Mine mine, Board board, CellCoordinates cellCoordinates)
     {
-        var cellToPlaceMineAt = board.Cells[cellCoordinates.X, cellCoordinates.Y];
-
-        if (cellToPlaceMineAt.Mine != null)
-        {
-            throw new Exception("Mine already placed here");
-        }
-
-        if (mine.Type is MineType.Small or MineType.RemoteControlled)
-        {
-            cellToPlaceMineAt.Mine = mine;
-            return;
-        }
-        
-        // if huge mine: 
-        
-        if (cellToPlaceMineAt.X + 1 == board.BoardSize || cellToPlaceMineAt.X + 1 == board.BoardSize)
-        {
-            throw new Exception("overflow");
-        }
-
-        var cellsToPlaceHugeMineAt = new List<Cell>
-        {
-            board.Cells[cellToPlaceMineAt.X, cellToPlaceMineAt.Y],
-            board.Cells[cellToPlaceMineAt.X + 1, cellToPlaceMineAt.Y],
-            board.Cells[cellToPlaceMineAt.X, cellToPlaceMineAt.Y + 1],
-            board.Cells[cellToPlaceMineAt.X + 1, cellToPlaceMineAt.Y + 1]
-        };
-        
-        foreach (var cell in cellsToPlaceHugeMineAt)
-        {
-            cell.Mine = mine;
-        }
-
+        IPlaceItem mines = new HugeMine();
+        mines.Place(mine,board, cellCoordinates);
     }
 
     public void UndoPlaceShipToBoardByCell(Unit unit, Board board)
@@ -148,9 +95,9 @@ public class GameLogicHandler
         
         foreach (var cell in board.Cells)
         {
-            if (cell.Ship != null && cell.Mine != null) // && !cell.Mine.HasExploded
+            if (cell.Ship != null && cell.Mine != null && !(cell.Type == CellType.DamagedShip) && !(cell.Type == CellType.DestroyedShip)) // 
             {
-                //cell.Mine.HasExploded = true;
+                // cell.Mine.HasExploded = true;
                 cell.Type = CellType.DamagedShip;
 
                 if (DestroyShipsIfAllCellsDamaged(board, cell.Ship))

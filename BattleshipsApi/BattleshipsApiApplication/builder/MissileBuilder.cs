@@ -16,7 +16,7 @@ public class MissileBuilder : IBuilder
 
     public override IBuilder AddDammage(int dammage)
     {
-        _missile.Dammage = dammage;
+        _missile.Damage = dammage;
         return this;
     }
 }

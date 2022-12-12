@@ -16,7 +16,7 @@ public class PlaceShipHandler : BaseHandler<PlaceShipCommand>
         var board = player.Board;
 
         var factory = BattleshipsFacade.Factory;
-        var ship = factory.CreateShip(command.Type, player.nationType);
+        var ship = factory.CreateShip(command.Type, player.NationType);
 
         if (player.AreAllUnitsPlaced || session.AllPlayersPlacedUnits)
         {
