@@ -1,5 +1,4 @@
 ﻿using BattleshipsApi.Contracts;
-using BattleshipsApi.Entities;
 
 namespace BattleshipsApi.Iterators
 {

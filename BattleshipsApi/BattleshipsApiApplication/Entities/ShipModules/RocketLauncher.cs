@@ -1,6 +1,4 @@
-﻿using BattleshipsApi.Composite;
-
-namespace BattleshipsApi.Entities.ShipModules;
+﻿namespace BattleshipsApi.Entities.ShipModules;
 
 public class RocketLauncher: IShipWeapon
 {
