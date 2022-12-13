@@ -6,7 +6,6 @@ namespace BattleshipsApi.Hubs.Handlers;
 
 public record StartGameCommand(Player Player1, Player Player2) : ICommand;
 
-
 public class StartGameHandler : BaseHandler<StartGameCommand>
 {
     public override async Task Handle(StartGameCommand command)

@@ -1,8 +1,9 @@
 ﻿using BattleshipsApi.Facades;
+using BattleshipsApi.Hubs.Handlers;
 
 namespace BattleshipsApi.Mediator;
 
-public abstract class BaseHandler<T>
+public abstract class BaseHandler<T> where T : ICommand
 {
     protected IMediator Mediator;
     protected readonly BattleshipsFacade BattleshipsFacade;

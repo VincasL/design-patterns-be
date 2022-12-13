@@ -1,5 +1,4 @@
-﻿using BattleshipsApi.Hubs;
-using BattleshipsApi.Hubs.Handlers;
+﻿using BattleshipsApi.Hubs.Handlers;
 
 namespace BattleshipsApi.Mediator;
 
@@ -18,7 +17,11 @@ public class BattleshipsMediator : IMediator
     private readonly UndoPlaceShipHandler _undoPlaceShipHandler;
 
 
-    public BattleshipsMediator(JoinQueueHandler joinQueueHandler, StartGameHandler startGameHandler, SendGameDataHandler sendGameDataHandler, UndoPlaceShipHandler undoPlaceShipHandler, AssignNewConnectionIdHandler assignNewConnectionIdHandler, MakeMoveHandler makeMoveHandler, MoveUnitHandler moveUnitHandler, PlaceShipHandler placeShipHandler, PlaceShipsHandler placeShipsHandler, RotateShipHandler rotateShipHandler, PlaceMineHandler placeMineHandler)
+    public BattleshipsMediator(JoinQueueHandler joinQueueHandler, StartGameHandler startGameHandler,
+        SendGameDataHandler sendGameDataHandler, UndoPlaceShipHandler undoPlaceShipHandler,
+        AssignNewConnectionIdHandler assignNewConnectionIdHandler, MakeMoveHandler makeMoveHandler,
+        MoveUnitHandler moveUnitHandler, PlaceShipHandler placeShipHandler, PlaceShipsHandler placeShipsHandler,
+        RotateShipHandler rotateShipHandler, PlaceMineHandler placeMineHandler)
     {
         _joinQueueHandler = joinQueueHandler;
         _startGameHandler = startGameHandler;
@@ -52,7 +55,6 @@ public class BattleshipsMediator : IMediator
             case AssignNewConnectionIdCommand cmd:
                 await _assignNewConnectionIdHandler.Handle(cmd);
                 break;
-
             case JoinQueueCommand cmd:
                 await _joinQueueHandler.Handle(cmd);
                 break;
