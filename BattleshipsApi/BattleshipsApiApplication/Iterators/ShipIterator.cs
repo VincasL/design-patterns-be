@@ -1,7 +1,6 @@
 ﻿using BattleshipsApi.Contracts;
 using BattleshipsApi.Entities;
 using BattleshipsApi.States.ShipStates;
-using System.Collections;
 
 namespace BattleshipsApi.Iterators
 {

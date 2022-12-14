@@ -14,6 +14,7 @@ public class BattleshipsFacade
     private readonly GameLogicHandler _gameLogicHandler;
     private readonly GameDataAdapter _gameDataAdapter;
     private readonly GameDataSender _gameDataSender;
+    public AbstractFactory Factory { get; }
 
     public BattleshipsFacade(QueueHandler queueHandler, GameLogicHandler gameLogicHandler, IMapper mapper, IHubContext<BattleshipHub> hubContext, GameDataSender gameDataSender)
     {
@@ -38,7 +39,7 @@ public class BattleshipsFacade
     {
         _gameLogicHandler.PlaceShipToBoard(ship, board, cellCoordinates);
     }
-    
+
     public void PlaceMineToBoard(Mine mine, Board board, CellCoordinates cellCoordinates)
     {
         _gameLogicHandler.PlaceMineToBoard(mine, board, cellCoordinates);
@@ -63,7 +64,7 @@ public class BattleshipsFacade
     {
         await _gameDataAdapter.SendGameData(session);
     }
-    
+
     public async Task StartGame(GameSession session)
     {
         await _gameDataSender.SendStartGame(session.PlayerOne.ConnectionId, session.PlayerTwo.ConnectionId);
@@ -83,9 +84,6 @@ public class BattleshipsFacade
     {
         Sessions.BindNewConnectionIdToPlayer(connectionId, contextConnectionId, session);
     }
-    
-
-    public AbstractFactory Factory { get; }
 
     public int ExplodeMinesInCellsIfThereAreShips(Board board)
     {

@@ -16,7 +16,7 @@ namespace BattleshipsApi.Entities.Mines
 
         public override Unit Clone()
         {
-            return new SmallMine(Dammage, Type, ArmourStrength, ExplosionRadious, HasExploded);
+            return new SmallMine(Damage, Type, ArmourStrength, ExplosionRadius, HasExploded);
         }
     }
 }

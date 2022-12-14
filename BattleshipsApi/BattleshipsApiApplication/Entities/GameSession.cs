@@ -4,13 +4,14 @@ namespace BattleshipsApi.Entities;
 
 public class GameSession : IPrototype
 {
-    private Settings _defaultSettings = new Settings(10);
+    private readonly Settings _defaultSettings = new(10);
 
     public Player PlayerOne { get; set; }
     public Player PlayerTwo { get; set; }
     public string NextPlayerTurnConnectionId { get; set; }
     public bool IsGameOver { get; set; }
     public Settings Settings { get; set; }
+    public DateTime GameStartedDateTime { get; set; }
 
     public bool AllPlayersPlacedUnits =>
         PlayerOne.AreAllUnitsPlaced && PlayerTwo.AreAllUnitsPlaced;

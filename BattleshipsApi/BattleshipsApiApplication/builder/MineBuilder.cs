@@ -17,7 +17,7 @@ public class MineBuilder : IBuilder
 
     public override IBuilder AddDammage(int dammage)
     {
-        _mine.Dammage = dammage;
+        _mine.Damage = dammage;
         return this;
     }
 }
