@@ -5,9 +5,15 @@ namespace BattleshipsApi.States.ShipStates
 {
     public class ShipDestroyed : IShipState
     {
-        public void HandleState(Ship ship)
+        public override void HandleState(Ship ship)
         {
+            fuel = 0;
+            shield = 0;
+            rockets = 0;
+            drone = null;
+            crew = null;
             return;
         }
+
     }
 }

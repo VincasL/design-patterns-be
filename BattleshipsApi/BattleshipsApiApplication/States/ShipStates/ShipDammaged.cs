@@ -5,7 +5,7 @@ namespace BattleshipsApi.States.ShipStates
 {
     public class ShipDammaged : IShipState
     {
-        public void HandleState(Ship ship)
+        public override void HandleState(Ship ship)
         {
             if (ship.ArmourStrength > 0)
             {
@@ -15,6 +15,8 @@ namespace BattleshipsApi.States.ShipStates
             {
                 ship.ShipState = new ShipDestroyed();
             }
+            dashSpeed = 0;
+            shield = 0;
         }
     }
 }
