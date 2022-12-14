@@ -36,46 +36,21 @@ public class Board : IPrototype
 
     public IIterator? GetIterator<T>()
     {
-        if(typeof(Ship).IsSubclassOf(typeof(T)))
+        if(typeof(Ship) == (typeof(T)))
         {
-            return GetShipIterator();
+            return getShipIterator();
         }
-        else if(typeof(Mine).IsSubclassOf(typeof(T)))
+        else if(typeof(Mine) == (typeof(T)))
         {
-            return GetMineIterator();
+            return getMineIterator();
         }
-        else if(typeof(Missile).IsSubclassOf(typeof(T)))
+        else if(typeof(Missile) == (typeof(T)))
         {
-            return GetMissileIterator();
+            return getMissileIterator();
         }
         return null;
     }
-    //public IIterator getMineIterator()
-    //{
-    //    List<Mine> mines = new List<Mine>();
-    //    foreach (Cell cell in Cells)
-    //    {
-    //        if (cell.Mine != null && !mines.Contains(cell.Mine))
-    //        {
-    //            mines.Add(cell.Mine);
-    //        }
-    //    }
-    //    var a = new MineAggregate(mines);
-    //    return a.CreateIterator();
-    //}
-    //public IIterator getShipIterator()
-    //{
-    //    List<Ship> ships = new List<Ship>();
-    //    foreach (Cell cell in Cells)
-    //    {
-    //        if (cell.Ship != null && !ships.Contains(cell.Ship))
-    //        {
-    //            ships.Add(cell.Ship);
-    //        }
-    //    }
-    //    var a = new ShipAggregate(ships);
-    //    return a.CreateIterator();
-    //}
+   
     public IIterator getShipIterator()
     {
         List<Unit> units = new List<Unit>();
