@@ -21,9 +21,9 @@ namespace BattleshipsApi.Iterators
             get { return items.Count; }
         }
         // Indexer
-        public Ship this[int index]
+        public Unit this[int index]
         {
-            get { return (Ship)items[index]; }
+            get { return items[index]; }
             set { items.Add(value); }
         }
     }

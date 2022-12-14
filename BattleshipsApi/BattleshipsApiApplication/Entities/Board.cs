@@ -51,19 +51,19 @@ public class Board : IPrototype
         }
         return null;
     }
-    public IIterator getMineIterator()
-    {
-        List<Mine> mines = new List<Mine>();
-        foreach (Cell cell in Cells)
-        {
-            if (cell.Mine != null && !mines.Contains(cell.Mine))
-            {
-                mines.Add(cell.Mine);
-            }
-        }
-        var a = new MineAggregate(mines);
-        return a.CreateIterator();
-    }
+    //public IIterator getMineIterator()
+    //{
+    //    List<Mine> mines = new List<Mine>();
+    //    foreach (Cell cell in Cells)
+    //    {
+    //        if (cell.Mine != null && !mines.Contains(cell.Mine))
+    //        {
+    //            mines.Add(cell.Mine);
+    //        }
+    //    }
+    //    var a = new MineAggregate(mines);
+    //    return a.CreateIterator();
+    //}
     //public IIterator getShipIterator()
     //{
     //    List<Ship> ships = new List<Ship>();
@@ -87,17 +87,24 @@ public class Board : IPrototype
         var a = new ShipAggregate(units);
         return a.CreateIterator();
     }
-    public IIterator getMissileIterator()
+    public IIterator getMineIterator()
     {
-        List<Missile> missiles = new List<Missile>();
+        List<Unit> units = new List<Unit>();
         foreach (Cell cell in Cells)
         {
-            if (cell.Missile != null && !missiles.Contains(cell.Missile))
-            {
-                missiles.Add(cell.Missile);
-            }
+            units.AddRange(cell.Units);
         }
-        var a = new MissileAggregate(missiles);
+        var a = new MineAggregate(units);
+        return a.CreateIterator();
+    }
+    public IIterator getMissileIterator()
+    {
+        List<Unit> units = new List<Unit>();
+        foreach (Cell cell in Cells)
+        {
+            units.AddRange(cell.Units);
+        }
+        var a = new MissileAggregate(units);
         return a.CreateIterator();
     }
 

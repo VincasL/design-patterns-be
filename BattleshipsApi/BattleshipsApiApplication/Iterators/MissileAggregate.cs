@@ -5,9 +5,9 @@ namespace BattleshipsApi.Iterators
 {
     public class MissileAggregate : IAggregate
     {
-        List<Missile> items = new List<Missile>();
+        List<Unit> items = new List<Unit>();
 
-        public MissileAggregate(List<Missile> items)
+        public MissileAggregate(List<Unit> items)
         {
             this.items = items;
         }
@@ -21,7 +21,7 @@ namespace BattleshipsApi.Iterators
             get { return items.Count; }
         }
         // Indexer
-        public Missile this[int index]
+        public Unit this[int index]
         {
             get { return items[index]; }
             set { items.Add(value); }

@@ -5,9 +5,9 @@ namespace BattleshipsApi.Iterators
 {
     public class MineAggregate : IAggregate
     {
-        List<Mine> items = new List<Mine>();
+        List<Unit> items = new List<Unit>();
 
-        public MineAggregate(List<Mine> items)
+        public MineAggregate(List<Unit> items)
         {
             this.items = items;
         }
@@ -21,7 +21,7 @@ namespace BattleshipsApi.Iterators
             get { return items.Count; }
         }
         // Indexer
-        public Mine this[int index]
+        public Unit this[int index]
         {
             get { return items[index]; }
             set { items.Add(value); }
