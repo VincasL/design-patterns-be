@@ -12,14 +12,16 @@ namespace BattleshipsApi.Iterators
         {
             this.aggregate = aggregate;
         }
+        int current = 0;
         //Gets first iteration item
         public object First()
         {
             for (int i = 0; i < aggregate.Count; i++)
             {
-                if (aggregate[i] is Ship && !(aggregate[i].ShipState is ShipDestroyed))
+                if (aggregate[i] is Ship && !(((Ship)aggregate[i]).ShipState is ShipDestroyed))
                 {
                     return aggregate[i];
+                    current = i+1;
                 }
             }
             return null;
@@ -27,13 +29,14 @@ namespace BattleshipsApi.Iterators
 
         public IEnumerable<object> GetEnumerator()
         {
-            for (int i = 0; i < aggregate.Count; i++)
+            for (int i = current; i < aggregate.Count; i++)
             {
-                if (aggregate[i] is Ship && !(aggregate[i].ShipState is ShipDestroyed))
+                if (aggregate[i] is Ship && !(((Ship)aggregate[i]).ShipState is ShipDestroyed))
                 {
                     yield return aggregate[i];
                 }
             }
+            yield break;
         }
 
     }

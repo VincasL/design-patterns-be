@@ -10,6 +10,7 @@ public class MoveToShip : MoveStrategy
     {
         var unitCoordinates = new List<CellCoordinates>();
         var allEntities = new List<CellCoordinates>();
+        List<Ship> shipList = new List<Ship>();
         //find all mine and ship coordinates
         foreach (var cell in board.Cells)
         {
@@ -21,6 +22,13 @@ public class MoveToShip : MoveStrategy
             {
                 allEntities.Add(new CellCoordinates { X = cell.X, Y = cell.Y });
             }
+        }
+        var iterator = board.GetIterator<Ship>();
+        var enumerator = iterator.GetEnumerator();
+
+        foreach (var a in enumerator)
+        {
+            shipList.Add((Ship)a);
         }
         var rightUnitCoordinates = new List<CellCoordinates>();
         var leftUnitCoordinates = new List<CellCoordinates>();
@@ -44,6 +52,12 @@ public class MoveToShip : MoveStrategy
             }
         }
         //if it colides, move to that direction
+        Ship? temp;
+        foreach (Ship s in shipList)
+        {
+            //do some logic here
+            temp = s;
+        }
         if (isFound)
         {
             MoveToDirection(board, unitCoordinates, rightUnitCoordinates, unit);

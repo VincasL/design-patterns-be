@@ -15,13 +15,14 @@ public class BattleshipsMediator : IMediator
     private readonly PlaceShipsHandler _placeShipsHandler;
     private readonly RotateShipHandler _rotateShipHandler;
     private readonly UndoPlaceShipHandler _undoPlaceShipHandler;
+    private readonly AddComponentToShipHandler _addComponentToShipHandler;
 
 
     public BattleshipsMediator(JoinQueueHandler joinQueueHandler, StartGameHandler startGameHandler,
         SendGameDataHandler sendGameDataHandler, UndoPlaceShipHandler undoPlaceShipHandler,
         AssignNewConnectionIdHandler assignNewConnectionIdHandler, MakeMoveHandler makeMoveHandler,
         MoveUnitHandler moveUnitHandler, PlaceShipHandler placeShipHandler, PlaceShipsHandler placeShipsHandler,
-        RotateShipHandler rotateShipHandler, PlaceMineHandler placeMineHandler)
+        RotateShipHandler rotateShipHandler, PlaceMineHandler placeMineHandler, AddComponentToShipHandler addComponentToShipHandler)
     {
         _joinQueueHandler = joinQueueHandler;
         _startGameHandler = startGameHandler;
@@ -34,6 +35,7 @@ public class BattleshipsMediator : IMediator
         _placeShipsHandler = placeShipsHandler;
         _rotateShipHandler = rotateShipHandler;
         _placeMineHandler = placeMineHandler;
+        _addComponentToShipHandler = addComponentToShipHandler;
         _joinQueueHandler.SetMediator(this);
         _startGameHandler.SetMediator(this);
         _sendGameDataHandler.SetMediator(this);
@@ -45,6 +47,7 @@ public class BattleshipsMediator : IMediator
         _placeShipsHandler.SetMediator(this);
         _rotateShipHandler.SetMediator(this);
         _placeMineHandler.SetMediator(this);
+        _addComponentToShipHandler.SetMediator(this);
 
     } 
 
@@ -85,6 +88,11 @@ public class BattleshipsMediator : IMediator
             case SendGameDataCommand cmd:
                 await _sendGameDataHandler.Handle(cmd);
                 break;
+            case AddComponentToShipCommand cmd:
+                await _addComponentToShipHandler.Handle(cmd);
+                break;
+            default:
+                throw new Exception("No handler assigned to command!");
         }
     }
 }

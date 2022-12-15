@@ -1,4 +1,5 @@
 ﻿using BattleshipsApi.Contracts;
+using BattleshipsApi.Entities;
 
 namespace BattleshipsApi.Iterators
 {
@@ -13,14 +14,24 @@ namespace BattleshipsApi.Iterators
         // Gets first iteration item
         public object First()
         {
-            return aggregate[0];
+            for (int i = 0; i < aggregate.Count; i++)
+            {
+                if (aggregate[i] is Mine)
+                {
+                    return aggregate[i];
+                }
+            }
+            return null;
         }
         // Gets next iteration item
         public IEnumerable<object> GetEnumerator()
         {
-            for (int i=0;i<aggregate.Count;i++)
+            for (int i = 0; i < aggregate.Count; i++)
             {
-                yield return aggregate[i];
+                if (aggregate[i] is Mine)
+                {
+                    yield return aggregate[i];
+                }
             }
         }
     }

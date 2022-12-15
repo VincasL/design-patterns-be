@@ -33,39 +33,26 @@ public class Board : IPrototype
         Cells = cells;
         BoardSize = boardSize;
     }
+    
 
     public IIterator? GetIterator<T>()
     {
-        if(typeof(Ship).IsSubclassOf(typeof(T)))
+        if(typeof(Ship) == (typeof(T)))
         {
-            return GetShipIterator();
+            return getShipIterator();
         }
-        else if(typeof(Mine).IsSubclassOf(typeof(T)))
+        else if(typeof(Mine) == (typeof(T)))
         {
-            return GetMineIterator();
+            return getMineIterator();
         }
-        else if(typeof(Missile).IsSubclassOf(typeof(T)))
+        else if(typeof(Missile) == (typeof(T)))
         {
-            return GetMissileIterator();
+            return getMissileIterator();
         }
         return null;
     }
-
-    public IIterator GetMineIterator()
-    {
-        List<Mine> mines = new List<Mine>();
-        foreach (Cell cell in Cells)
-        {
-            if (cell.Mine != null && !mines.Contains(cell.Mine))
-            {
-                mines.Add(cell.Mine);
-            }
-        }
-        var a = new MineAggregate(mines);
-        return a.CreateIterator();
-    }
-
-    public IIterator GetShipIterator()
+   
+    public IIterator getShipIterator()
     {
         List<Unit> units = new List<Unit>();
         foreach (Cell cell in Cells)
@@ -75,17 +62,24 @@ public class Board : IPrototype
         var a = new ShipAggregate(units);
         return a.CreateIterator();
     }
-    public IIterator GetMissileIterator()
+    public IIterator getMineIterator()
     {
-        List<Missile> missiles = new List<Missile>();
+        List<Unit> units = new List<Unit>();
         foreach (Cell cell in Cells)
         {
-            if (cell.Missile != null && !missiles.Contains(cell.Missile))
-            {
-                missiles.Add(cell.Missile);
-            }
+            units.AddRange(cell.Units);
         }
-        var a = new MissileAggregate(missiles);
+        var a = new MineAggregate(units);
+        return a.CreateIterator();
+    }
+    public IIterator getMissileIterator()
+    {
+        List<Unit> units = new List<Unit>();
+        foreach (Cell cell in Cells)
+        {
+            units.AddRange(cell.Units);
+        }
+        var a = new MissileAggregate(units);
         return a.CreateIterator();
     }
 
