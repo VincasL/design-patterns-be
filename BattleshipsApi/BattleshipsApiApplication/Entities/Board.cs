@@ -33,6 +33,7 @@ public class Board : IPrototype
         Cells = cells;
         BoardSize = boardSize;
     }
+    
 
     public IIterator? GetIterator<T>()
     {

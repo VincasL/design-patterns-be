@@ -70,4 +70,10 @@ public class BattleshipHub : Hub
     {
         await _mediator.Send(new AssignNewConnectionIdCommand(connectionId, Context.ConnectionId));
     }
+
+    public async Task AddComponentToShip(CellCoordinates cellCoordinates)
+    {
+        await _mediator.Send(new AddComponentToShipCommand(cellCoordinates, Context.ConnectionId));
+    }
 }
+

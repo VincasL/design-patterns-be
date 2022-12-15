@@ -64,6 +64,7 @@ builder.Services.AddTransient<PlaceMineHandler>();
 builder.Services.AddTransient<PlaceShipsHandler>();
 builder.Services.AddTransient<RotateShipHandler>();
 builder.Services.AddTransient<UndoPlaceShipHandler>();
+builder.Services.AddTransient<AddComponentToShipHandler>();
 
 
 builder.Services.AddSignalR(c =>

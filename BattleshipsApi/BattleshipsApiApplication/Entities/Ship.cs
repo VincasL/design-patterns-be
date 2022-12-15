@@ -14,6 +14,7 @@ public abstract class Ship : Unit, IShipComponent, IGetShipData, IPlaceItem
     public ShipType Type { get; set; }
     public bool IsHorizontal { get; set; }
     public int ArmourStrength { get; set; }
+    public int TotalArmorStrength => GetArmourStrength();
     public int Fuel { get; set; }
     public int Speed { get; set; }
     IShipState State;
