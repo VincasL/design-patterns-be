@@ -1,14 +1,13 @@
 ﻿using BattleshipsApi.Composite;
 using BattleshipsApi.Contracts;
 using BattleshipsApi.Enums;
-using BattleshipsApi.Proxy;
 using BattleshipsApi.States.ShipStates;
 using BattleshipsApi.Template;
 using BattleshipsApi.VisitorPattern;
 
 namespace BattleshipsApi.Entities;
 
-public abstract class Ship : Unit, IShipComponent, IGetShipData, IPlaceItem
+public abstract class Ship : Unit, IShipComponent, IPlaceItem, IVisitable
 {
     public int Length { get; set; }
     public ShipType Type { get; set; }
@@ -42,16 +41,11 @@ public abstract class Ship : Unit, IShipComponent, IGetShipData, IPlaceItem
         Children = children;
         this.ShipState = new ShipNotPlaced();
     }
-    public Ship(){ }
+    protected Ship(){ }
 
     public int GetArmourStrength()
     {
         return Children.Aggregate(0, (acc, x) => acc + x.GetArmourStrength());
-    }
-
-    public int GetShipSize(ShipType type, NationType nationType)
-    {
-        return Length;
     }
 
     public override Unit Clone()
@@ -85,7 +79,6 @@ public abstract class Ship : Unit, IShipComponent, IGetShipData, IPlaceItem
                 {
                     throw new Exception("Ships overlap");
                 }
-
                 cell.Ship = ship;
             }
         }

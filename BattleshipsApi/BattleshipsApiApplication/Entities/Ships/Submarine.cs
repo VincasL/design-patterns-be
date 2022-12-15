@@ -4,7 +4,7 @@ using BattleshipsApi.VisitorPattern;
 
 namespace BattleshipsApi.Entities.Ships
 {
-    public class Submarine : Ship, IVisitable
+    public class Submarine : Ship
     {
         public Submarine()
         {

@@ -1,6 +1,7 @@
 ﻿using BattleshipsApi.Entities;
 using BattleshipsApi.Facades;
 using BattleshipsApi.Mediator;
+using BattleshipsApi.Proxy;
 using BattleshipsApi.VisitorPattern;
 
 namespace BattleshipsApi.Hubs.Handlers;
@@ -10,13 +11,7 @@ public class MakeMoveHandler : BaseHandler<MakeMoveCommand>
 {
     public override async Task Handle(MakeMoveCommand command)
     {
-
-
-
-
-
         var connectionId = command.ContextConnectionId;
-        //TODO: validation
         var session = BattleshipsFacade.GetSessionByConnectionId(connectionId);
 
         if (!session.AllPlayersPlacedUnits)
@@ -36,39 +31,43 @@ public class MakeMoveHandler : BaseHandler<MakeMoveCommand>
 
         var enemyPlayer = session.GetEnemyPlayerByConnectionId(connectionId);
         var player = session.GetPlayerByConnectionId(connectionId);
-        var enemyBoard = enemyPlayer.Board;
         var visitor = new ShipVisitor(session.GameStartedDateTime);
+        var something = DateTime.UtcNow.Ticks;
+        Console.WriteLine("Proxy initialization Start " + something);
+        var proxy = new VisitorProxy(session.GameStartedDateTime);
+        var somethingElse = DateTime.UtcNow.Ticks;
+        Console.WriteLine("Proxy initialization End " + somethingElse);
+        Console.WriteLine("Difference (ticks) : " + (something - somethingElse));
 
-        var (hasShipBeenHit, hasShipBeenDestroyed) = BattleshipsFacade.MakeMoveToEnemyBoard(command.CellCoordinates, enemyBoard);
+        var (hasShipBeenHit, hasShipBeenDestroyed) = BattleshipsFacade.MakeMoveToEnemyBoard(command.CellCoordinates, enemyPlayer.Board);
 
         // moves heat seeking mine
         if (!hasShipBeenDestroyed && !hasShipBeenHit)
         {
-            var mine = enemyBoard.GetHeatSeakingMine();
+            var mine = enemyPlayer.Board.GetHeatSeakingMine();
             if (mine != null && mine.HasExploded == false)
             {
-                mine.MoveStrategy.MoveDifferently(enemyBoard, mine);
+                mine.MoveStrategy.MoveDifferently(enemyPlayer.Board, mine);
             }
         }
 
         if (hasShipBeenDestroyed)
         {
-            enemyBoard.DestroyedShipCount++;
+            enemyPlayer.Board.DestroyedShipCount++;
         }
 
         if (!hasShipBeenHit)
         {
-            var destroyedShipCountByMines = BattleshipsFacade.ExplodeMinesInCellsIfThereAreShips(enemyBoard);
+            var destroyedShipCountByMines = BattleshipsFacade.ExplodeMinesInCellsIfThereAreShips(enemyPlayer.Board);
             if (destroyedShipCountByMines > 0)
             {
                 hasShipBeenDestroyed = true;
-                enemyBoard.DestroyedShipCount += destroyedShipCountByMines;
+                enemyPlayer.Board.DestroyedShipCount += destroyedShipCountByMines;
             }
             session.SetMoveToNextPlayer();
         }
 
-        // check if all ships destroyed
-        if (session.Settings.ShipCount <= enemyBoard.DestroyedShipCount)
+        if (session.Settings.ShipCount <= enemyPlayer.Board.DestroyedShipCount)
         {
             session.IsGameOver = true;
             player.Winner = true;
@@ -76,9 +75,17 @@ public class MakeMoveHandler : BaseHandler<MakeMoveCommand>
 
         foreach (Unit unit in enemyPlayer.PlacedShips)
         {
-            if (unit is Ship)
+            if (unit is Ship ship)
             {
-                ((Ship)unit).Accept(visitor);
+                ship.Accept(proxy);
+            }
+        }
+
+        foreach (Unit unit in enemyPlayer.PlacedShips)
+        {
+            if (unit is Ship ship)
+            {
+                ship.Accept(visitor);
             }
         }
 

@@ -17,8 +17,7 @@ public static class Sessions
                 _sessions = new List<GameSession>();
             }
         }
-
-        Console.WriteLine("Sessions returned");
+        Console.WriteLine("\n\nSessions returned\n");
         return _sessions;
     }
     
@@ -40,7 +39,6 @@ public static class Sessions
         {
             throw new Exception("No connection found with this connectionId! Try restarting the game");
         }
-        
         return session;
     }
 
@@ -53,4 +51,3 @@ public static class Sessions
         }
     }
 }
-

@@ -1,9 +1,8 @@
 ﻿using BattleshipsApi.Enums;
-using BattleshipsApi.Proxy;
 
 namespace BattleshipsApi.Entities;
 
-public class Player : IGetPlayerData
+public class Player
 {
     public string ConnectionId { get; set; }
     public string Name { get; set; }
@@ -31,10 +30,5 @@ public class Player : IGetPlayerData
         Winner = winner;
         PlacedShips = placedShips;
         PlacedMines = placedMines;
-    }
-
-    public List<Ship> GetPlayerShips(string connection, string name)
-    {
-        return PlacedShips;
     }
 }

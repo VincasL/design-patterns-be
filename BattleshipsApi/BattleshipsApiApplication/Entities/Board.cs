@@ -107,10 +107,10 @@ public class Board : IPrototype
         {
             var units = cell.Units;
 
-            if (units.Count != 0)
-            {
-                Console.WriteLine('a');
-            }
+            //if (units.Count != 0)
+            //{
+            //    Console.WriteLine('a');
+            //}
             
             if (cell.Ship != null && cell.Type != CellType.DamagedShip && cell.Type != CellType.DestroyedShip)
             {

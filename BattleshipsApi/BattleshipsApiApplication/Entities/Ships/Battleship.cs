@@ -16,14 +16,14 @@ namespace BattleshipsApi.Entities.Ships
         {
         }
 
-        public override int Accept(IVisitor visitor)
-        {
-            return visitor.Visit(this);
-        }
-
         public override Ship Clone()
         {
             return new Battleship(Type, IsHorizontal, ArmourStrength, Fuel, new List<IShipComponent>(Children));
+        }
+
+        public override int Accept(IVisitor visitor)
+        {
+            return visitor.Visit(this);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using BattleshipsApi.Entities;
+﻿using BattleshipsApi.Entities;
 using BattleshipsApi.Facades;
 using BattleshipsApi.Mediator;
 
@@ -16,10 +15,8 @@ public class SendGameDataHandler : BaseHandler<SendGameDataCommand>
         var playerTwoSessionData = ((GameSession)gameSession.Clone()).SwapPlayers().ShowPlayerOneShips().ShowPlayerTwoMines();
 
         // var playerOneSessionDataShallowClone = ((GameSession)gameSession.ShallowClone()).ShowPlayerOneShips();
-
-
-        Console.WriteLine($"main\n{gameSession}\n");
-        Console.WriteLine($"deep\n{playerOneSessionData}\n");
+        //Console.WriteLine($"main\n{gameSession}\n");
+        //Console.WriteLine($"deep\n{playerOneSessionData}\n");
         // Console.WriteLine($"shallow\n{playerOneSessionDataShallowClone}\n");
 
         await BattleshipsFacade.SendGameData(playerOneSessionData);

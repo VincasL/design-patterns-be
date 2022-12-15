@@ -4,7 +4,7 @@ using BattleshipsApi.VisitorPattern;
 
 namespace BattleshipsApi.Entities.Ships
 {
-    public class Carrier : Ship, IVisitable
+    public class Carrier : Ship
     {
         public Carrier()
         {
